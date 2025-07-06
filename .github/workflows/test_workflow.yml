@@ -1,0 +1,38 @@
+name: Build OSX, Win & Python bindings
+
+# this workflow:
+# - runs master & PR pushes for OSX & Win
+# - publishes Python bindings for all platforms and minor Python versions to:
+#   - https://pypi.org/project/pyvalhalla/ for tag pushes
+#   - https://pypi.org/project/pyvalhalla-git/ for master pushes
+
+on:
+  push:
+    schedule:
+      - cron: "*/5 * * * *"
+    tags:
+      - '*'
+    branches:
+      - master
+
+env:
+  # only run tmate if manually invoked and debug_enabled == true or a previous step failed
+  SETUP_TMATE: ${{ (((github.event_name == 'workflow_dispatch') && (github.event.inputs.debug_enabled == 'true')) || (github.job.status != 'success')) && (github.repository_owner == 'nilsnolde') }}
+  # only publish to PyPI on tags, schedule or workflow_dispatch (only on master!)
+  PUBLISH_PYPI: ${{ (startsWith(github.ref, 'refs/tags') || (github.event_name == 'schedule') || ((github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/master'))) && (github.repository_owner == 'nilsnolde') }}
+
+jobs:
+  test:
+    name: test tag stuff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine package to publish
+        run: |
+          echo "Publish PyPI: ${{ github.env.PUBLISH_PYPI }}"
+          echo "${{ github.ref }}"
+          echo "${{ github.event_name }}"
+          echo "${{ github.repository_owner }}"
+          echo "${{ startsWith(github.ref, 'refs/tags') || (github.event_name == 'schedule') }}"
+          echo "${{ startsWith(github.ref, 'refs/tags') || (github.event_name == 'schedule') || ((github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/master')) }}"
