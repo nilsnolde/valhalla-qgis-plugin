@@ -1,0 +1,64 @@
+name: Build OSX, Win & Python bindings
+
+# this workflow:
+# - runs master & PR pushes for OSX & Win
+# - publishes Python bindings for all platforms and minor Python versions to:
+#   - https://pypi.org/project/pyvalhalla/ for tag pushes
+#   - https://pypi.org/project/pyvalhalla-git/ for master pushes
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - master
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+env:
+  # only run tmate if manually invoked and debug_enabled == true or a previous step failed
+  SETUP_TMATE: ${{ (((github.event_name == 'workflow_dispatch') && (github.event.inputs.debug_enabled == 'true')) || (github.job.status != 'success')) && (github.repository_owner == 'nilsnolde') }}
+  # only publish to PyPI on tags, schedule or workflow_dispatch (only on master!)
+  PUBLISH_PYPI: ${{ (startsWith(github.ref, 'refs/tags') || (github.event_name == 'schedule') || ((github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/master'))) && (github.repository_owner == 'nilsnolde') }}
+
+jobs:
+  publish_pypi:
+    name: Whether to publish PyPI
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Are we publishing to PyPI?\n\$ ${{ env.PUBLISH_PYPI }}"
+    outputs:
+      PUBLISH_PYPI: ${{ env.PUBLISH_PYPI }}
+
+  test:
+    name: test tag stuff
+    runs-on: ubuntu-latest
+    needs: [publish_pypi]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bla
+        run: |
+          echo "VALHALLA_RELEASE_PKG=bla" >> $GITHUB_ENV
+
+      - name: Determine package to publish
+        if: ${{ env.VALHALLA_RELEASE_PKG }}
+        run: |
+          echo "${{ needs.publish_pypi.outputs.PUBLISH_PYPI }}"
+          echo "pkg release: $VALHALLA_RELEASE_PKG"
+          echo "pkg release: ${{ env.VALHALLA_RELEASE_PKG }}"
+          echo "pkg release: ${{ github.env }}"
+          echo "Publish PyPI: ${{ env.PUBLISH_PYPI }}"
+          echo "${{ github.ref }}"
+          echo "${{ github.event_name }}"
+          echo "${{ github.repository_owner }}"
+          echo "${{ startsWith(github.ref, 'refs/tags') || (github.event_name == 'schedule') }}"
+          echo "${{ startsWith(github.ref, 'refs/tags') || (github.event_name == 'schedule') || ((github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/master')) }}"
+          echo "${{ (startsWith(github.ref, 'refs/tags') || (github.event_name == 'schedule') || ((github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/master'))) && (github.repository_owner == 'nilsnolde') }}"
+  test2:
+    runs-on: ubuntu-latest
+    needs: [publish_pypi]
+    if: ${{ needs.publish_pypi.outputs.PUBLISH_PYPI == 'true' }}
+    steps:
+      - run: echo "${{ needs.publish_pypi.outputs.PUBLISH_PYPI }}"
