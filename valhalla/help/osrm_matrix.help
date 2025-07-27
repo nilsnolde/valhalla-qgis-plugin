@@ -1,0 +1,3 @@
+The <b>OSRM Matrix</b> algorithm calculates origin-destination matrices for two input layers by calculating routes from each point in layer 1 to each point in layer 2. Specifying the same layer twice will result in a cross product of that layer.
+
+The output layer is a table layer with the attributes <i>durations</i>, <i>distances</i>, and <i>ID</i>.

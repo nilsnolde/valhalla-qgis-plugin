@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
-                                 Valhalla - QGIS plugin
- QGIS client to query Valhalla APIs
+Valhalla QGIS Plugin
                               -------------------
-        begin                : 2019-10-12
+        begin                : 2020-02-08
         git sha              : $Format:%H$
-        copyright            : (C) 2020 by Nils Nolde
-        email                : nils@gis-ops.com
+        copyright            : (C) 2025 by Nils Nolde
+        email                : nilsnolde+github@proton.me
  ***************************************************************************/
-
- This plugin provides access to some of the APIs from Valhalla
- (https://github.com/valhalla/valhalla), developed and
- maintained by https://gis-ops.com, Berlin, Germany.
 
 /***************************************************************************
  *                                                                         *
@@ -24,40 +19,31 @@
  ***************************************************************************/
 """
 
-import os.path
 import configparser
 from datetime import datetime
+from pathlib import Path
+
+from qgis.gui import QgisInterface
 
 
-# noinspection PyPep8Naming
-def classFactory(iface):  # pylint: disable=invalid-name
-    """Load OSMtools class from file OS;tools.
+def classFactory(iface: QgisInterface):
+    """Load plugin class from file."""
+    from .plugin import ValhallaPlugin
 
-    :param iface: A QGIS interface instance.
-    :type iface: QgsInterface
-    """
-
-    from .ValhallaPlugin import Valhalla
-    return Valhalla(iface)
+    return ValhallaPlugin(iface)
 
 
-# Define plugin wide constants
-PLUGIN_NAME = 'Valhalla'
-DEFAULT_COLOR = '#a8b1f5'
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-RESOURCE_PREFIX = ":plugins/Valhalla/img/"
-CONFIG_PATH = os.path.join(BASE_DIR, 'config.yml')
-
-# Read metadata.txt
-METADATA = configparser.ConfigParser()
-METADATA.read(os.path.join(BASE_DIR, 'metadata.txt'), encoding='utf-8')
 today = datetime.today()
 
-__version__ = METADATA['general']['version']
-__author__ = METADATA['general']['author']
-__email__ = METADATA['general']['email']
-__web__ = METADATA['general']['homepage']
-__help__ = METADATA['general']['help']
-__date__ = today.strftime('%Y-%m-%d')
-__copyright__ = '(C) {} by {}'.format(today.year, __author__)
+BASE_DIR = Path(__file__).parent.resolve()
+METADATA = configparser.ConfigParser()
+METADATA.read(BASE_DIR.joinpath("metadata.txt"), encoding="utf-8")
+PLUGIN_NAME = METADATA["general"]["name"]
+__version__ = METADATA["general"]["version"]
+__author__ = METADATA["general"]["author"]
+__email__ = METADATA["general"]["email"]
+__web__ = METADATA["general"]["homepage"]
+__date__ = today.strftime("%Y-%m-%d")
+__copyright__ = "(C) {} by {}".format(today.year, __author__)
+
+RESOURCE_PATH = BASE_DIR.joinpath("resources").resolve()

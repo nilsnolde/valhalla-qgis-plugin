@@ -1,0 +1,3 @@
+# P-Median
+
+The P-Median problem places facilities such that each demand point is mapped to a single facility, and the sum of the weighted distance between all demand points and corresponding facilities is minimized.

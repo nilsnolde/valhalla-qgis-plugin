@@ -1,0 +1,34 @@
+[tool.black]
+line-length = 105
+force-exclude = '''
+(
+    /(
+        \.git
+      | \.venv
+      | third_party
+      | help
+      | resources
+      | compiled
+    )/
+    | valhalla/__init__.py
+    | valhalla/plugin.py
+    | tests/utilities.py
+    | tests/qgis_interface.py
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 105
+src_paths = ["valhalla"]
+skip = [
+    ".venv",
+    "compiled",
+    "third_party",
+    "valhalla/__init__.py",
+    "valhalla/plugin.py",
+    "tests/__main__.py",
+    "tests/test_e2e.py",
+    "tests/utilities.py",
+    "tests/qgis_interface.py"
+]

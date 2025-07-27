@@ -1,0 +1,8 @@
+[report]
+omit =
+    */gui/compiled/*
+    */plugin.py
+    */__init__.py
+    */tests/*
+    */third_party/*
+    */dist-packages/*

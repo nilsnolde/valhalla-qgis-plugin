@@ -1,0 +1,13 @@
+The <b>Valhalla Directions</b> algorithm calculates routes either
+  1. for a single point layer (this produces a single route),
+  2. for a multipoint layer (produces one route for each multipoint feature),
+  3. between features of multiple layers.
+
+
+When two input layers are provided, routes will either be computed for each pair (<i>all by all</i>), or for corresponding pairs only (<i>row by row</i>, either based on provided layer fields or by simple feature order).
+
+Specify points and/or polygons to be avoided during routing with the <i>avoid locations</i> / <i>polygons</i> parameters.
+The output layer is a LineString layer with the attributes <i>durations</i>, <i>distances</i>, and – optionally – IDs .
+
+Valhalla has a dynamic cost model. You can set an extensive amount of costing options in the <b>Advanced Parameters</b> section. Refer to
+<a href="https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md">the documentation</a> for an in-depth explanation.

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="140"
+   height="140"
+   viewBox="0 0 140 140"
+   fill="none"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="isochrones_icon.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="5.615"
+     inkscape:cx="70.080142"
+     inkscape:cy="70.080142"
+     inkscape:window-width="2256"
+     inkscape:window-height="1420"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <circle
+     cx="70"
+     cy="70"
+     r="70"
+     fill="#f76c5e"
+     id="circle1" />
+  <circle
+     cx="70"
+     cy="70"
+     r="50"
+     fill="#fdb147"
+     id="circle2" />
+  <circle
+     cx="70"
+     cy="70"
+     r="30"
+     fill="#ffe66d"
+     id="circle3" />
+  <path
+     d="m 70,17.30187 c 10,0 20,10 20,20 0,15 -20,35 -20,35 0,0 -20,-20 -20,-35 0,-10 10,-20 20,-20 z"
+     fill="#1f3c88"
+     id="path3" />
+  <circle
+     cx="70"
+     cy="37.301872"
+     r="6"
+     fill="#ffffff"
+     id="circle4" />
+</svg>

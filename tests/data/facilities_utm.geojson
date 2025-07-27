@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "facilities_utm",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32630" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1, "predefined": 0 }, "geometry": { "type": "Point", "coordinates": [ 872919.341077067423612, 4716251.658907528035343 ] } },
+{ "type": "Feature", "properties": { "id": 2, "predefined": 0 }, "geometry": { "type": "Point", "coordinates": [ 872178.407823311514221, 4715936.571430548094213 ] } },
+{ "type": "Feature", "properties": { "id": 3, "predefined": 1 }, "geometry": { "type": "Point", "coordinates": [ 872539.583095648093149, 4716711.50421498902142 ] } }
+]
+}
