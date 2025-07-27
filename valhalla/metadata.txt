@@ -2,8 +2,7 @@
 name=Valhalla
 qgisMinimumVersion=3.4
 qgisMaximumVersion=3.99
-description=Rich set of functions for network analysis
-about=
+description=Valhalla routing, isochrones, expansion and matrix calculations for QGIS
 version=3.0.0
 author=Nils Nolde
 email=nils@gis-ops.com
@@ -23,7 +22,7 @@ tracker=https://github.com/nilsnolde/valhalla-qgis-plugin/issues
 repository=https://github.com/nilsnolde/valhalla-qgis-plugin
 category=Web
 icon=resources/icons/valhalla_logo.svg
-tags=routing, OSM, openstreetmap, valhalla, isochrone, route, matrix, processing
+tags=routing, OSM, openstreetmap, valhalla, isochrone, route, matrix, processing, expansion
 
 experimental=False
 deprecated=False
