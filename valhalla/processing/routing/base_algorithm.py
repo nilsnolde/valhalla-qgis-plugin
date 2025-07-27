@@ -1,12 +1,11 @@
 from pathlib import Path
-from typing import Optional, Tuple, Type
+from typing import List, Optional, Tuple, Type
 
 from qgis.core import (
     QgsFeatureSink,
     QgsFields,
     QgsProcessing,
     QgsProcessingAlgorithm,
-    QgsProcessingException,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterDefinition,
     QgsProcessingParameterEnum,
@@ -21,7 +20,7 @@ from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 
 from valhalla.core.results_factory import ResultsFactory
-from valhalla.core.settings import ValhallaSettings
+from valhalla.core.settings import ProviderSetting, ValhallaSettings
 from valhalla.global_definitions import (
     SETTINGS_WIDGETS_MAP,
     RouterEndpoint,
@@ -42,7 +41,7 @@ from valhalla.utils.resource_utils import get_graph_dir, get_icon
 
 class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
 
-    IN_METHOD = "INPUT_METHOD"
+    IN_PROVIDER = "INPUT_PROVIDER"
     IN_URL = "INPUT_URL"
     IN_PKG = "INPUT_PACKAGE"
     IN_MODE = "INPUT_MODE"
@@ -61,7 +60,8 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
     ):
         super(ValhallaBaseAlgorithm, self).__init__()
 
-        self.provider_ = provider  # avoid overriding QGIS' built-in provider method
+        self.router = provider  # avoid overriding QGIS' built-in provider method
+        self.providers: List[ProviderSetting] = list()  # will be set in init_base_params
         self.endpoint = endpoint
         self.profile = RouterProfile(profile) if profile else RouterProfile.CAR
         if provider == RouterType.VALHALLA:
@@ -70,7 +70,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
             # we keep the costing params dict for retrieving the parameter values later
             self.costing_defaults = self.get_costing_defaults(costing_widget)
 
-        self.pkgs = [pkg_path.name for pkg_path in get_graph_dir(self.provider_).iterdir()]
+        self.pkgs = [pkg_path.name for pkg_path in get_graph_dir(self.router).iterdir()]
 
     def tr(self, string):
         """
@@ -86,13 +86,14 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         :param multi_layer: If True, adds a number to the input layer and input field descriptions.
         """
 
-        defaultUrl = ValhallaSettings().get_router_url(self.provider_, self.profile)
+        self.providers = ValhallaSettings().get_providers(RouterType.VALHALLA)
+        servers = [prov.name for prov in self.providers]
 
         method_param = QgsProcessingParameterEnum(
-            self.IN_METHOD,
-            "Method",
-            list(RouterMethod),
-            defaultValue=RouterMethod[0],
+            self.IN_PROVIDER,
+            "Provider",
+            servers,
+            defaultValue=servers[0],
         )
         self.addParameter(method_param)
 
@@ -104,12 +105,12 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         # )
         # self.addParameter(pkg_param)
 
-        url_param = QgsProcessingParameterString(
-            self.IN_URL, "URL (used if method is HTTP)", defaultValue=defaultUrl
-        )
-        self.addParameter(url_param)
+        # url_param = QgsProcessingParameterString(
+        #     self.IN_URL, "URL (used if method is HTTP)", defaultValue=defaultUrl
+        # )
+        # self.addParameter(url_param)
 
-        if self.provider_ == RouterType.VALHALLA:
+        if self.router == RouterType.VALHALLA:
             mode_param = QgsProcessingParameterEnum(
                 self.IN_MODE,
                 "Mode",
@@ -167,26 +168,28 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
 
         output_param = QgsProcessingParameterFeatureSink(
             name=self.OUT,
-            description=f"{self.provider_}_{self.endpoint}"
-            f"{f'_{self.profile}' if self.provider_ == RouterType.VALHALLA else str()}",
+            description=f"{self.router}_{self.endpoint}"
+            f"{f'_{self.profile}' if self.router == RouterType.VALHALLA else str()}",
             createByDefault=True,
         )
         self.addParameter(output_param)
 
     def get_base_params(self, parameters, context):
-        method = RouterMethod[self.parameterAsEnum(parameters, self.IN_METHOD, context)]
+        provider: ProviderSetting = self.providers[
+            self.parameterAsEnum(parameters, self.IN_PROVIDER, context)
+        ]
         mode = RoutingMetric[self.parameterAsEnum(parameters, self.IN_MODE, context)]
-        url = self.parameterAsString(parameters, self.IN_URL, context)
-        pkg = (
-            self.pkgs[self.parameterAsEnum(parameters, self.IN_PKG, context)]
-            if len(self.pkgs) > 0
-            else ""
-        )
+        # url = self.parameterAsString(parameters, self.IN_URL, context)
+        # pkg = (
+        #     self.pkgs[self.parameterAsEnum(parameters, self.IN_PKG, context)]
+        #     if len(self.pkgs) > 0
+        #     else ""
+        # )
         layer_1: QgsVectorLayer = self.parameterAsSource(parameters, self.IN_1, context)
         layer_field_name_1 = self.parameterAsString(parameters, self.IN_FIELD_1, context)
 
         params = dict()
-        if self.provider_ == RouterType.VALHALLA:
+        if self.router == RouterType.VALHALLA:
             params["options"] = dict()
             avoid_locations = self.parameterAsSource(parameters, self.IN_AVOID_LOCATIONS, context)
             if avoid_locations:
@@ -200,24 +203,24 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
             params["options"]["shortest"] = True if mode == RoutingMetric.SHORTEST else False
 
         factory_args = {
-            "provider": self.provider_,
-            "method": method,
+            "provider": self.router,
+            "url": provider.url,
             "profile": self.profile,
-            "url": url,
+            "method": RouterMethod.REMOTE,
         }
 
-        if method == RouterMethod.LOCAL:
-            if not pkg:
-                raise QgsProcessingException(
-                    f"You chose the '{method}' method but don't seem to have any packages downloaded."
-                )
-            factory_args.update(
-                {
-                    "method": RouterMethod.LOCAL,
-                    "url": None,
-                    "pkg_path": str(get_graph_dir(self.provider_) / pkg),
-                }
-            )
+        # if method == RouterMethod.LOCAL:
+        #     if not pkg:
+        #         raise QgsProcessingException(
+        #             f"You chose the '{method}' method but don't seem to have any packages downloaded."
+        #         )
+        #     factory_args.update(
+        #         {
+        #             "method": RouterMethod.LOCAL,
+        #             "url": None,
+        #             "pkg_path": str(get_graph_dir(self.router) / pkg),
+        #         }
+        #     )
         results_factory = ResultsFactory(**factory_args)
 
         return layer_1, layer_field_name_1, params, results_factory
@@ -312,31 +315,31 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
     def createInstance(self):
         # we can ignore the unfulfilled parameter warning here because we know it will only be
         # instantiated by subclasses that automatically pass these parameters
-        if self.provider_ == RouterType.VALHALLA:
+        if self.router == RouterType.VALHALLA:
             return type(self)(profile=self.profile)
         else:
             return type(self)()
 
     def group(self) -> str:
-        if self.provider_ == RouterType.VALHALLA:
-            return self.provider_.capitalize()
+        if self.router == RouterType.VALHALLA:
+            return self.router.capitalize()
         else:
-            return self.provider_.upper()
+            return self.router.upper()
 
     def groupId(self):
-        return self.provider_
+        return self.router
 
     def icon(self) -> QIcon:
         return get_icon(f"icon_{self.endpoint}.png")
 
     def name(self):
-        if self.provider_ == RouterType.VALHALLA:
-            return f"{self.provider_}_{self.endpoint}_{self.profile}"
+        if self.router == RouterType.VALHALLA:
+            return f"{self.router.lower()}_{self.endpoint.lower()}_{self.profile.lower()}"
 
-        return f"{self.provider_}_{self.endpoint}"
+        return f"{self.router.lower()}_{self.endpoint.lower()}"
 
     def displayName(self):
-        if self.provider_ == RouterType.VALHALLA:
+        if self.router == RouterType.VALHALLA:
             return f"{self.endpoint.capitalize()} | {self.profile.capitalize()}"
 
         return f"{self.endpoint.capitalize()}"  # there are no profiles for OSRM
@@ -344,7 +347,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
     def shortHelpString(self):
         """Displays the sidebar help in the algorithm window"""
 
-        file = HELP_DIR / Path(f"{self.provider_}_{self.endpoint}.help")
+        file = HELP_DIR / Path(f"{self.router.lower()}_{self.endpoint.lower()}.help")
 
         with open(file) as fh:
             msg = fh.read()

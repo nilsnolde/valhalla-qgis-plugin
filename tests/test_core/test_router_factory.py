@@ -15,7 +15,12 @@ class TestRouterFactory(HTTPTestCase):
     """Test interface to routingpy."""
 
     def test_router_factory_valhalla_http_directions(self):
-        factory = RouterFactory(RouterType.VALHALLA, RouterMethod.REMOTE, RouterProfile.PED)
+        factory = RouterFactory(
+            RouterType.VALHALLA,
+            RouterMethod.REMOTE,
+            RouterProfile.PED,
+            url="https://valhalla1.openstreetmap.de",
+        )
         direction: Direction = factory.request(
             RouterEndpoint.DIRECTIONS,
             locations=[[x, y] for x, y in WAYPOINTS_4326],

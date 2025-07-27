@@ -4,7 +4,6 @@ from ..exceptions import ValhallaError
 from ..global_definitions import RouterEndpoint, RouterMethod, RouterProfile, RouterType
 from ..third_party.routingpy.routingpy import Valhalla, get_router_by_name
 from .http.router_client import RouterClient
-from .settings import ValhallaSettings
 
 
 class RouterFactory:
@@ -33,7 +32,7 @@ class RouterFactory:
 
         if method == RouterMethod.REMOTE:
             self.router = get_router_by_name(provider.lower())(
-                url or ValhallaSettings().get_router_url(provider, profile),
+                url,
                 client=RouterClient,
             )
         # else:
@@ -52,7 +51,7 @@ class RouterFactory:
         self._profile = profile
         if self.method == RouterMethod.REMOTE:
             self.router = get_router_by_name(self.provider.lower())(
-                self.url or ValhallaSettings().get_router_url(self.provider, profile),
+                self.url,
                 client=RouterClient,
             )
 

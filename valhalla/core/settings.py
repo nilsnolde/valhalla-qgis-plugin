@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional, Union
+from typing import Any, List, Union
 
 from qgis.core import QgsSettings
 from qgis.PyQt.QtCore import QSettings
 
-from ..global_definitions import Dialogs, RouterProfile, RouterType
+from ..global_definitions import Dialogs, RouterType
 from ..gui.ui_definitions import PluginSettingsDlgElems
 from ..utils.resource_utils import get_settings_dir
 
@@ -80,14 +80,14 @@ class ValhallaSettings(QgsSettings):
         """Simply returns the shop's base URL from the settings"""
         return self.get(Dialogs.SETTINGS, PluginSettingsDlgElems.SHOP_HTTP_URL)
 
-    def get_router_url(self, router: RouterType, profile: Optional[RouterProfile] = None) -> str:
-        """Returns the router's URL."""
-        t = (
-            PROFILE_TO_OSRM_URL[profile]
-            if router == RouterType.OSRM
-            else PluginSettingsDlgElems.VALHALLA_HTTP_URL
-        )
-        return self.get(Dialogs.SETTINGS, t)
+    # def get_router_url(self, router: RouterType, profile: Optional[RouterProfile] = None) -> str:
+    #     """Returns the router's URL."""
+    #     t = (
+    #         PROFILE_TO_OSRM_URL[profile]
+    #         if router == RouterType.OSRM
+    #         else PluginSettingsDlgElems.VALHALLA_HTTP_URL
+    #     )
+    #     return self.get(Dialogs.SETTINGS, t)
 
     def get_providers(
         self,

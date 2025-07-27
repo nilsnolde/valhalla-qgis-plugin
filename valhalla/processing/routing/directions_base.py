@@ -99,7 +99,7 @@ class DirectionsBase(ValhallaBaseAlgorithm):
             results_factory,
         ) = self.get_base_params(parameters, context)
 
-        if self.provider_ == RouterType.VALHALLA:
+        if self.router == RouterType.VALHALLA:
             params["instructions"] = False
 
         order_field = self.parameterAsString(parameters, self.IN_ORDER, context)
