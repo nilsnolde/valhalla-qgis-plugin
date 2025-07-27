@@ -4,8 +4,10 @@ from typing import Dict, Optional, Tuple
 from qgis.core import QgsNetworkAccessManager
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtNetwork import QNetworkReply
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QWidget
 
+from ..core.settings import ValhallaSettings
+from ..global_definitions import Dialogs
 from ..gui.panels.settings.panel_base import PanelBase
 from ..utils.resource_utils import get_icon
 from .compiled.dlg_plugin_settings_ui import Ui_PluginSettingsDialog
@@ -127,6 +129,6 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
     #     with open(BASE_DIR.joinpath("..", "tests", "mock_data", "order_mock.json")) as f:
     #         ordered_pkgs = json.load(f)  # noqa: F841
 
-    # def on_settings_change(self, new_text, widget: Optional[QWidget] = ""):
-    #     attr = widget.objectName() if widget else self.sender().objectName()
-    #     ValhallaSettings().set(Dialogs.SETTINGS, attr, str(new_text))
+    def on_settings_change(self, new_text, widget: Optional[QWidget] = ""):
+        attr = widget.objectName() if widget else self.sender().objectName()
+        ValhallaSettings().set(Dialogs.SETTINGS, attr, str(new_text))

@@ -320,14 +320,14 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         else:
             return type(self)()
 
-    def group(self) -> str:
-        if self.router == RouterType.VALHALLA:
-            return self.router.capitalize()
-        else:
-            return self.router.upper()
+    # def group(self) -> str:
+    #     if self.router == RouterType.VALHALLA:
+    #         return self.router.capitalize()
+    #     else:
+    #         return self.router.upper()
 
-    def groupId(self):
-        return self.router
+    # def groupId(self):
+    #     return self.router
 
     def icon(self) -> QIcon:
         return get_icon(f"icon_{self.endpoint}.png")
