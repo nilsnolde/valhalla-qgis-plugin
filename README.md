@@ -1,4 +1,4 @@
-![example workflow](https://github.com/gis-ops/network-analyst-qgis-plugin/actions/workflows/ci-tests.yml/badge.svg)
+[![Test plugin](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests.yml)
 
 QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhalla).
 
