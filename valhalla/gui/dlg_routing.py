@@ -97,9 +97,9 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
         self.router_widget.mode_btns.buttonToggled.connect(self._on_profile_change)
 
         # icons on left side menu
-        self.menu_widget.item(0).setIcon(get_icon("routing_icon.svg"))
+        self.menu_widget.item(0).setIcon(get_icon("directions_icon.svg"))
         self.menu_widget.item(1).setIcon(get_icon("isochrones_icon.svg"))
-        self.menu_widget.item(2).setIcon(get_icon("od_matrix_icon.svg"))
+        self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
 
     def _get_params(self, endpoint: RouterEndpoint) -> dict:

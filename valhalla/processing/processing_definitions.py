@@ -1,7 +1,7 @@
 from enum import Enum
 from pathlib import Path
 
-from valhalla import BASE_DIR
+from .. import BASE_DIR
 
 
 class MergeStrategy(str, Enum):

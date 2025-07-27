@@ -1,7 +1,7 @@
 from typing import Union
 
-from valhalla.global_definitions import RouterProfile, RouterType
-from valhalla.processing.routing.directions_base import DirectionsBase
+from ....global_definitions import RouterProfile, RouterType
+from ....processing.routing.directions_base import DirectionsBase
 
 
 class ValhallaDirections(DirectionsBase):

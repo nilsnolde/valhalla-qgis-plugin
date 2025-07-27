@@ -19,9 +19,9 @@ from qgis.core import (
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 
-from valhalla.core.results_factory import ResultsFactory
-from valhalla.core.settings import ProviderSetting, ValhallaSettings
-from valhalla.global_definitions import (
+from ...core.results_factory import ResultsFactory
+from ...core.settings import ProviderSetting, ValhallaSettings
+from ...global_definitions import (
     SETTINGS_WIDGETS_MAP,
     RouterEndpoint,
     RouterMethod,
@@ -29,14 +29,14 @@ from valhalla.global_definitions import (
     RouterType,
     RoutingMetric,
 )
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_base import (
+from ...gui.widgets.costing_settings.widget_settings_valhalla_base import (
     ValhallaSettingsBase,
 )
-from valhalla.processing.processing_definitions import HELP_DIR
-from valhalla.utils.geom_utils import WGS84
-from valhalla.utils.layer_utils import get_wgs_coords_from_layer
-from valhalla.utils.misc_utils import wrap_in_html_tag
-from valhalla.utils.resource_utils import get_graph_dir, get_icon
+from ...utils.geom_utils import WGS84
+from ...utils.layer_utils import get_wgs_coords_from_layer
+from ...utils.misc_utils import wrap_in_html_tag
+from ...utils.resource_utils import get_graph_dir, get_icon
+from ..processing_definitions import HELP_DIR
 
 
 class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
@@ -330,7 +330,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
     #     return self.router
 
     def icon(self) -> QIcon:
-        return get_icon(f"icon_{self.endpoint}.png")
+        return get_icon(f"{self.endpoint.lower()}_icon.svg")
 
     def name(self):
         if self.router == RouterType.VALHALLA:

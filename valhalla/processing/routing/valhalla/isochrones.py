@@ -10,19 +10,19 @@ from qgis.core import (
 )
 from qgis.PyQt.QtCore import QVariant
 
-from valhalla.global_definitions import (
+from ....global_definitions import (
     DEFAULT_LAYER_FIELDS,
     FieldNames,
     RouterEndpoint,
     RouterProfile,
     RouterType,
 )
-from valhalla.processing.routing.base_algorithm import (
+from ....third_party.routingpy import routingpy
+from ....utils.layer_utils import get_wgs_coords_from_feature
+from ....utils.logger_utils import qgis_log
+from ...routing.base_algorithm import (
     ValhallaBaseAlgorithm,
 )
-from valhalla.third_party.routingpy import routingpy
-from valhalla.utils.layer_utils import get_wgs_coords_from_feature
-from valhalla.utils.logger_utils import qgis_log
 
 
 class ValhallaIsochrones(ValhallaBaseAlgorithm):

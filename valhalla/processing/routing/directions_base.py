@@ -14,24 +14,24 @@ from qgis.core import (
 )
 from qgis.PyQt.QtCore import QVariant
 
-from valhalla.core.results_factory import DEFAULT_LAYER_FIELDS
-from valhalla.global_definitions import (
+from ...core.results_factory import DEFAULT_LAYER_FIELDS
+from ...global_definitions import (
     FieldNames,
     RouterEndpoint,
     RouterProfile,
     RouterType,
 )
-from valhalla.processing.processing_definitions import MergeStrategy
-from valhalla.processing.routing.base_algorithm import (
-    ValhallaBaseAlgorithm,
-)
-from valhalla.third_party.routingpy import routingpy
-from valhalla.utils.layer_utils import (
+from ...third_party.routingpy import routingpy
+from ...utils.layer_utils import (
     get_wgs_coords_from_feature,
     get_wgs_coords_from_layer,
 )
-from valhalla.utils.logger_utils import qgis_log
-from valhalla.utils.misc_utils import wrap_in_html_tag
+from ...utils.logger_utils import qgis_log
+from ...utils.misc_utils import wrap_in_html_tag
+from ..processing_definitions import MergeStrategy
+from ..routing.base_algorithm import (
+    ValhallaBaseAlgorithm,
+)
 
 
 class DirectionsBase(ValhallaBaseAlgorithm):

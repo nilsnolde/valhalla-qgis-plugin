@@ -8,19 +8,19 @@ from qgis.core import (
     QgsProcessingParameterField,
 )
 
-from valhalla.global_definitions import (
+from ...global_definitions import (
     DEFAULT_LAYER_FIELDS,
     FieldNames,
     RouterEndpoint,
     RouterProfile,
     RouterType,
 )
-from valhalla.processing.routing.base_algorithm import (
+from ...third_party.routingpy import routingpy
+from ...utils.layer_utils import get_wgs_coords_from_layer
+from ...utils.misc_utils import wrap_in_html_tag
+from ..routing.base_algorithm import (
     ValhallaBaseAlgorithm,
 )
-from valhalla.third_party.routingpy import routingpy
-from valhalla.utils.layer_utils import get_wgs_coords_from_layer
-from valhalla.utils.misc_utils import wrap_in_html_tag
 
 
 class MatrixBase(ValhallaBaseAlgorithm):

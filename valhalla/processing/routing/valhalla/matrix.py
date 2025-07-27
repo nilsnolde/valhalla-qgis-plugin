@@ -1,7 +1,7 @@
 from typing import Union
 
-from valhalla.global_definitions import RouterProfile, RouterType
-from valhalla.processing.routing.matrix_base import MatrixBase
+from ....global_definitions import RouterProfile, RouterType
+from ...routing.matrix_base import MatrixBase
 
 
 class ValhallaMatrix(MatrixBase):
