@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SpatialOptimization</class>
+ <widget class="QDialog" name="SpatialOptimization">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1121</width>
+    <height>658</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Network Analyst - Spatial Optimization</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalWrapper">
+     <item>
+      <layout class="QHBoxLayout" name="wrapperLayout">
+       <item>
+        <widget class="QListWidget" name="menu_widget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>153</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QListWidget{
+	background-color: rgb(69, 69, 69, 220);
+	outline: 0;
+}
+QListWidget::item {
+	color: white;
+	padding: 3px;
+}
+QListWidget::item::selected {
+	color: black;
+	background-color:palette(Window);
+    padding-right: 0px;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="currentRow">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>LSCP</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>MCLP</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>P-Center</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>P-Median</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSplitter" name="splitter">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>24</number>
+         </property>
+         <widget class="QWidget" name="verticalLayoutWidget_2">
+          <layout class="QVBoxLayout" name="splitterLeftLayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMaximumSize</enum>
+           </property>
+           <item>
+            <widget class="QScrollArea" name="scrollArea">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>898</width>
+                <height>622</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <widget class="QGroupBox" name="router_box">
+                 <property name="title">
+                  <string>Router</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_8"/>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="input_layers_box">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="title">
+                  <string>Matrix inputs</string>
+                 </property>
+                 <layout class="QFormLayout" name="formLayout_2">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>Facility layer</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QgsMapLayerComboBox" name="ui_fac_layer"/>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_5">
+                    <property name="text">
+                     <string>Facility ID field</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QgsFieldComboBox" name="ui_fac_id_field"/>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_6">
+                    <property name="text">
+                     <string>Demand point layer</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QgsMapLayerComboBox" name="ui_dem_point_layer"/>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_7">
+                    <property name="text">
+                     <string>Demand point ID field</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QgsFieldComboBox" name="ui_dem_point_id_field"/>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_15">
+                    <property name="text">
+                     <string>Optimization metric</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <layout class="QHBoxLayout" name="horizontalLayout_3">
+                    <item>
+                     <widget class="QRadioButton" name="ui_metric_duration">
+                      <property name="text">
+                       <string>Duration</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="ui_metric_distance">
+                      <property name="text">
+                       <string>Distance</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_16">
+                    <property name="text">
+                     <string>Return matrix</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QCheckBox" name="ui_return_matrix">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="0">
+                   <widget class="QLabel" name="label_17">
+                    <property name="text">
+                     <string>Draw connecting lines</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="1">
+                   <widget class="QCheckBox" name="ui_draw_connecting_lines">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QStackedWidget" name="ui_params_stacked">
+                 <property name="frameShadow">
+                  <enum>QFrame::Sunken</enum>
+                 </property>
+                 <widget class="QWidget" name="ui_lscp_params">
+                  <layout class="QVBoxLayout" name="verticalLayout_4">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox">
+                     <property name="title">
+                      <string>Parameters [mandatory]</string>
+                     </property>
+                     <layout class="QFormLayout" name="formLayout">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_3">
+                        <property name="text">
+                         <string>Service radius</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QgsDoubleSpinBox" name="ui_lscp_service_radius">
+                        <property name="minimum">
+                         <double>0.000000000000000</double>
+                        </property>
+                        <property name="maximum">
+                         <double>99999999.989999994635582</double>
+                        </property>
+                        <property name="value">
+                         <double>1.000000000000000</double>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_2">
+                     <property name="title">
+                      <string>Parameters [optional]</string>
+                     </property>
+                     <layout class="QFormLayout" name="formLayout_4">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label">
+                        <property name="text">
+                         <string>Predefined field</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QgsFieldComboBox" name="ui_lscp_predefined"/>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="ui_mclp_params">
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_3">
+                     <property name="title">
+                      <string>Parameters [mandatory]</string>
+                     </property>
+                     <layout class="QFormLayout" name="formLayout_3">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_8">
+                        <property name="text">
+                         <string>Service radius</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QgsDoubleSpinBox" name="ui_mclp_service_radius">
+                        <property name="maximum">
+                         <double>9999999999.000000000000000</double>
+                        </property>
+                        <property name="value">
+                         <double>1.000000000000000</double>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QLabel" name="label_10">
+                        <property name="text">
+                         <string>Number of facilities to allocate</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QgsSpinBox" name="ui_mclp_n_fac">
+                        <property name="minimum">
+                         <number>1</number>
+                        </property>
+                        <property name="maximum">
+                         <number>9999999</number>
+                        </property>
+                        <property name="value">
+                         <number>1</number>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_4">
+                     <property name="title">
+                      <string>Parameters [optional]</string>
+                     </property>
+                     <layout class="QFormLayout" name="formLayout_7">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_9">
+                        <property name="text">
+                         <string>Predefined facilities field</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QgsFieldComboBox" name="ui_mclp_predefined"/>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QLabel" name="label_14">
+                        <property name="text">
+                         <string>Demand points weights field</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QgsFieldComboBox" name="ui_mclp_weights"/>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="ui_pcenter_params">
+                  <layout class="QVBoxLayout" name="verticalLayout_6">
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_5">
+                     <property name="title">
+                      <string>Parameters [mandatory]</string>
+                     </property>
+                     <layout class="QFormLayout" name="formLayout_5">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_11">
+                        <property name="text">
+                         <string>Number of facilities to allocate</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QgsSpinBox" name="ui_pcenter_n_fac">
+                        <property name="maximum">
+                         <number>9999999</number>
+                        </property>
+                        <property name="value">
+                         <number>1</number>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="ui_pmedian_params">
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_6">
+                     <property name="title">
+                      <string>Parameters [mandatory]</string>
+                     </property>
+                     <layout class="QFormLayout" name="formLayout_6">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_12">
+                        <property name="text">
+                         <string>Number of facilities to allocate</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QgsSpinBox" name="ui_pmedian_n_fac">
+                        <property name="maximum">
+                         <number>99999999</number>
+                        </property>
+                        <property name="value">
+                         <number>1</number>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_7">
+                     <property name="title">
+                      <string>Parameters [optional]</string>
+                     </property>
+                     <layout class="QFormLayout" name="formLayout_8">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_13">
+                        <property name="text">
+                         <string>Demand points weights field</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QgsFieldComboBox" name="ui_pmedian_weights"/>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="execute_btn">
+             <property name="text">
+              <string>Execute</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QToolButton" name="ui_about_btn">
+               <property name="text">
+                <string>Help</string>
+               </property>
+               <property name="icon">
+                <iconset theme=":images/themes/default/mActionPropertiesWidget.svg">
+                 <normaloff>.</normaloff>.</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="label_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>With :heart: from GIS-OPS UG</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="ui_help_btn">
+               <property name="text">
+                <string>Help</string>
+               </property>
+               <property name="icon">
+                <iconset theme=":images/themes/default/mActionHelpContents.svg">
+                 <normaloff>.</normaloff>.</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="verticalLayoutWidget_3">
+          <layout class="QVBoxLayout" name="splitterRightLayout"/>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>qgsdoublespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsFieldComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsfieldcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsMapLayerComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsmaplayercombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>qgsspinbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

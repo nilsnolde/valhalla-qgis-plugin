@@ -1,0 +1,3 @@
+[submodule "valhalla/third_party/routingpy"]
+	path = valhalla/third_party/routingpy
+	url = https://github.com/nilsnolde/routingpy

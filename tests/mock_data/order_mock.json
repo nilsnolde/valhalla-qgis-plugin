@@ -1,0 +1,30 @@
+{
+  "valhalla": [
+    {
+      "name": "Canada",
+      "filename": "canada-latest.tar.bz2"
+    },
+    {
+      "name": "Europe",
+      "filename": "europe-latest.tar.bz2"
+    },
+    {
+      "name": "Switzerland",
+      "filename": "switzerland-latest.tar.bz2"
+    }
+  ],
+  "osrm": [
+    {
+      "name": "Germany",
+      "filename": "germany-latest.tar.bz2"
+    },
+    {
+      "name": "India",
+      "filename": "india-latest.tar.bz2"
+    },
+    {
+      "name": "Thailand",
+      "filename": "thailand-latest.tar.bz2"
+    }
+  ]
+}

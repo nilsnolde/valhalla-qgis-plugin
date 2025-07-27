@@ -1,0 +1,160 @@
+{
+  "valhalla": [
+    {
+      "name": "Europe",
+      "filename": "europe-latest.tar.bz2",
+      "size": 15711524,
+      "polyline": "gm||@wq}|GnahBo_h@vqXfw@vik@~pY~sgAvbSnte@nul@gbu@vcAwsf@nvlAoqP_oKocRonm@_ohCfwYw_Wgzn@wnu@fqHgiB_h~@fn~@~W",
+      "free": false
+    },
+    {
+      "name": "World",
+      "filename": "world-latest.tar.bz2",
+      "size": 152661536,
+      "polyline": "w~iy@opdaH~mDv|s@vvIvwi@wqXgw@oahBn_h@gn~@_XfiB~g~@vnu@gqHv_Wfzn@~nhCgwYncRnnm@nqP~nKvfo@~kaAnte@wcs@fg_AwidA~ebBfpeBfpAn}@v}~Cg^~vj@gsaBn|dAg^njj@~dPvhKns^njj@nwHoe`@gcc@nbKwiRomMovZgn~@gfx@gplAoi|@nKoKgyNwcs@whd@gnLw_p@vzLokXwzL_rGobKosEg{CgxGftD_sNnhC_db@wdH_|fBnoBgkPwoJf^gb\\_iSg{CgqHvmUwj@fE__cBftDoi|@foSwhKfw@",
+      "free": false
+    },
+    {
+      "name": "Switzerland",
+      "filename": "switzerland-latest.tar.bz2",
+      "size": 11520114,
+      "polyline": "_xyx@_zd~Gvik@~pY~sgAvbSnte@nul@gbu@vcAwsf@nvlAoqP_oKocRonm@geX_hpB",
+      "free": false
+    },
+    {
+      "name": "Germany",
+      "filename": "germany-latest.tar.bz2",
+      "size": 10936853,
+      "polyline": "_xyx@_zd~GfeX~gpB_ohCfwYojQ_xcBnahBo_h@vqXfw@",
+      "free": false
+    },
+    {
+      "name": "Austria",
+      "filename": "austria-latest.tar.bz2",
+      "size": 4012136,
+      "polyline": "gm||@wq}|GnjQ~wcBw_Wgzn@wnu@fqHgiB_h~@fn~@~W",
+      "free": false
+    },
+    {
+      "name": "Asia",
+      "filename": "asia-latest.tar.bz2",
+      "size": 31353131,
+      "polyline": "wb~s@wmh{Gn{iJ~t\\_wj@fsaBw}~Cf^gwdBwngBgg_AvidAote@vcs@wfo@_laAvsf@ovlAfbu@wcA",
+      "free": false
+    },
+    {
+      "name": "India",
+      "filename": "india-latest.tar.bz2",
+      "size": 16632023,
+      "polyline": "olyl@kwuzGw`gArskB~naDf^~vj@gsaBgeeCs~I",
+      "free": false
+    },
+    {
+      "name": "China",
+      "filename": "china-latest.tar.bz2",
+      "size": 15446134,
+      "polyline": "olyl@kwuzGoodAbrmBgwdBwngBolx@wxWfucFjuQ",
+      "free": false
+    },
+    {
+      "name": "Thailand",
+      "filename": "thailand-latest.tar.bz2",
+      "size": 10263040,
+      "polyline": "gudr@_tozGolx@wxWgbu@vcAwsf@nvlAvfo@~kaAnte@wcs@fg_AwidA",
+      "free": false
+    },
+    {
+      "name": "North America",
+      "filename": "north_america-latest.tar.bz2",
+      "size": 136538395,
+      "polyline": "gfsh@wwjzGn|dAg^njj@~dPvhKns^njj@nwHoe`@gcc@nbKwiRomMovZgn~@gfx@gplAoi|@wlNgps@whd@gnLw_p@vzLokXwzL_rGobKosEg{CgxGftD_sNnhC_db@wdH_|fBnoBgkPwoJf^gb\\_iSg{CgqHvmUwjdBnzDoi|@foSwhKfw@~mDv|s@vvIvwi@vik@~pY~sgAvbSnte@nul@n{iJ~t\\",
+      "free": false
+    },
+    {
+      "name": "United States of America",
+      "filename": "united_states_of_america-latest.tar.bz2",
+      "size": 89198628,
+      "polyline": "wb~s@wmh{Gfn{D_ozD~rNohCfxGgtDnsEf{C~qGnbKnkXvzLv_p@wzLvhd@fnLfyNvcs@vclA~u|@fn~@ffx@nmMnvZobKviRne`@fcc@ojj@owHwhKos^ojj@_ePo|dAf^o{iJ_u\\",
+      "free": false
+    },
+    {
+      "name": "Canada",
+      "filename": "canada-latest.tar.bz2",
+      "size": 77867340,
+      "polyline": "wb~s@wmh{Gfn{D_ozD_db@wdH_|fBnoBgkPwoJf^gb\\_iSg{CgqHvmUwjdBnzDoi|@foSwhKfw@~mDv|s@vvIvwi@vik@~pY~sgAvbSnte@nul@",
+      "free": false
+    },
+    {
+      "name": "Belgium",
+      "filename": "belgium-latest.tar.bz2",
+      "size": 77867284,
+      "polyline": "wb~s@wmh{Gfn{D_ozD_db@wdH_|fBnoBgkPwoJf^gb\\_iSg{CgqHvmUwjdBnzDoi|@foSwhKfw@~mDv|s@vvIvwi@vik@~pY~sgAvbSnte@nul@",
+      "free": true
+    }
+  ],
+  "osrm": [
+    {
+      "name": "Switzerland",
+      "filename": "switzerland-latest.tar.bz2",
+      "size": 11520114,
+      "polyline": "_xyx@_zd~Gvik@~pY~sgAvbSnte@nul@gbu@vcAwsf@nvlAoqP_oKocRonm@geX_hpB",
+      "free": false
+    },
+    {
+      "name": "Germany",
+      "filename": "germany-latest.tar.bz2",
+      "size": 10936853,
+      "polyline": "_xyx@_zd~GfeX~gpB_ohCfwYojQ_xcBnahBo_h@vqXfw@",
+      "free": false
+    },
+    {
+      "name": "Austria",
+      "filename": "austria-latest.tar.bz2",
+      "size": 4012136,
+      "polyline": "gm||@wq}|GnjQ~wcBw_Wgzn@wnu@fqHgiB_h~@fn~@~W",
+      "free": false
+    },
+    {
+      "name": "India",
+      "filename": "india-latest.tar.bz2",
+      "size": 16632023,
+      "polyline": "olyl@kwuzGw`gArskB~naDf^~vj@gsaBgeeCs~I",
+      "free": false
+    },
+    {
+      "name": "China",
+      "filename": "china-latest.tar.bz2",
+      "size": 15446134,
+      "polyline": "olyl@kwuzGoodAbrmBgwdBwngBolx@wxWfucFjuQ",
+      "free": false
+    },
+    {
+      "name": "Thailand",
+      "filename": "thailand-latest.tar.bz2",
+      "size": 10263040,
+      "polyline": "gudr@_tozGolx@wxWgbu@vcAwsf@nvlAvfo@~kaAnte@wcs@fg_AwidA",
+      "free": false
+    },
+    {
+      "name": "United States of America",
+      "filename": "united_states_of_america-latest.tar.bz2",
+      "size": 89198628,
+      "polyline": "wb~s@wmh{Gfn{D_ozD~rNohCfxGgtDnsEf{C~qGnbKnkXvzLv_p@wzLvhd@fnLfyNvcs@vclA~u|@fn~@ffx@nmMnvZobKviRne`@fcc@ojj@owHwhKos^ojj@_ePo|dAf^o{iJ_u\\",
+      "free": false
+    },
+    {
+      "name": "Canada",
+      "filename": "canada-latest.tar.bz2",
+      "size": 77867340,
+      "polyline": "wb~s@wmh{Gfn{D_ozD_db@wdH_|fBnoBgkPwoJf^gb\\_iSg{CgqHvmUwjdBnzDoi|@foSwhKfw@~mDv|s@vvIvwi@vik@~pY~sgAvbSnte@nul@",
+      "free": false
+    },
+    {
+      "name": "Belgium",
+      "filename": "belgium-latest.tar.bz2",
+      "size": 77867284,
+      "polyline": "wb~s@wmh{Gfn{D_ozD_db@wdH_|fBnoBgkPwoJf^gb\\_iSg{CgqHvmUwjdBnzDoi|@foSwhKfw@~mDv|s@vvIvwi@vik@~pY~sgAvbSnte@nul@",
+      "free": true
+    }
+  ]
+}

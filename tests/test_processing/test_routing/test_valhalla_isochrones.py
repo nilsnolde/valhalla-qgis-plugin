@@ -1,0 +1,35 @@
+from tests.test_processing.processing_base import ProcessingBase
+from tests.utilities import get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+from valhalla.global_definitions import RouterMethod, RouterProfile
+from valhalla.processing.routing.valhalla.isochrones import ValhallaIsochrones
+
+
+class TestValhallaIsochrones(ProcessingBase):
+    def test_isochrones_basic(self):
+        """Valhalla isochrones processing algorithm returns features with HTTP method."""
+        params = {
+            "INPUT_LAYER_1": self.layer_1,
+            "INPUT_INTERVALS": "50, 100",
+        }
+        alg = ValhallaIsochrones(profile=RouterProfile.CAR)
+        feats, progress_changed_vals = self.run_routing_algorithm(alg, params)
+
+        self.assertEqual(len(feats), 6)
+        self.assertEqual(progress_changed_vals, [33, 66, 100])
+
+    def test_isochrones_bindings(self):
+        """Valhalla isochrones processing algorithm returns features with bindings method."""
+        params = {
+            "INPUT_METHOD": RouterMethod.LOCAL,
+            "INPUT_PACKAGE": "andorra_tiles.tar",
+            "INPUT_LAYER_1": self.layer_1,
+            "INPUT_INTERVALS": "50, 100",
+        }
+        alg = ValhallaIsochrones(profile=RouterProfile.CAR)
+        feats, progress_changed_vals = self.run_routing_algorithm(alg, params)
+
+        self.assertEqual(len(feats), 6)
+        self.assertEqual(progress_changed_vals, [33, 66, 100])
