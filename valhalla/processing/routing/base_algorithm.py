@@ -42,7 +42,7 @@ from valhalla.utils.resource_utils import get_graph_dir, get_icon
 class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
 
     IN_PROVIDER = "INPUT_PROVIDER"
-    IN_URL = "INPUT_URL"
+    # IN_URL = "INPUT_URL"
     IN_PKG = "INPUT_PACKAGE"
     IN_MODE = "INPUT_MODE"
     IN_AVOID_LOCATIONS = "INPUT_AVOID_LOCATIONS"
@@ -89,13 +89,13 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         self.providers = ValhallaSettings().get_providers(RouterType.VALHALLA)
         servers = [prov.name for prov in self.providers]
 
-        method_param = QgsProcessingParameterEnum(
+        url_param = QgsProcessingParameterEnum(
             self.IN_PROVIDER,
             "Provider",
             servers,
             defaultValue=servers[0],
         )
-        self.addParameter(method_param)
+        self.addParameter(url_param)
 
         # pkg_param = QgsProcessingParameterEnum(
         #     self.IN_PKG,

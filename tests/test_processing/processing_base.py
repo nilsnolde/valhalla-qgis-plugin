@@ -109,6 +109,9 @@ class ProcessingBase(HTTPTestCase):
         """Prepares and runs the algorithm, then returns the list of features"""
         progress_changed_vals = []
 
+        # always request to localhost
+        params["INPUT_PROVIDER"] = 1
+
         def on_progress_changed(progress: float):
             nonlocal progress_changed_vals  # noqa: F824
             progress_changed_vals.append(progress)
