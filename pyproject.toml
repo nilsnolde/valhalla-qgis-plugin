@@ -32,3 +32,6 @@ skip = [
     "tests/utilities.py",
     "tests/qgis_interface.py"
 ]
+
+[tool.qgis-plugin-ci]
+plugin_path = "valhalla"

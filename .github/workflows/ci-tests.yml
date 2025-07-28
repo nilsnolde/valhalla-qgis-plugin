@@ -1,4 +1,4 @@
-name: Test plugin
+name: Test plugin - QGIS releases
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         #   - current LTR
         #   - current release 
         #   - master
-        qgis_tags: [3.40.9, 3.44.1, latest]
+        qgis_tags: [3.40.9, 3.44.1]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

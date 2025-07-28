@@ -1,0 +1,32 @@
+name: Test plugin - QGIS master
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '*.md'
+      - '*.sh'
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+
+env:
+  PLUGIN_NAME: valhalla
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run linters & tests
+        run: |
+          docker pull qgis/qgis:latest
+          docker run -dt --name qgis-testing-environment --network host -v "${GITHUB_WORKSPACE}":/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:latest
+          docker run --rm -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
+          docker exec qgis-testing-environment bash -c "/tests_directory/tests/scripts/qgis_test_setup.sh latest ${{ env.PLUGIN_NAME }}"
