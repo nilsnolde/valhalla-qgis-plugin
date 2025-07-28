@@ -3,7 +3,7 @@
 QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhalla).
 
 It features:
-- UI & processing algorithms to routing, isochrones, matrix & expansion endpoints for `pedestrian`, `bicycle`, `car` & `motorcycle`
+- UI & processing algorithms to routing, isochrones, matrix & expansion endpoints for `pedestrian`, `bicycle`, `car`, `truck` & `motorcycle`
 - support for most[^1] of Valhalla costing options in both UI & processing algorithms for **all endpoints**, e.g.
   - time-dependent routing
   - exclude polygons to avoid user-defined areas
