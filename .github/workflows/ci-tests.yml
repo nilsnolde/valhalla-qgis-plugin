@@ -23,8 +23,7 @@ jobs:
       matrix:
         # test 
         #   - current LTR
-        #   - current release 
-        #   - master
+        #   - current release
         qgis_tags: [3.40.9, 3.44.1]
     steps:
       - name: Checkout
