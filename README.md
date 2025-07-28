@@ -1,4 +1,4 @@
-[![Test - QGIS releases](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests.yml) [![Test - QGIS master](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests-latest.yml/badge.svg)](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests-latest.yml)
+[![Test - QGIS releases](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests.yml) [![Test - QGIS master](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests-latest.yml/badge.svg)](https://github.com/nilsnolde/valhalla-qgis-plugin/actions/workflows/ci-tests-latest.yml) [![Coverage Status](https://coveralls.io/repos/github/nilsnolde/valhalla-qgis-plugin/badge.svg?branch=master)](https://coveralls.io/github/nilsnolde/valhalla-qgis-plugin?branch=master)
 
 QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhalla).
 
