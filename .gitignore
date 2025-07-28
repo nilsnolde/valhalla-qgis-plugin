@@ -5,3 +5,4 @@ dist/
 .coverage
 symbology-style.db
 .venv
+*.lcov

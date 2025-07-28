@@ -37,3 +37,25 @@ jobs:
           docker run -dt --name qgis-testing-environment --network host -v "${GITHUB_WORKSPACE}":/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:${{ matrix.qgis_tags }}
           docker run --rm -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
           docker exec qgis-testing-environment bash -c "/tests_directory/tests/scripts/qgis_test_setup.sh ${{ matrix.qgis_tags }} ${{ env.PLUGIN_NAME }}"
+
+      - name: Upload coverage artifact
+        if: matrix.qgis_tags == '3.44.1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: coverage.lcov
+
+  coveralls:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-lcov
+      - name: Send coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage.lcov

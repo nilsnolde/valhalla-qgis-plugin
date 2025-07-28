@@ -46,3 +46,4 @@ cd tests_directory
 pre-commit run --all-files
 python3 -m coverage run -m unittest discover
 python3 -m coverage report
+python3 -m coverage lcov --include "valhalla/*"
