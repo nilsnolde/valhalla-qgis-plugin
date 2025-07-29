@@ -125,7 +125,7 @@ class Ui_routing_widget(object):
         self.label_10 = QtWidgets.QLabel(self.ui_valhalla_isochrones_params)
         self.label_10.setObjectName("label_10")
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_10)
-        self.ui_isochrone_denoise = gui.QgsDoubleSpinBox(self.ui_valhalla_isochrones_params)
+        self.ui_isochrone_denoise = QgsDoubleSpinBox(self.ui_valhalla_isochrones_params)
         self.ui_isochrone_denoise.setDecimals(1)
         self.ui_isochrone_denoise.setMaximum(1.0)
         self.ui_isochrone_denoise.setSingleStep(0.1)
@@ -135,7 +135,7 @@ class Ui_routing_widget(object):
         self.label_11 = QtWidgets.QLabel(self.ui_valhalla_isochrones_params)
         self.label_11.setObjectName("label_11")
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_11)
-        self.ui_isochrone_generalize = gui.QgsSpinBox(self.ui_valhalla_isochrones_params)
+        self.ui_isochrone_generalize = QgsSpinBox(self.ui_valhalla_isochrones_params)
         self.ui_isochrone_generalize.setMaximum(1000)
         self.ui_isochrone_generalize.setObjectName("ui_isochrone_generalize")
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.ui_isochrone_generalize)
@@ -207,7 +207,7 @@ class Ui_routing_widget(object):
         self.ui_osrm_matrix_params.setObjectName("ui_osrm_matrix_params")
         self.ui_params_stacked.addWidget(self.ui_osrm_matrix_params)
         self.verticalLayout_7.addWidget(self.ui_params_stacked)
-        self.options_box = gui.QgsCollapsibleGroupBox(self.scrollAreaWidgetContents)
+        self.options_box = QgsCollapsibleGroupBox(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -318,4 +318,6 @@ class Ui_routing_widget(object):
         self.options_box.setTitle(_translate("routing_widget", "Options"))
         self.execute_btn.setText(_translate("routing_widget", "Execute"))
         self.ui_graph_btn.setToolTip(_translate("routing_widget", "Loads the current graph extent as polygon layer and checks for things like admins & tz dbs"))
-from qgis import gui
+from qgscollapsiblegroupbox import QgsCollapsibleGroupBox
+from qgsdoublespinbox import QgsDoubleSpinBox
+from qgsspinbox import QgsSpinBox

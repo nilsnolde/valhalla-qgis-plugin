@@ -21,7 +21,11 @@ class AboutDialog(QDialog, Ui_AboutDialog):
         self.ui_data_age_text.setText("NA")
         try:
             result = get_status_response(self.parent.router_widget.provider.url)
-            self.ui_valhalla_version_text.setText(result["version"])
+            valhalla_version: str = result["version"]
+            if "-" in valhalla_version:
+                std_version, commit_id = valhalla_version.split("-")
+                valhalla_version = f'{std_version}-<a href="https://github.com/valhalla/valhalla/commit/{commit_id}">{commit_id}</a>'
+            self.ui_valhalla_version_text.setText(valhalla_version)
             self.ui_data_age_text.setText(
                 datetime.fromtimestamp(result["tileset_last_modified"]).isoformat() + " UTC"
             )
