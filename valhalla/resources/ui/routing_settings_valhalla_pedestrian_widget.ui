@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>636</width>
+    <width>639</width>
     <height>593</height>
    </rect>
   </property>
@@ -14,6 +14,15 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QgsCollapsibleGroupBox" name="penalties_box">
      <property name="toolTip">
@@ -23,16 +32,28 @@
       <string>Penalties</string>
      </property>
      <property name="collapsed">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <layout class="QFormLayout" name="formLayout_4">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="step_penalty_label">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty in seconds added to each transition onto a path with steps or stairs. Higher values apply larger cost penalties to avoid paths that contain flights of steps.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Step&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Step&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="openExternalLinks">
          <bool>true</bool>
@@ -52,7 +73,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied for transition to generic service road. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="openExternalLinks">
          <bool>true</bool>
@@ -77,7 +98,22 @@
      <property name="title">
       <string>Additional parameters</string>
      </property>
+     <property name="collapsed">
+      <bool>true</bool>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,0">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item>
        <layout class="QFormLayout" name="additional_params_column_1">
         <item row="0" column="0">
@@ -86,7 +122,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Walking speed in kilometers per hour. Must be between 0.5 and 25 km/hr.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;This is a range of values from 0 to 1, where 0 attempts to avoid hills and steep grades even if it means a longer (time and distance) path, while 1 indicates the pedestrian does not fear hills and steeper grades. Based on the use_hills factor, penalties are applied to roads based on elevation change and grade. These penalties help the path avoid hilly roads in favor of flatter roads or less steep grades where available.&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Walking speed&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Walking speed&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -115,7 +151,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A factor that penalizes the cost when traversing a closed edge. Its value can range from &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;1.0&lt;/span&gt; - don't penalize closed edges, to &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;10.0&lt;/span&gt; - apply high cost penalty to closed edges.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Walkway factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Walkway factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -144,7 +180,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A factor that modifies (multiplies) the cost when generic service roads are encountered.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -183,7 +219,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the maximum difficulty of hiking trails that is allowed. Values between 0 and 6 are allowed. The values correspond to &lt;span style=&quot; font-style:italic;&quot;&gt;sac_scale&lt;/span&gt; values within OpenStreetMap. The default value is 1 which means that well cleared trails that are mostly flat or slightly sloped are allowed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Max hiking difficulty&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Max hiking difficulty&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -197,7 +233,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A factor that modifies (multiplies) the cost when alleys are encountered. Pedestrian routes generally want to avoid alleys or narrow service roads between buildings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Alley factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Alley factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -210,7 +246,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A factor that modifies (multiplies) the cost when encountering a &lt;a href=&quot;http://wiki.openstreetmap.org/wiki/Tag:service%3Ddriveway&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;driveway&lt;/span&gt;&lt;/a&gt;, which is often a private, service road. Pedestrian routes generally want to avoid driveways (private).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Driveway factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Driveway factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -223,7 +259,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A factor that modifies the cost when encountering roads with dedicated sidewalks. Pedestrian routes generally attempt to favor using sidewalks. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Sidewalk factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Sidewalk factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -285,7 +321,22 @@
      <property name="title">
       <string>Favor types</string>
      </property>
+     <property name="collapsed">
+      <bool>true</bool>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item>
        <layout class="QFormLayout" name="formLayout">
         <item row="0" column="0">
@@ -294,7 +345,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take ferries.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use ferry&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use ferry&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -320,7 +371,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is a range of values from 0 to 1, where 0 attempts to avoid hills and steep grades even if it means a longer (time and distance) path, while 1 indicates the pedestrian does not fear hills and steeper grades. Based on the &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;use_hills&lt;/span&gt; factor, penalties are applied to roads based on elevation change and grade. These penalties help the path avoid hilly roads in favor of flatter roads or less steep grades where available.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use hills&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#pedestrian-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use hills&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -350,7 +401,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take living streets.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use living streets&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use living streets&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -363,7 +414,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take track roads.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use tracks&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use tracks&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>

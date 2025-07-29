@@ -3,9 +3,8 @@ from copy import deepcopy
 from typing import List, Optional, Tuple
 
 from qgis.core import Qgis, QgsFields, QgsProject, QgsVectorLayer, QgsWkbTypes
-from qgis.gui import QgisInterface
+from qgis.gui import QgisInterface, QgsDockWidget
 from qgis.PyQt.QtWidgets import (
-    QDialog,
     QLineEdit,
     QMessageBox,
     QTextEdit,
@@ -30,10 +29,9 @@ from ..third_party.routingpy import routingpy
 from ..third_party.routingpy.routingpy.utils import deep_merge_dicts
 from ..utils.layer_utils import post_process_layer
 from ..utils.resource_utils import get_graph_dir, get_icon
-from .compiled.dlg_routing_ui import Ui_RoutingDialog
+from .compiled.widget_routing_dock_ui import Ui_routing_widget
 from .dlg_about import AboutDialog
 from .gui_utils import add_msg_bar
-from .splitter_mixin import SplitterMixin
 
 MENU_TABS = {
     RouterEndpoint.DIRECTIONS: "ui_directions_params",
@@ -48,13 +46,13 @@ DEFAULT_PROVIDERS = [
 ]
 
 
-class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
-    def __init__(self, parent=None, iface: QgisInterface = None):
-        QDialog.__init__(self, parent)
-        self.setupUi(self)
+class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
+    def __init__(self, iface: QgisInterface = None):
+        QgsDockWidget.__init__(self)
+        widget = QWidget(self)
+        self.setupUi(widget)
         self.ui_log_btn.setIcon(get_icon("url.svg"))
 
-        SplitterMixin.__init__(self, self.splitter)
         self.iface = iface
 
         # add a status bar
@@ -75,7 +73,7 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
         self.waypoints_widget = WaypointsWidget(self, self.iface)
         self.waypoints_box.layout().addWidget(self.waypoints_widget)
         self.routing_params_widget = RoutingParamsWidget(self, self.iface)
-        self.splitterRightLayout.layout().addWidget(self.routing_params_widget)
+        self.options_box.layout().addWidget(self.routing_params_widget)
 
         # initial factory, will/should always be HTTP
         self.factory = ResultsFactory(
@@ -101,6 +99,8 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
         self.menu_widget.item(1).setIcon(get_icon("isochrones_icon.svg"))
         self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
+
+        self.setWidget(widget)
 
     def _get_params(self, endpoint: RouterEndpoint) -> dict:
         """Returns the current parameters"""
@@ -141,11 +141,11 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
             # only append the costing options if the costing options widget is active
             return {
                 **params,
-                **(
-                    self.routing_params_widget.get_costing_params()
-                    if self.collapse_button.isChecked()
-                    else dict()
-                ),
+                # **(
+                #     self.routing_params_widget.get_costing_params()
+                #     if self.collapse_button.isChecked()
+                #     else dict()
+                # ),
             }
         else:
             if endpoint == RouterEndpoint.DIRECTIONS:
@@ -304,39 +304,39 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
 
     def _on_router_or_menu_change(self, menu_index: int):
         """Disables/enables some widgets if it's OSRM isochrone/expansion"""
-        is_osrm = self.router_widget.router == RouterType.OSRM
-        is_osrm_forbidden_endpoint = menu_index in (1, 3) and is_osrm
+        # is_osrm = self.router_widget.router == RouterType.OSRM
+        # is_osrm_forbidden_endpoint = menu_index in (1, 3) and is_osrm
 
-        # disable a few widgets
-        self.routing_params_widget.exclude_locations.setEnabled(not is_osrm)
-        self.routing_params_widget.exclude_polygons.setEnabled(not is_osrm)
-        self.routing_params_widget.ui_settings_stacked.setEnabled(not is_osrm)
-        self.routing_params_widget.ui_metric_box.setEnabled(not is_osrm)
-        self.routing_params_widget.ui_reset_settings.setEnabled(not is_osrm)
+        # # disable a few widgets
+        # self.routing_params_widget.exclude_locations.setEnabled(not is_osrm)
+        # self.routing_params_widget.exclude_polygons.setEnabled(not is_osrm)
+        # self.routing_params_widget.ui_settings_stacked.setEnabled(not is_osrm)
+        # self.routing_params_widget.ui_metric_box.setEnabled(not is_osrm)
+        # self.routing_params_widget.ui_reset_settings.setEnabled(not is_osrm)
 
-        self.waypoints_widget.setEnabled(not is_osrm_forbidden_endpoint)
-        self.ui_valhalla_isochrones_params.setEnabled(not is_osrm_forbidden_endpoint)
-        self.ui_valhalla_expansion_params.setEnabled(not is_osrm_forbidden_endpoint)
-        self.execute_btn.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.waypoints_widget.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.ui_valhalla_isochrones_params.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.ui_valhalla_expansion_params.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.execute_btn.setEnabled(not is_osrm_forbidden_endpoint)
 
-        # update their tooltips
-        tooltip = "Methods Isochrones and Expansion not available with OSRM"
-        self.waypoints_widget.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        self.execute_btn.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        self.ui_valhalla_isochrones_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        self.ui_valhalla_expansion_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # # update their tooltips
+        # tooltip = "Methods Isochrones and Expansion not available with OSRM"
+        # self.waypoints_widget.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # self.execute_btn.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # self.ui_valhalla_isochrones_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # self.ui_valhalla_expansion_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
 
         if menu_index == 0:
-            self.ui_endpoint_label.setText("Routing")
+            # self.ui_endpoint_label.setText("Routing")
             self.setWindowTitle("Valhalla - Routing")
         elif menu_index == 1:
-            self.ui_endpoint_label.setText("Isochrones")
+            # self.ui_endpoint_label.setText("Isochrones")
             self.setWindowTitle("Valhalla - Isochrones")
         elif menu_index == 2:
-            self.ui_endpoint_label.setText("Matrix")
+            # self.ui_endpoint_label.setText("Matrix")
             self.setWindowTitle("Valhalla - Matrix")
         elif menu_index == 3:
-            self.ui_endpoint_label.setText("Expansion")
+            # self.ui_endpoint_label.setText("Expansion")
             self.setWindowTitle("Valhalla - Expansion")
 
     def _on_profile_change(self):

@@ -413,7 +413,6 @@ class WaypointsWidget(QWidget):
 
     def _handle_init_maptool(self):
         """Set up the maptool: remember the last one used, hide the parent dlg."""
-        self.parent_dlg.hide()
         self.last_maptool = self.iface.mapCanvas().mapTool()
         self.iface.mapCanvas().setMapTool(self.point_tool)
 
@@ -452,7 +451,6 @@ class WaypointsWidget(QWidget):
 
         # then restore some of the things we set up when initializing the point tool
         QApplication.restoreOverrideCursor()
-        self.parent_dlg.show()
         QApplication.processEvents()
         self.iface.mapCanvas().setMapTool(self.last_maptool)
 

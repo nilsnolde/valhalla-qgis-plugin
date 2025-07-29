@@ -6,14 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>636</width>
-    <height>498</height>
+    <width>640</width>
+    <height>510</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QgsCollapsibleGroupBox" name="penalties">
      <property name="toolTip">
@@ -22,7 +34,22 @@
      <property name="title">
       <string>Penalties</string>
      </property>
+     <property name="collapsed">
+      <bool>true</bool>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item>
        <layout class="QFormLayout" name="penalties_column_1">
         <item row="0" column="0">
@@ -31,7 +58,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied when transitioning between roads that do not have consistent naming–in other words, no road names in common.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Maneuver&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Maneuver&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -54,7 +81,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied when a gate with no access information is on the road.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Gate&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Gate&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -81,7 +108,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied for transition to generic service road. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -104,7 +131,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;tr&gt;&lt;td/&gt;&lt;td&gt;&lt;p&gt;A penalty applied for a country crossing.&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Country crossing&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Country crossing&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -131,7 +158,22 @@
      <property name="title">
       <string>Favor types</string>
      </property>
+     <property name="collapsed">
+      <bool>true</bool>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item>
        <layout class="QFormLayout" name="formLayout_5">
         <item row="0" column="0">
@@ -140,7 +182,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A cyclist's propensity to use roads alongside other vehicles. This is a range of values from 0 to 1, where 0 attempts to avoid roads and stay on cycleways and paths, and 1 indicates the rider is more comfortable riding on roads. Based on the &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;use_roads&lt;/span&gt; factor, roads with certain classifications and higher speeds are penalized in an attempt to avoid them when finding the best path.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use roads&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use roads&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -150,7 +192,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A cyclist's desire to tackle hills in their routes. This is a range of values from 0 to 1, where 0 attempts to avoid hills and steep grades even if it means a longer (time and distance) path, while 1 indicates the rider does not fear hills and steeper grades. Based on the &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;use_hills&lt;/span&gt; factor, penalties are applied to roads based on elevation change and grade. These penalties help the path avoid hilly roads in favor of flatter roads or less steep grades where available.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use hills&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use hills&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -202,7 +244,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value is meant to represent how much a cyclist wants to avoid roads with poor surfaces relative to the bicycle type being used. This is a range of values between 0 and 1. When the value is 0, there is no penalization of roads with different surface types; only bicycle speed on each surface is taken into account. As the value approaches 1, roads with poor surfaces for the bike are penalized heavier so that they are only taken if they significantly improve travel time. When the value is equal to 1, all bad surfaces are completely disallowed from routing, including start and end points.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Avoid bad surfaces&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Avoid bad surfaces&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -242,7 +284,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take ferries.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use ferry&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use ferry&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -252,7 +294,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take living streets. This is a range of values between 0 and 1. Values near 0 attempt to avoid living streets and values from 0.5 to 1 will currently have no effect on route selection. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use living streets&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use living streets&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -266,14 +308,29 @@
      <property name="title">
       <string>Additional parameters</string>
      </property>
+     <property name="collapsed">
+      <bool>true</bool>
+     </property>
      <layout class="QFormLayout" name="formLayout_4">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="bicycle_type_label">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The type of bicycle.&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;Road&lt;/span&gt;: a road-style bicycle with narrow tires that is generally lightweight and designed for speed on paved surfaces. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;Hybrid&lt;/span&gt;: a bicycle made mostly for city riding or casual riding on roads and paths with good surfaces.&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;Cross&lt;/span&gt;: a cyclo-cross bicycle, which is similar to a road bicycle but with wider tires suitable to rougher surfaces.&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;Mountain&lt;/span&gt;: a mountain bicycle suitable for most surfaces but generally heavier and slower on paved surfaces.&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Bicycle type&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Bicycle type&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -310,7 +367,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cycling speed is the average travel speed along smooth, flat roads. This is meant to be the speed a rider can comfortably maintain over the desired distance of the route. It can be modified (in the costing method) by surface type in conjunction with bicycle type and (coming soon) by hilliness of the road section. When no speed is specifically provided, the default speed is determined by the bicycle type and are as follows: Road = 25 KPH (15.5 MPH), Cross = 20 KPH (13 MPH), Hybrid/City = 18 KPH (11.5 MPH), and Mountain = 16 KPH (10 MPH).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Cycling speed&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#bicycle-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Cycling speed&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>

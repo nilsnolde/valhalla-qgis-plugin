@@ -11,7 +11,7 @@ It features:
 - support for multiple Valhalla servers, the [public server](https://github.com/valhalla/valhalla?tab=readme-ov-file#demo-server) and `localhost` are preconfigured
 
 > [!NOTE]
-> Starting with `v3.0.0` this plugin had a complete re-write from scratch. Previously it was loosely based on one of my ex-plugins [ORS Tools](https://plugins.qgis.org/plugins/ORStools/), but that design has a quite a few shortcomings in terms of UX and aesthetics. Eventually I'd like to make this plugin a `QgsDockWidget`, so both the main QGIS window and plugin UI can be accessed at the same time.
+> Starting with `v3.0.0` this plugin had a complete re-write from scratch. Previously it was loosely based on one of my ex-plugins [ORS Tools](https://plugins.qgis.org/plugins/ORStools/), but that design has a quite a few shortcomings in terms of UX and aesthetics. The biggest problem is that the dialogs are huge and one can't properly access both the map canvas **and** the plugin at the same time. Starting with `v3.0.0` it's a docked plugin, i.e. a proper panel.
 
 [^1]: Some costing options make little sense, e.g. transit, some other we didn't get around to yet. Valhalla is also under constant development, we might miss a few recently added ones.
 

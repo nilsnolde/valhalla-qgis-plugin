@@ -7,13 +7,25 @@
     <x>0</x>
     <y>0</y>
     <width>605</width>
-    <height>607</height>
+    <height>642</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QgsCollapsibleGroupBox" name="penalties_box">
      <property name="toolTip">
@@ -23,9 +35,21 @@
       <string>Penalties</string>
      </property>
      <property name="collapsed">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item>
        <layout class="QFormLayout" name="penalties_column_1">
         <item row="0" column="0">
@@ -34,7 +58,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied to the cost when a toll&lt;a href=&quot;http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dtoll_booth&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;/&gt;&lt;/a&gt;booth is encountered.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Toll booth&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Toll booth&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -71,7 +95,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied for transition to generic service road. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -84,7 +108,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;tr&gt;&lt;td/&gt;&lt;td&gt;&lt;p&gt;A penalty applied for a country crossing.&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Country crossing&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Country crossing&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -101,7 +125,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied when transitioning between roads that do not have consistent naming–in other words, no road names in common.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Maneuver&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Maneuver&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -134,7 +158,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied when a gate with no access information is on the road.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Gate&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Gate&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -157,7 +181,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A penalty applied when a gate or bollard with &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;access=private&lt;/span&gt; is encountered. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Private access&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Private access&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -177,7 +201,22 @@
      <property name="title">
       <string>Favor types</string>
      </property>
+     <property name="collapsed">
+      <bool>true</bool>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <property name="leftMargin">
+       <number>7</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>7</number>
+      </property>
       <item>
        <layout class="QFormLayout" name="formLayout_4">
         <item row="0" column="1">
@@ -212,7 +251,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take ferries.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use ferry&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use ferry&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -225,7 +264,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A riders's propensity to prefer the use of highways.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#motorcycle-costing-options---beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use highways&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#motorcycle-costing-options---beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use highways&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -251,7 +290,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take roads with tolls.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use tolls&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use tolls&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -268,7 +307,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take living streets.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use living streets&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use living streets&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -281,7 +320,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value indicates the willingness to take track roads.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use tracks&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use tracks&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -314,7 +353,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="use_trails_label">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#motorcycle-costing-options---beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use trails&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#motorcycle-costing-options---beta&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Use trails&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -338,6 +377,9 @@
      <property name="title">
       <string>Additional parameters</string>
      </property>
+     <property name="collapsed">
+      <bool>true</bool>
+     </property>
      <layout class="QFormLayout" name="formLayout_6">
       <item row="0" column="0">
        <widget class="QLabel" name="top_speed_label">
@@ -345,7 +387,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Top speed the vehicle can go. Also used to avoid roads with higher speeds than this value. &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;top_speed&lt;/span&gt; must be between 10 and 252 KPH.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Top speed&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Top speed&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="openExternalLinks">
          <bool>true</bool>
@@ -371,7 +413,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A factor that penalizes the cost when traversing a closed edge. Its value can range from &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;1.0&lt;/span&gt; - don't penalize closed edges, to &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;10.0&lt;/span&gt; - apply high cost penalty to closed edges.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Closure factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Closure factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="openExternalLinks">
          <bool>true</bool>
@@ -400,7 +442,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A factor that modifies (multiplies) the cost when generic service roads are encountered.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Service factor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="openExternalLinks">
          <bool>true</bool>
@@ -426,7 +468,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If set to &lt;span style=&quot; font-family:'.SF NS Mono';&quot;&gt;true&lt;/span&gt;, ignores all closures, marked due to live traffic closures, during routing. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Ignore closures&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference.md#automobile-and-bus-costing-options&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Ignore closures&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="openExternalLinks">
          <bool>true</bool>
