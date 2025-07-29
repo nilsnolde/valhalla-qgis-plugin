@@ -179,6 +179,7 @@ class RouterWidget(QWidget):
         self.ui_btn_prov_options.setIcon(get_icon("server.svg"))
         self.ui_btn_prov_options.setIconSize(QSize(24, 24))
         self.ui_btn_prov_options.setFixedSize(self.ui_cmb_prov.height(), self.ui_cmb_prov.height())
+        self.ui_btn_prov_options.setToolTip("Server manager")
         self.ui_btn_prov_options.clicked.connect(self._on_btn_prov_options_clicked)
 
         self.provider_field.addWidget(self.ui_cmb_prov)

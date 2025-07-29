@@ -103,12 +103,13 @@ BUTTONS = {
 }
 
 
-def build_btn(layout: QLayout, btn_type: WayPtWidgetElems) -> QToolButton:
+def build_btn(layout: QLayout, btn_type: WayPtWidgetElems, checkable: bool = False) -> QToolButton:
     """Builds a button of configured type and adds it to the passed layout"""
     name = btn_type.value
     icon_path, tip = BUTTONS[btn_type]
 
     btn = QToolButton()
+    btn.setCheckable(checkable)
     btn.setIcon(get_icon(icon_path))
     btn.setObjectName(name)
     btn.setIconSize(QSize(16, 16))
@@ -412,18 +413,21 @@ class WaypointsWidget(QWidget):
         self._reset_annotations()
 
     def _handle_init_maptool(self):
-        """Set up the maptool: remember the last one used, hide the parent dlg."""
-        self.last_maptool = self.iface.mapCanvas().mapTool()
-        self.iface.mapCanvas().setMapTool(self.point_tool)
+        """Set up the maptool: remember the last one used."""
+        if self.ui_btn_add_pt.isChecked():
+            self.last_maptool = self.iface.mapCanvas().mapTool()
+            self.iface.mapCanvas().setMapTool(self.point_tool)
 
-        # add a layer if not there already
-        ann_lyr = QgsProject.instance().mapLayer(self.points_lyr_id)
-        if not ann_lyr:
-            self._reset_annotations()
-        # make sure it's also visible
-        QgsProject.instance().layerTreeRoot().findLayer(self.points_lyr.id()).setItemVisibilityChecked(
-            True
-        )
+            # add a layer if not there already
+            ann_lyr = QgsProject.instance().mapLayer(self.points_lyr_id)
+            if not ann_lyr:
+                self._reset_annotations()
+            # make sure it's also visible
+            QgsProject.instance().layerTreeRoot().findLayer(
+                self.points_lyr.id()
+            ).setItemVisibilityChecked(True)
+        else:
+            self._handle_doubleclick()
 
     def _handle_add_pt(self, pt: QgsPointXY):
         """Transforms the clicked point and adds it to the table."""
@@ -448,6 +452,7 @@ class WaypointsWidget(QWidget):
     def _handle_doubleclick(self):
         """Shows the parent dlg again and restores previous settings"""
         self._reset_annotations()
+        self.ui_btn_add_pt.setChecked(False)
 
         # then restore some of the things we set up when initializing the point tool
         QApplication.restoreOverrideCursor()
@@ -540,7 +545,7 @@ class WaypointsWidget(QWidget):
         self.buttons_layout = QHBoxLayout(self)
 
         # set up buttons
-        self.ui_btn_add_pt = build_btn(self.buttons_layout, WayPtWidgetElems.ADD_PT)
+        self.ui_btn_add_pt = build_btn(self.buttons_layout, WayPtWidgetElems.ADD_PT, True)
         self.ui_btn_rm_pt = build_btn(self.buttons_layout, WayPtWidgetElems.DEL_PT)
         self.ui_btn_rm_all = build_btn(self.buttons_layout, WayPtWidgetElems.DEL_ALL)
         self.ui_btn_from_lyr = build_btn(self.buttons_layout, WayPtWidgetElems.FROM_LYR)

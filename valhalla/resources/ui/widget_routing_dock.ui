@@ -160,7 +160,7 @@ QListWidget::item::selected {
               <x>0</x>
               <y>0</y>
               <width>581</width>
-              <height>963</height>
+              <height>961</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -553,15 +553,22 @@ QListWidget::item::selected {
             <number>0</number>
            </property>
            <item>
-            <widget class="QPushButton" name="ui_log_btn">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QToolButton" name="ui_log_btn">
+             <property name="text">
+              <string/>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="ui_graph_btn">
              <property name="toolTip">
-              <string>View last request log</string>
+              <string>Loads the current graph extent as polygon layer and checks for things like admins &amp; tz dbs</string>
              </property>
              <property name="text">
               <string/>
@@ -590,7 +597,7 @@ QListWidget::item::selected {
            <item>
             <widget class="QToolButton" name="ui_about_btn">
              <property name="text">
-              <string>Help</string>
+              <string/>
              </property>
              <property name="icon">
               <iconset theme=":images/themes/default/mActionPropertiesWidget.svg"/>
@@ -606,7 +613,7 @@ QListWidget::item::selected {
            <item>
             <widget class="QToolButton" name="ui_help_btn">
              <property name="text">
-              <string>Help</string>
+              <string/>
              </property>
              <property name="icon">
               <iconset theme=":images/themes/default/mActionHelpContents.svg"/>
