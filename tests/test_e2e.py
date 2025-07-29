@@ -14,7 +14,7 @@ from tests import HTTPTestCase
 from tests.constants import WAYPOINTS_4326
 
 
-from valhalla.gui.dlg_routing import RoutingDialog
+from valhalla.gui.dock_routing import RoutingDockWidget
 
 # from network_analyst import BASE_DIR
 # from network_analyst.utils.resource_utils import get_settings_dir
@@ -25,10 +25,11 @@ class TestHttpRouting(HTTPTestCase):
     def setUp(self) -> None:
         super(TestHttpRouting, self).setUp()
 
-        self.dlg = RoutingDialog(IFACE.mainWindow(), IFACE)
-        self.dlg.open()
+        self.dlg = RoutingDockWidget(IFACE)
+        self.dlg.setVisible(True)
         # set localhost instead of FOSSGIS
         self.dlg.router_widget.ui_cmb_prov.setCurrentIndex(1)
+        self.dlg.options_box.setChecked(True)
         for ix, _ in enumerate(WAYPOINTS_4326[:-1]):
             self.dlg.waypoints_widget.ui_table.insertRow(ix)
             self.dlg.waypoints_widget._add_row_to_table(ix, *list(reversed(WAYPOINTS_4326[ix])))

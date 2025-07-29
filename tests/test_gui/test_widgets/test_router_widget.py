@@ -13,7 +13,7 @@ CANVAS: QgsMapCanvas
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from valhalla.global_definitions import RouterMethod, RouterType
-from valhalla.gui.dlg_routing import RoutingDialog
+from valhalla.gui.dock_routing import RoutingDockWidget
 from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
     ValhallaSettingsMbikeWidget,
 )
@@ -30,7 +30,7 @@ class TestWaypointsWidget(HTTPTestCase):
         CANVAS.setExtent(QgsRectangle(1478686, 6885333, 1500732, 6903232))
         CANVAS.setDestinationCrs(QgsCoordinateReferenceSystem.fromEpsgId(3857))
 
-        self.dlg = RoutingDialog(IFACE.mainWindow(), IFACE)
+        self.dlg = RoutingDockWidget(IFACE)
 
     def test_provider_change(self):
         """

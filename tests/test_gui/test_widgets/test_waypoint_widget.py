@@ -30,7 +30,7 @@ from valhalla.global_definitions import RouterType
 from valhalla.gui.dlg_from_json import FromValhallaJsonDialog
 from valhalla.gui.dlg_from_lyr import FromLayerDialog
 from valhalla.gui.dlg_from_osrm_url import FromOsrmUrlDialog
-from valhalla.gui.dlg_routing import RoutingDialog
+from valhalla.gui.dock_routing import RoutingDockWidget
 
 
 class TestWaypointsWidget(HTTPTestCase):
@@ -41,7 +41,7 @@ class TestWaypointsWidget(HTTPTestCase):
         CANVAS.setExtent(QgsRectangle(1478686, 6885333, 1500732, 6903232))
         CANVAS.setDestinationCrs(QgsCoordinateReferenceSystem.fromEpsgId(3857))
 
-        cls.dlg = RoutingDialog(IFACE.mainWindow(), IFACE)
+        cls.dlg = RoutingDockWidget(IFACE)
 
     def tearDown(self) -> None:
         self.dlg.waypoints_widget._handle_clear_locations()
@@ -51,7 +51,7 @@ class TestWaypointsWidget(HTTPTestCase):
         """adds waypoints to the table"""
         # click the add button which should hide the dialog
         QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_add_pt, Qt.LeftButton)
-        self.assertFalse(self.dlg.isVisible())
+        self.assertTrue(self.dlg.isVisible())
         sleep(0.2)
 
         # add 3 points in Berlin
@@ -71,7 +71,7 @@ class TestWaypointsWidget(HTTPTestCase):
 
     def test_get_valhalla_locations(self):
         table = self.dlg.waypoints_widget.ui_table
-        self.dlg.open()
+        self.dlg.setVisible(True)
 
         radiuses = [0, 100, 1000]
         extra_params = [
@@ -118,7 +118,7 @@ class TestWaypointsWidget(HTTPTestCase):
 
     def test_add_waypoints(self):
         table = self.dlg.waypoints_widget.ui_table
-        self.dlg.open()
+        self.dlg.setVisible(True)
         self.add_waypoints(WAYPOINTS_3857)
 
         # we have 3 coordinates in there and they're properly projected from 3857 to 4326
@@ -129,7 +129,7 @@ class TestWaypointsWidget(HTTPTestCase):
 
     def test_remove_waypoints(self):
         table = self.dlg.waypoints_widget.ui_table
-        self.dlg.open()
+        self.dlg.setVisible(True)
         self.add_waypoints(WAYPOINTS_3857)
 
         # select the first point and remove it
@@ -144,7 +144,7 @@ class TestWaypointsWidget(HTTPTestCase):
 
     def test_clear_all_waypoints(self):
         table = self.dlg.waypoints_widget.ui_table
-        self.dlg.open()
+        self.dlg.setVisible(True)
         self.add_waypoints(WAYPOINTS_3857)
 
         self.assertEqual(table.rowCount(), 3)
@@ -153,7 +153,7 @@ class TestWaypointsWidget(HTTPTestCase):
 
     def test_move_item_up(self):
         table = self.dlg.waypoints_widget.ui_table
-        self.dlg.open()
+        self.dlg.setVisible(True)
         self.add_waypoints(WAYPOINTS_3857)
 
         # remember the old configuration before moving rows
@@ -168,7 +168,7 @@ class TestWaypointsWidget(HTTPTestCase):
 
     def test_move_item_down(self):
         table = self.dlg.waypoints_widget.ui_table
-        self.dlg.open()
+        self.dlg.setVisible(True)
         self.add_waypoints(WAYPOINTS_3857)
 
         # remember the old configuration before moving rows
@@ -182,7 +182,7 @@ class TestWaypointsWidget(HTTPTestCase):
         self.assertEqual(old_second, table.item(1, 0))
 
     def test_from_layer(self):
-        self.dlg.open()
+        self.dlg.setVisible(True)
         # First add a point layer
         pt_lyr = QgsVectorLayer("Point?crs=EPSG:3857", "single_point", "memory")
         for point in WAYPOINTS_3857:
@@ -210,7 +210,7 @@ class TestWaypointsWidget(HTTPTestCase):
             self.assertAlmostEqual(float(table.item(row_id, 1).text()), WAYPOINTS_4326[row_id][0], 5)
 
     def test_from_valhalla_json(self):
-        self.dlg.open()
+        self.dlg.setVisible(True)
 
         extra_params = {
             "preferred_side": "same",
@@ -246,7 +246,7 @@ class TestWaypointsWidget(HTTPTestCase):
             assertQueryStringEqual(table.item(row_id, 3).text(), unquote(urlencode(extra_params)))
 
     def test_from_osrm_url(self):
-        self.dlg.open()
+        self.dlg.setVisible(True)
 
         radiuses = ("100", "0", "100")
         bearings = ("1,2", "3,5", "10,5")
@@ -284,7 +284,7 @@ class TestWaypointsWidget(HTTPTestCase):
             assertQueryStringEqual(table.item(row_id, 3).text(), f"heading={bearings[row_id]}")
 
     def test_waypoints_layer(self):
-        self.dlg.open()
+        self.dlg.setVisible(True)
         self.add_waypoints(WAYPOINTS_4326)
 
         ann_lyr: QgsAnnotationLayer = QgsProject.instance().mapLayersByName(
@@ -294,7 +294,7 @@ class TestWaypointsWidget(HTTPTestCase):
         self.assertEqual(len(items), 3)
 
     def test_waypoints_layer_visibility(self):
-        self.dlg.open()
+        self.dlg.setVisible(True)
         self.assertEqual(len(QgsProject.instance().mapLayers()), 0)
         self.add_waypoints(WAYPOINTS_4326)
 
@@ -320,7 +320,7 @@ class TestWaypointsWidget(HTTPTestCase):
 
     def test_waypoints_table_preserves_itself(self):
         # first add some points to the project's annotation layer
-        self.dlg.open()
+        self.dlg.setVisible(True)
 
         with NamedTemporaryFile(suffix=".qgz") as p1, NamedTemporaryFile(suffix=".qgz") as p2:
             # first write a project with 3 coords, clear the table, then write a project with 2 coords

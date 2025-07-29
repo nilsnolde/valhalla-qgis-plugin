@@ -206,11 +206,11 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             # only append the costing options if the costing options widget is active
             return {
                 **params,
-                # **(
-                #     self.routing_params_widget.get_costing_params()
-                #     if self.collapse_button.isChecked()
-                #     else dict()
-                # ),
+                **(
+                    self.routing_params_widget.get_costing_params()
+                    if self.options_box.isChecked()
+                    else dict()
+                ),
             }
         else:
             if endpoint == RouterEndpoint.DIRECTIONS:
