@@ -81,11 +81,11 @@ BUTTONS = {
         "Add points from a layer",
     ),
     WayPtWidgetElems.FROM_JSON: (
-        ":images/themes/default/mActionAddHtml.svg",
+        "valhalla_logo.svg",
         "Add points from a Valhalla locations JSON",
     ),
     WayPtWidgetElems.FROM_URL: (
-        ":images/themes/default/mActionAddHtml.svg",
+        "osrm_logo.svg",
         "Add points from a OSRM URL",
     ),
     WayPtWidgetElems.MV_UP: (
