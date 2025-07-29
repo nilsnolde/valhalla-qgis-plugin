@@ -2,10 +2,18 @@ import json
 from copy import deepcopy
 from typing import List, Optional, Tuple
 
-from qgis.core import Qgis, QgsFields, QgsProject, QgsVectorLayer, QgsWkbTypes
-from qgis.gui import QgisInterface
+from qgis.core import (  # noqa: F811
+    Qgis,
+    QgsFeature,
+    QgsFields,
+    QgsGeometry,
+    QgsPointXY,
+    QgsProject,
+    QgsVectorLayer,
+    QgsWkbTypes,
+)
+from qgis.gui import QgisInterface, QgsDockWidget
 from qgis.PyQt.QtWidgets import (
-    QDialog,
     QLineEdit,
     QMessageBox,
     QTextEdit,
@@ -28,12 +36,12 @@ from ..gui.widgets.widget_routing_params import RoutingParamsWidget
 from ..gui.widgets.widget_waypoints import WaypointsWidget
 from ..third_party.routingpy import routingpy
 from ..third_party.routingpy.routingpy.utils import deep_merge_dicts
+from ..utils.http_utils import get_status_response
 from ..utils.layer_utils import post_process_layer
-from ..utils.resource_utils import get_graph_dir, get_icon
-from .compiled.dlg_routing_ui import Ui_RoutingDialog
+from ..utils.resource_utils import get_graph_dir, get_icon, get_resource_path
+from .compiled.widget_routing_dock_ui import Ui_routing_widget
 from .dlg_about import AboutDialog
 from .gui_utils import add_msg_bar
-from .splitter_mixin import SplitterMixin
 
 MENU_TABS = {
     RouterEndpoint.DIRECTIONS: "ui_directions_params",
@@ -48,13 +56,14 @@ DEFAULT_PROVIDERS = [
 ]
 
 
-class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
-    def __init__(self, parent=None, iface: QgisInterface = None):
-        QDialog.__init__(self, parent)
-        self.setupUi(self)
+class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
+    def __init__(self, iface: QgisInterface = None):
+        QgsDockWidget.__init__(self)
+        widget = QWidget(self)
+        self.setupUi(widget)
         self.ui_log_btn.setIcon(get_icon("url.svg"))
+        self.ui_graph_btn.setIcon(get_icon("graph_extent_icon.svg"))
 
-        SplitterMixin.__init__(self, self.splitter)
         self.iface = iface
 
         # add a status bar
@@ -75,7 +84,7 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
         self.waypoints_widget = WaypointsWidget(self, self.iface)
         self.waypoints_box.layout().addWidget(self.waypoints_widget)
         self.routing_params_widget = RoutingParamsWidget(self, self.iface)
-        self.splitterRightLayout.layout().addWidget(self.routing_params_widget)
+        self.options_box.layout().addWidget(self.routing_params_widget)
 
         # initial factory, will/should always be HTTP
         self.factory = ResultsFactory(
@@ -95,12 +104,68 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
         self.ui_about_btn.clicked.connect(self._on_about_click)
         self.ui_log_btn.clicked.connect(self._on_log_click)
         self.router_widget.mode_btns.buttonToggled.connect(self._on_profile_change)
+        self.ui_graph_btn.clicked.connect(self._on_graph_click)
 
         # icons on left side menu
         self.menu_widget.item(0).setIcon(get_icon("directions_icon.svg"))
         self.menu_widget.item(1).setIcon(get_icon("isochrones_icon.svg"))
         self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
+
+        self.setWindowTitle("Valhalla - Routing")
+
+        self.setWidget(widget)
+
+    def _on_graph_click(self):
+        curr_prov: ProviderSetting = self.router_widget.ui_cmb_prov.currentData()[-1]
+        if curr_prov.url == DEFAULT_PROVIDERS[0].url:
+            self.status_bar.pushInfo(
+                "No worries", "The public server has the full world graph and admins/timezones loaded"
+            )
+            return
+
+        try:
+            result = get_status_response(self.router_widget.provider.url, True)
+            if not result.get("bbox"):
+                raise Exception(
+                    "Can't retrieve graph extent, the server doesn't allow it, see https://valhalla.github.io/valhalla/api/status/api-reference/."
+                )
+        except Exception as e:
+            self.status_bar.pushCritical("Failed /status request", str(e))
+            return
+
+        msg_missing_dbs: List[str] = []
+        if not result["has_admins"]:
+            msg_missing_dbs.append("Admin DB is missing from graph, expect wrong driving side.")
+        if not result["has_timezones"]:
+            msg_missing_dbs.append(
+                "Timezones DB is missing from graph, expect non-functional time-dependent settings."
+            )
+        if msg_missing_dbs:
+            self.status_bar.pushWarning("Missing DB(s)", "\n".join(msg_missing_dbs))
+
+        # add the graph extent layer
+        lyr_name = f"{curr_prov.name} Graph Extent"
+        if QgsProject.instance().mapLayersByName(lyr_name):
+            self.status_bar.pushInfo("Layer exists", "Graph extents layer already exists, skipping...")
+            return
+
+        extent_lyr = QgsVectorLayer("Polygon?crs=EPSG:4326", lyr_name, "memory")
+        feat = QgsFeature(QgsFields())
+        feat.setGeometry(
+            QgsGeometry.fromPolygonXY(
+                [
+                    [
+                        QgsPointXY(lon, lat)
+                        for lon, lat in result["bbox"]["features"][0]["geometry"]["coordinates"][0]
+                    ]
+                ]
+            )
+        )
+        extent_lyr.dataProvider().addFeature(feat)
+        extent_lyr.updateExtents()
+        extent_lyr.loadNamedStyle(str(get_resource_path("styles", "graph_extent.qml")))
+        QgsProject.instance().addMapLayer(extent_lyr, True)
 
     def _get_params(self, endpoint: RouterEndpoint) -> dict:
         """Returns the current parameters"""
@@ -143,7 +208,7 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
                 **params,
                 **(
                     self.routing_params_widget.get_costing_params()
-                    if self.collapse_button.isChecked()
+                    if self.options_box.isChecked()
                     else dict()
                 ),
             }
@@ -154,7 +219,9 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
             return params
 
     def _on_about_click(self):
-        about = AboutDialog()
+        about = AboutDialog(self)
+        if exc_msg := about.exception_msg:
+            self.status_bar.pushWarning("Failed /status request", exc_msg)
         about.exec()
 
     def _on_log_click(self):
@@ -304,39 +371,39 @@ class RoutingDialog(QDialog, Ui_RoutingDialog, SplitterMixin):
 
     def _on_router_or_menu_change(self, menu_index: int):
         """Disables/enables some widgets if it's OSRM isochrone/expansion"""
-        is_osrm = self.router_widget.router == RouterType.OSRM
-        is_osrm_forbidden_endpoint = menu_index in (1, 3) and is_osrm
+        # is_osrm = self.router_widget.router == RouterType.OSRM
+        # is_osrm_forbidden_endpoint = menu_index in (1, 3) and is_osrm
 
-        # disable a few widgets
-        self.routing_params_widget.exclude_locations.setEnabled(not is_osrm)
-        self.routing_params_widget.exclude_polygons.setEnabled(not is_osrm)
-        self.routing_params_widget.ui_settings_stacked.setEnabled(not is_osrm)
-        self.routing_params_widget.ui_metric_box.setEnabled(not is_osrm)
-        self.routing_params_widget.ui_reset_settings.setEnabled(not is_osrm)
+        # # disable a few widgets
+        # self.routing_params_widget.exclude_locations.setEnabled(not is_osrm)
+        # self.routing_params_widget.exclude_polygons.setEnabled(not is_osrm)
+        # self.routing_params_widget.ui_settings_stacked.setEnabled(not is_osrm)
+        # self.routing_params_widget.ui_metric_box.setEnabled(not is_osrm)
+        # self.routing_params_widget.ui_reset_settings.setEnabled(not is_osrm)
 
-        self.waypoints_widget.setEnabled(not is_osrm_forbidden_endpoint)
-        self.ui_valhalla_isochrones_params.setEnabled(not is_osrm_forbidden_endpoint)
-        self.ui_valhalla_expansion_params.setEnabled(not is_osrm_forbidden_endpoint)
-        self.execute_btn.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.waypoints_widget.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.ui_valhalla_isochrones_params.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.ui_valhalla_expansion_params.setEnabled(not is_osrm_forbidden_endpoint)
+        # self.execute_btn.setEnabled(not is_osrm_forbidden_endpoint)
 
-        # update their tooltips
-        tooltip = "Methods Isochrones and Expansion not available with OSRM"
-        self.waypoints_widget.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        self.execute_btn.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        self.ui_valhalla_isochrones_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        self.ui_valhalla_expansion_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # # update their tooltips
+        # tooltip = "Methods Isochrones and Expansion not available with OSRM"
+        # self.waypoints_widget.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # self.execute_btn.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # self.ui_valhalla_isochrones_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
+        # self.ui_valhalla_expansion_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
 
         if menu_index == 0:
-            self.ui_endpoint_label.setText("Routing")
+            # self.ui_endpoint_label.setText("Routing")
             self.setWindowTitle("Valhalla - Routing")
         elif menu_index == 1:
-            self.ui_endpoint_label.setText("Isochrones")
+            # self.ui_endpoint_label.setText("Isochrones")
             self.setWindowTitle("Valhalla - Isochrones")
         elif menu_index == 2:
-            self.ui_endpoint_label.setText("Matrix")
+            # self.ui_endpoint_label.setText("Matrix")
             self.setWindowTitle("Valhalla - Matrix")
         elif menu_index == 3:
-            self.ui_endpoint_label.setText("Expansion")
+            # self.ui_endpoint_label.setText("Expansion")
             self.setWindowTitle("Valhalla - Expansion")
 
     def _on_profile_change(self):

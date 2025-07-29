@@ -7,7 +7,7 @@ from tests.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from valhalla.global_definitions import DEFAULT_LAYER_FIELDS, RouterEndpoint
-from valhalla.gui.dlg_routing import RoutingDialog
+from valhalla.gui.dock_routing import RoutingDockWidget
 
 
 class TestResultsFactory(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestResultsFactory(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.dlg = RoutingDialog(IFACE.mainWindow(), IFACE)
+        cls.dlg = RoutingDockWidget(IFACE)
 
         # set localhost instead of FOSSGIS
         cls.dlg.router_widget.ui_cmb_prov.setCurrentIndex(1)

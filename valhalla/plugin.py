@@ -1,6 +1,7 @@
 from typing import List, Optional
 
-from PyQt5.QtWidgets import QMessageBox
+from qgis.PyQt.QtWidgets import QMessageBox
+from qgis.PyQt.QtCore import Qt
 from qgis.core import Qgis, QgsApplication
 from qgis.gui import QgisInterface, QgsMessageBar
 from qgis.PyQt.QtWidgets import QAction, QMenu, QToolBar
@@ -10,7 +11,7 @@ from .core.settings import IGNORE_PYPI, PLUGIN_VERSION, ValhallaSettings
 from .exceptions import ValhallaCmdError
 from .global_definitions import PYPI_PKGS, Dialogs, PyPiState
 from .gui.dlg_plugin_settings import PluginSettingsDialog
-from .gui.dlg_routing import RoutingDialog
+from .gui.dock_routing import RoutingDockWidget
 from .gui.dlg_spopt import SpoptDialog
 from .processing.provider import ValhallaProvider
 from .utils.misc_utils import str_to_bool
@@ -35,7 +36,7 @@ class ValhallaPlugin:
         self.menu: Optional[QMenu] = None
         self.actions: List[QAction] = list() # type: ignore
 
-        self.routing_dlg: Optional[RoutingDialog] = None
+        self.routing_dock: Optional[RoutingDockWidget] = None
         self.settings_dlg: Optional[PluginSettingsDialog] = None
         self.optimization_dlg: Optional[SpoptDialog] = None
 
@@ -73,20 +74,24 @@ class ValhallaPlugin:
         # add processing provider
         QgsApplication.processingRegistry().addProvider(self.provider)
 
+        # try a dock widget
+        self.routing_dock = RoutingDockWidget(self.iface)
+        self.iface.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.routing_dock)
+
     def unload(self):
         """Unload the user interface."""
         for action in self.actions:
             self.iface.vectorMenu().removeAction(action)
             self.na_toolbar.removeAction(action)
 
-        QgsApplication.processingRegistry().removeProvider(self.provider)
+        if self.provider:
+            QgsApplication.processingRegistry().removeProvider(self.provider)
+
+        self.iface.removeDockWidget(self.routing_dock)
 
     def open_routing_dlg(self):
         """Create and open the version dialog."""
-        if not self.routing_dlg:
-            self.routing_dlg = RoutingDialog(self.iface.mainWindow(), self.iface)
-            # self._check_libs(self.routing_dlg.status_bar)
-        self.routing_dlg.open()
+        self.routing_dock.setVisible(not self.routing_dock.isVisible())
 
     def open_settings_dlg(self):
         """Create and open the settings dialog."""
