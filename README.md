@@ -9,15 +9,39 @@ It features:
   - exclude polygons to avoid user-defined areas
   - and various other [costing options](https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#costing-options)
 - support for multiple Valhalla servers, the [public server](https://github.com/valhalla/valhalla?tab=readme-ov-file#demo-server) and `localhost` are preconfigured
+- get extended graph information from the Valhalla server:
+  - load the graph extent from a given instance (usually `localhost`) as a polygon layer
+  - check for admins & timezone DBs
+  - print Valhalla server version
+  - print date of last graph update
 
 > [!NOTE]
 > Starting with `v3.0.0` this plugin had a complete re-write from scratch. Previously it was loosely based on one of my ex-plugins [ORS Tools](https://plugins.qgis.org/plugins/ORStools/), but that design has a quite a few shortcomings in terms of UX and aesthetics. The biggest problem is that the dialogs are huge and one can't properly access both the map canvas **and** the plugin at the same time. Starting with `v3.0.0` it's a docked plugin, i.e. a proper panel.
 
 [^1]: Some costing options make little sense, e.g. transit, some other we didn't get around to yet. Valhalla is also under constant development, we might miss a few recently added ones.
 
-## Examples
+## How To
 
-some pics
+![explanatory UI pic](./docs/img/RoutingUI_explained.png)
+
+1. Select the endpoint/action to "Execute". Note that some endpoints expect multiple waypoints.
+2. Manage the servers which are shown in the "Provider" drop-down
+3. Add/remove/clear waypoints in the table:
+  - to add waypoints, click the "add" button and then in the map canvas. To end the adding session, either double-click in the map canvas or click the "add" button again.
+  - to remove single/multiple waypoints, click rows in the waypoints table before clicking the "remove" button.
+  - the "clear" button will remove _all_ waypoints from the table
+4. Multiple alternatives to add waypoints to the table:
+  - "From Point Layer": parses waypoints from the features of a user-specified point layer
+  - "From Valhalla JSON": parses waypoints from a Valhalla `locations` request array (TODO: [#27](https://github.com/nilsnolde/valhalla-qgis-plugin/issues/27))
+  - "From OSRM URL": parses waypoints from a OSRM GET request URL, also sets `bearing` etc in the "Extra" column
+5. Shows/hides the "Valhalla waypoints" annotation layer
+6. Moves the _selected_ waypoint rows up & down, also updates the "Valhalla waypoints" annotation layer
+7. Set a radius for each waypoint which will snap more roads
+8. Set extra Valhalla waypoint properties in URL query parameter form (i.e.`k1=v1&k2=v2`), e.g. `waiting=1800&date_time=2025-07-25T09:00`
+9. Additional costing options to influence the path finding for _any_ endpoint
+10. View the full most recent request, mostly useful when reporting issues, or debugging.
+11. Check the remote graph for admin & timezone DBs (they should exist) and loads the graph extent of the currently set Valhalla server as a polygon layer (if available).
+12. Some information about the plugin and (if available) the currently set Valhalla server.
 
 ## Test
 

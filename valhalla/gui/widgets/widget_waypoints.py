@@ -176,7 +176,7 @@ def extract_locations(  # noqa: C901
 
 
 class WaypointsWidget(QWidget):
-    ANN_NAME = "NA Waypoints"
+    ANN_NAME = "Valhalla Waypoints"
 
     def __init__(
         self,
