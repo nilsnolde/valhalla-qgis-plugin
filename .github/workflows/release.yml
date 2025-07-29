@@ -14,7 +14,6 @@ jobs:
           python-version: 3.12
 
       - name: Deploy plugin
-        run: 
         run: |
           pip3 install qgis-plugin-ci
           qgis-plugin-ci \
