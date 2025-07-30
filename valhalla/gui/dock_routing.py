@@ -386,6 +386,10 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             )
         if msg_missing_dbs:
             self.status_bar.pushWarning("Missing DB(s)", "\n".join(msg_missing_dbs))
+        else:
+            self.status_bar.pushInfo(
+                "DB(s) exist", "Both admin areas and timezones are built into the graph."
+            )
 
         # add the graph extent layer
         lyr_name = f"{curr_prov.name} - Valhalla Graph Extent"
