@@ -23,7 +23,7 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from ..core.results_factory import ResultsFactory
-from ..core.settings import ProviderSetting, ValhallaSettings
+from ..core.settings import DEFAULT_PROVIDERS, ProviderSetting, ValhallaSettings
 from ..exceptions import ValhallaError
 from ..global_definitions import (
     DEFAULT_LAYER_FIELDS,
@@ -50,11 +50,6 @@ MENU_TABS = {
     RouterEndpoint.MATRIX: "ui_matrix_params",
     RouterEndpoint.EXPANSION: "ui_expansion_params",
 }
-
-DEFAULT_PROVIDERS = [
-    ProviderSetting("FOSSGIS", "https://valhalla1.openstreetmap.de", "", "access_key"),  # auth_key
-    ProviderSetting("localhost", "http://localhost:8002", "", ""),  # auth_key
-]
 
 HELP_URL = "https://github.com/nilsnolde/valhalla-qgis-plugin?tab=readme-ov-file#how-to"
 

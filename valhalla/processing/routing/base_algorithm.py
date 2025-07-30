@@ -20,7 +20,7 @@ from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 
 from ...core.results_factory import ResultsFactory
-from ...core.settings import ProviderSetting, ValhallaSettings
+from ...core.settings import DEFAULT_PROVIDERS, ProviderSetting, ValhallaSettings
 from ...global_definitions import (
     SETTINGS_WIDGETS_MAP,
     RouterEndpoint,
@@ -86,7 +86,13 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         :param multi_layer: If True, adds a number to the input layer and input field descriptions.
         """
 
-        self.providers = ValhallaSettings().get_providers(RouterType.VALHALLA)
+        # make sure we have at least one remote HTTP API URL
+        settings = ValhallaSettings()
+        if not settings.get_providers(RouterType.VALHALLA):
+            for prov in DEFAULT_PROVIDERS:
+                settings.set_provider(RouterType.VALHALLA.lower(), prov)
+
+        self.providers = settings.get_providers(RouterType.VALHALLA)
         servers = [prov.name for prov in self.providers]
 
         url_param = QgsProcessingParameterEnum(

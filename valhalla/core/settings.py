@@ -35,6 +35,12 @@ class ProviderSetting:
     auth_param: str
 
 
+DEFAULT_PROVIDERS = [
+    ProviderSetting("FOSSGIS", "https://valhalla1.openstreetmap.de", "", "access_key"),  # auth_key
+    ProviderSetting("localhost", "http://localhost:8002", "", ""),  # auth_key
+]
+
+
 class ValhallaSettings(QgsSettings):
     def __init__(self):
         super().__init__(
