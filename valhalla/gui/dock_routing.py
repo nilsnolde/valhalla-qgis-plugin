@@ -66,6 +66,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.setupUi(widget)
         self.ui_log_btn.setIcon(get_icon("url.svg"))
         self.ui_graph_btn.setIcon(get_icon("graph_extent_icon.svg"))
+        self.ui_debug_btn.setIcon(get_icon("debug_icon.svg"))
 
         self.iface = iface
 
@@ -109,6 +110,9 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.router_widget.mode_btns.buttonToggled.connect(self._on_profile_change)
         self.ui_graph_btn.clicked.connect(self._on_graph_click)
         self.ui_help_btn.clicked.connect(lambda: webbrowser.open(HELP_URL))
+        self.ui_debug_btn.clicked.connect(
+            lambda: ValhallaSettings().set(Dialogs.SETTINGS, "debug", str(self.ui_debug_btn.isChecked()))
+        )
 
         # icons on left side menu
         self.menu_widget.item(0).setIcon(get_icon("directions_icon.svg"))
@@ -117,6 +121,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
 
         self.setWindowTitle("Valhalla - Routing")
+        self.ui_debug_btn.setChecked(settings.is_debug())
 
         self.setWidget(widget)
 

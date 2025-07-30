@@ -10,7 +10,6 @@ from . import PLUGIN_NAME, __version__
 from .core.settings import IGNORE_PYPI, PLUGIN_VERSION, ValhallaSettings
 from .exceptions import ValhallaCmdError
 from .global_definitions import PYPI_PKGS, Dialogs, PyPiState
-from .gui.dlg_plugin_settings import PluginSettingsDialog
 from .gui.dock_routing import RoutingDockWidget
 from .gui.dlg_spopt import SpoptDialog
 from .processing.provider import ValhallaProvider
@@ -37,8 +36,8 @@ class ValhallaPlugin:
         self.actions: List[QAction] = list() # type: ignore
 
         self.routing_dock: Optional[RoutingDockWidget] = None
-        self.settings_dlg: Optional[PluginSettingsDialog] = None
-        self.optimization_dlg: Optional[SpoptDialog] = None
+        # self.settings_dlg: Optional[PluginSettingsDialog] = None
+        # self.optimization_dlg: Optional[SpoptDialog] = None
 
     def add_action(self, icon, title, callback):
         action = QAction(icon, title, self.iface.mainWindow())
@@ -64,7 +63,7 @@ class ValhallaPlugin:
         for title, callback, icon in (
             ("Routing Functions", self.open_routing_dlg, valhalla_icon),
             # NOTE, the below code still exists, but it's non-functional since we never came up with a graph store
-            ("Settings", self.open_settings_dlg, get_icon("settings_logo.svg")),
+            # ("Settings", self.open_settings_dlg, get_icon("settings_logo.svg")),
             # ('Optimization Functions', self.open_optimization_dlg, ":images/themes/default/mActionCalculateField.svg")
         ):
             self.add_action(icon, title, callback)
@@ -93,12 +92,12 @@ class ValhallaPlugin:
         """Create and open the version dialog."""
         self.routing_dock.setVisible(not self.routing_dock.isVisible())
 
-    def open_settings_dlg(self):
-        """Create and open the settings dialog."""
-        if not self.settings_dlg:
-            self.settings_dlg = PluginSettingsDialog(self.iface.mainWindow())
-            # self._check_libs(self.settings_dlg.status_bar)
-        self.settings_dlg.open()
+    # def open_settings_dlg(self):
+    #     """Create and open the settings dialog."""
+    #     if not self.settings_dlg:
+    #         self.settings_dlg = PluginSettingsDialog(self.iface.mainWindow())
+    #         # self._check_libs(self.settings_dlg.status_bar)
+    #     self.settings_dlg.open()
 
     def open_optimization_dlg(self):
         """Create and open the optimization dialog."""

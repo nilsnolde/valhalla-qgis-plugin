@@ -7,11 +7,13 @@ from qgis.PyQt.QtCore import QSettings
 
 from ..global_definitions import Dialogs, RouterType
 from ..gui.ui_definitions import PluginSettingsDlgElems
+from ..utils.misc_utils import str_to_bool
 from ..utils.resource_utils import get_settings_dir
 
 DEFAULTS = {
     PluginSettingsDlgElems.VALHALLA_HTTP_URL: "https://valhalla1.openstreetmap.de",
     PluginSettingsDlgElems.VALHALLA_HTTP_PARAM: "access_token",
+    PluginSettingsDlgElems.DEBUG: "False"
     # PluginSettingsDlgElems.SHOP_HTTP_URL: "http://localhost:8080",
 }
 
@@ -72,9 +74,10 @@ class ValhallaSettings(QgsSettings):
 
         self.endGroup()
 
-    def is_debug(self):
+    def is_debug(self) -> bool:
         """Lets us know if we're in debug mode"""
-        return self.get(Dialogs.SETTINGS, PluginSettingsDlgElems.DEBUG)
+
+        return str_to_bool(self.get(Dialogs.SETTINGS, "debug"))
 
     def get_shop_url(self) -> str:
         """Simply returns the shop's base URL from the settings"""

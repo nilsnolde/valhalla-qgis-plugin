@@ -14,7 +14,7 @@ class PluginSettingsDlgElems(str, Enum):
     # OSRM_HTTP_SECRET = "ui_osrm_http_secret"
     # SHOP_HTTP_URL = "ui_shop_http_url"
     # ACCOUNT_AUTH = "ui_account_auth"
-    DEBUG = "ui_debug"
+    DEBUG = "debug"
 
 
 @unique
