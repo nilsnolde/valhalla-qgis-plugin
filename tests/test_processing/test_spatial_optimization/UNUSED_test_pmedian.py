@@ -1,6 +1,5 @@
 from qgis.core import QgsWkbTypes
-
-from valhalla.processing.spatial_optimization.pmedian import PMedianAlgorithm
+from qvalhalla.processing.spatial_optimization.pmedian import PMedianAlgorithm
 
 from .spopt_base import SpOptProcessingBase
 

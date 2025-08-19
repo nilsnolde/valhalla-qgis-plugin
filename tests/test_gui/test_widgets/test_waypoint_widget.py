@@ -26,11 +26,11 @@ from ...utilities import assertQueryStringEqual, get_qgis_app
 CANVAS: QgsMapCanvas
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.global_definitions import RouterType
-from valhalla.gui.dlg_from_json import FromValhallaJsonDialog
-from valhalla.gui.dlg_from_lyr import FromLayerDialog
-from valhalla.gui.dlg_from_osrm_url import FromOsrmUrlDialog
-from valhalla.gui.dock_routing import RoutingDockWidget
+from qvalhalla.global_definitions import RouterType
+from qvalhalla.gui.dlg_from_json import FromValhallaJsonDialog
+from qvalhalla.gui.dlg_from_lyr import FromLayerDialog
+from qvalhalla.gui.dlg_from_osrm_url import FromOsrmUrlDialog
+from qvalhalla.gui.dock_routing import RoutingDockWidget
 
 
 class TestWaypointsWidget(HTTPTestCase):

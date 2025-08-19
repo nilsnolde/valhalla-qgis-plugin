@@ -14,7 +14,7 @@ from tests import HTTPTestCase
 from tests.constants import WAYPOINTS_4326
 
 
-from valhalla.gui.dock_routing import RoutingDockWidget
+from qvalhalla.gui.dock_routing import RoutingDockWidget
 
 # from network_analyst import BASE_DIR
 # from network_analyst.utils.resource_utils import get_settings_dir

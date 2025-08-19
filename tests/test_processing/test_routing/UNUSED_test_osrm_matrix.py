@@ -1,7 +1,6 @@
+from qvalhalla.processing.routing.osrm.matrix import OSRMMatrix
 from tests.test_processing.processing_base import ProcessingBase
 from tests.utilities import get_qgis_app
-
-from valhalla.processing.routing.osrm.matrix import OSRMMatrix
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

@@ -1,5 +1,5 @@
-from valhalla.global_definitions import RouterType
-from valhalla.processing.routing.matrix_base import MatrixBase
+from ....global_definitions import RouterType
+from ....processing.routing.matrix_base import MatrixBase
 
 
 class OSRMMatrix(MatrixBase):

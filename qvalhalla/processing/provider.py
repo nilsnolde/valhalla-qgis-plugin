@@ -1,12 +1,12 @@
 from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
-from valhalla import PLUGIN_NAME, __version__
-from valhalla.global_definitions import RouterProfile
-from valhalla.processing.routing.valhalla.directions import ValhallaDirections
-from valhalla.processing.routing.valhalla.expansion import ValhallaExpansion
-from valhalla.processing.routing.valhalla.isochrones import ValhallaIsochrones
-from valhalla.processing.routing.valhalla.matrix import ValhallaMatrix
+from .. import PLUGIN_NAME, __version__
+from ..global_definitions import RouterProfile
+from ..processing.routing.valhalla.directions import ValhallaDirections
+from ..processing.routing.valhalla.expansion import ValhallaExpansion
+from ..processing.routing.valhalla.isochrones import ValhallaIsochrones
+from ..processing.routing.valhalla.matrix import ValhallaMatrix
 
 # from valhalla.processing.spatial_optimization.lscp import LSCPAlgorithm
 # from valhalla.processing.spatial_optimization.mclp import MCLPAlgorithm

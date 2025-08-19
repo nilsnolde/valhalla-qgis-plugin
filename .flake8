@@ -3,12 +3,12 @@ max-line-length = 999
 extend-exclude =
     .git
     .venv
-    valhalla/third_party
-    valhalla/help
-    valhalla/resources
-    valhalla/gui/compiled/*
-    valhalla/__init__.py
-    valhalla/plugin.py
+    qvalhalla/third_party
+    qvalhalla/help
+    qvalhalla/resources
+    qvalhalla/gui/compiled/*
+    qvalhalla/__init__.py
+    qvalhalla/plugin.py
     tests/utilities.py
     tests/qgis_interface.py
 
@@ -25,6 +25,6 @@ per-file-ignores =
     tests/test_gui/test_widgets/test_waypoint_widget.py: E402
     tests/test_gui/test_widgets/test_router_widget.py: E402
     tests/test_gui/test_routing_dlg.py: E402
-    valhalla/gui/panels/settings/__init__.py: F401
+    qvalhalla/gui/panels/settings/__init__.py: F401
 ignore = E203,E266,E501,W503,F403,E722, QGS105
 max-complexity = 10

@@ -347,7 +347,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         if method == RouterMethod.LOCAL:
             try:
                 if router_type == RouterType.VALHALLA:
-                    import valhalla  # noqa: F401
+                    import qvalhalla  # noqa: F401
                 elif router_type == RouterType.OSRM:
                     import osrm  # type: ignore # noqa: F401
                 pkg_name = self.router_widget.ui_cmb_prov.itemData(row_id)[2]

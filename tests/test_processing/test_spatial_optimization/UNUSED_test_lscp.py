@@ -1,6 +1,5 @@
 from qgis.core import QgsProcessingException, QgsWkbTypes
-
-from valhalla.processing.spatial_optimization.lscp import LSCPAlgorithm
+from qvalhalla.processing.spatial_optimization.lscp import LSCPAlgorithm
 
 from ...utilities import get_qgis_app
 from .spopt_base import SpOptProcessingBase

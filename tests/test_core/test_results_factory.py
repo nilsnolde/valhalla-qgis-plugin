@@ -4,8 +4,8 @@ from tests.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.core.results_factory import ResultsFactory
-from valhalla.global_definitions import (
+from qvalhalla.core.results_factory import ResultsFactory
+from qvalhalla.global_definitions import (
     RouterEndpoint,
     RouterMethod,
     RouterProfile,
