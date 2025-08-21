@@ -3,8 +3,8 @@ from tests.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.global_definitions import RouterProfile
-from valhalla.processing.routing.valhalla.expansion import ValhallaExpansion
+from qvalhalla.global_definitions import RouterProfile
+from qvalhalla.processing.routing.valhalla.expansion import ValhallaExpansion
 
 
 class TestValhallaExpansion(ProcessingBase):

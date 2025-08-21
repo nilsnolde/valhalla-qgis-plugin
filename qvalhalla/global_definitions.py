@@ -7,22 +7,22 @@ from typing import Dict, Tuple
 from qgis.core import QgsField
 from qgis.PyQt.QtCore import QVariant
 
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_bike import (
+from .gui.widgets.costing_settings.widget_settings_valhalla_bike import (
     ValhallaSettingsBikeWidget,
 )
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_car import (
+from .gui.widgets.costing_settings.widget_settings_valhalla_car import (
     ValhallaSettingsCarWidget,
 )
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
+from .gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
     ValhallaSettingsMbikeWidget,
 )
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
+from .gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
     ValhallaSettingsPedestrianWidget,
 )
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_truck import (
+from .gui.widgets.costing_settings.widget_settings_valhalla_truck import (
     ValhallaSettingsTruckWidget,
 )
-from valhalla.utils.misc_utils import IndexableStrEnum
+from .utils.misc_utils import IndexableStrEnum
 
 
 class Dialogs(Enum):

@@ -7,9 +7,9 @@ from tests.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.core.settings import ValhallaSettings
-from valhalla.global_definitions import Dialogs, RouterType
-from valhalla.gui.ui_definitions import PluginSettingsDlgElems
+from qvalhalla.core.settings import ValhallaSettings
+from qvalhalla.global_definitions import Dialogs, RouterType
+from qvalhalla.gui.ui_definitions import PluginSettingsDlgElems
 
 URLS = (
     (PluginSettingsDlgElems.VALHALLA_HTTP_URL, "http://localhost:8002"),

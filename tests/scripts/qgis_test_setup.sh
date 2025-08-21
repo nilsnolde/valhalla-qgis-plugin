@@ -36,8 +36,6 @@ chmod +x "$STARTUP_SCRIPT_PATH"
 
 # do the setup
 $SETUP_SCRIPT_PATH "$PLUGIN_NAME"
-rm -rf "/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/$PLUGIN_NAME"
-ln -s "/tests_directory/$PLUGIN_NAME" "/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/$PLUGIN_NAME"
 apt-get update && apt-get install -y pre-commit python3-coverage
 git config --global --add safe.directory /tests_directory
 
@@ -46,4 +44,4 @@ cd tests_directory
 pre-commit run --all-files
 python3 -m coverage run -m unittest discover
 python3 -m coverage report
-python3 -m coverage lcov --include "valhalla/*"
+python3 -m coverage lcov --include "qvalhalla/*"

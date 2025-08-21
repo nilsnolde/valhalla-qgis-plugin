@@ -18,11 +18,10 @@ from qgis.core import (
     QgsWkbTypes,
 )
 from qgis.PyQt.QtCore import QVariant
+from qvalhalla import BASE_DIR
+from qvalhalla.utils.resource_utils import get_settings_dir
 from tests import HTTPTestCase
 from tests.constants import GRAPHS, POLYGON_4326, WAYPOINTS_4326
-
-from valhalla import BASE_DIR
-from valhalla.utils.resource_utils import get_settings_dir
 
 
 class ProcessingBase(HTTPTestCase):

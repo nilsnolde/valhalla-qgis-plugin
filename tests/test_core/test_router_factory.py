@@ -1,14 +1,13 @@
-from tests import HTTPTestCase
-from tests.constants import WAYPOINTS_4326
-
-from valhalla.core.router_factory import RouterFactory
-from valhalla.global_definitions import (
+from qvalhalla.core.router_factory import RouterFactory
+from qvalhalla.global_definitions import (
     RouterEndpoint,
     RouterMethod,
     RouterProfile,
     RouterType,
 )
-from valhalla.third_party.routingpy.routingpy.direction import Direction
+from qvalhalla.third_party.routingpy.routingpy.direction import Direction
+from tests import HTTPTestCase
+from tests.constants import WAYPOINTS_4326
 
 
 class TestRouterFactory(HTTPTestCase):

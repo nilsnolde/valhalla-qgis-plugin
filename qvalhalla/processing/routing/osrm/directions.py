@@ -1,5 +1,5 @@
-from valhalla.global_definitions import RouterType
-from valhalla.processing.routing.directions_base import DirectionsBase
+from ....global_definitions import RouterType
+from ....processing.routing.directions_base import DirectionsBase
 
 
 class OSRMDirections(DirectionsBase):

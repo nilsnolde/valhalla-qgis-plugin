@@ -25,11 +25,11 @@ from qgis.core import (
 from qgis.PyQt.QtCore import QCoreApplication, QVariant
 from qgis.PyQt.QtGui import QIcon
 
-from valhalla.global_definitions import FieldNames, SpOptTypes
-from valhalla.processing.processing_definitions import HELP_DIR
-from valhalla.utils.geom_utils import WGS84
-from valhalla.utils.misc_utils import wrap_in_html_tag
-from valhalla.utils.resource_utils import get_icon
+from ...global_definitions import FieldNames, SpOptTypes
+from ...processing.processing_definitions import HELP_DIR
+from ...utils.geom_utils import WGS84
+from ...utils.misc_utils import wrap_in_html_tag
+from ...utils.resource_utils import get_icon
 
 
 class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):

@@ -1,7 +1,7 @@
-from valhalla.gui.compiled.routing_settings_valhalla_pedestrian_widget_ui import (
+from ...compiled.routing_settings_valhalla_pedestrian_widget_ui import (
     Ui_settings_valhalla_pedestrian,
 )
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_base import (
+from ...widgets.costing_settings.widget_settings_valhalla_base import (
     ValhallaSettingsBase,
 )
 

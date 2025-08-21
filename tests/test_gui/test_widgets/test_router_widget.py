@@ -12,15 +12,15 @@ from ...utilities import get_qgis_app
 CANVAS: QgsMapCanvas
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.global_definitions import RouterMethod, RouterType
-from valhalla.gui.dock_routing import RoutingDockWidget
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
+from qvalhalla.global_definitions import RouterMethod, RouterType
+from qvalhalla.gui.dock_routing import RoutingDockWidget
+from qvalhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
     ValhallaSettingsMbikeWidget,
 )
-from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
+from qvalhalla.gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
     ValhallaSettingsPedestrianWidget,
 )
-from valhalla.utils.resource_utils import get_settings_dir
+from qvalhalla.utils.resource_utils import get_settings_dir
 
 
 class TestWaypointsWidget(HTTPTestCase):

@@ -8,13 +8,13 @@ from tests.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.global_definitions import (
+from qvalhalla.global_definitions import (
     FieldNames,
     RouterMethod,
     RouterProfile,
     RoutingMetric,
 )
-from valhalla.processing.routing.valhalla.directions import ValhallaDirections
+from qvalhalla.processing.routing.valhalla.directions import ValhallaDirections
 
 
 class TestValhallaDirections(ProcessingBase):

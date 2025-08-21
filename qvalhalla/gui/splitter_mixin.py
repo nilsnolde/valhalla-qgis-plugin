@@ -1,8 +1,7 @@
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QResizeEvent
 from qgis.PyQt.QtWidgets import QSplitter, QSplitterHandle, QToolButton, QVBoxLayout
-
-from valhalla.utils.resource_utils import get_icon
+from qvalhalla.utils.resource_utils import get_icon
 
 
 class SplitterMixin:

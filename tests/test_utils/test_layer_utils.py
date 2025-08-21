@@ -13,7 +13,7 @@ from tests.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.utils.layer_utils import get_wgs_coords_from_layer
+from qvalhalla.utils.layer_utils import get_wgs_coords_from_layer
 
 
 class TestLayerUtils(HTTPTestCase):

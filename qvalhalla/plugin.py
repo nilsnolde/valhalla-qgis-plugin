@@ -1,17 +1,16 @@
 from typing import List, Optional
 
-from qgis.PyQt.QtWidgets import QMessageBox
-from qgis.PyQt.QtCore import Qt
 from qgis.core import Qgis, QgsApplication
 from qgis.gui import QgisInterface, QgsMessageBar
-from qgis.PyQt.QtWidgets import QAction, QMenu, QToolBar
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QAction, QMenu, QMessageBox, QToolBar
 
 from . import PLUGIN_NAME, __version__
 from .core.settings import IGNORE_PYPI, PLUGIN_VERSION, ValhallaSettings
 from .exceptions import ValhallaCmdError
 from .global_definitions import PYPI_PKGS, Dialogs, PyPiState
-from .gui.dock_routing import RoutingDockWidget
 from .gui.dlg_spopt import SpoptDialog
+from .gui.dock_routing import RoutingDockWidget
 from .processing.provider import ValhallaProvider
 from .utils.misc_utils import str_to_bool
 from .utils.resource_utils import check_local_lib_version, get_icon, get_pypi_lib_version, install_pypi
@@ -33,7 +32,7 @@ class ValhallaPlugin:
 
         self.na_toolbar: Optional[QToolBar] = None
         self.menu: Optional[QMenu] = None
-        self.actions: List[QAction] = list() # type: ignore
+        self.actions: List[QAction] = list()  # type: ignore
 
         self.routing_dock: Optional[RoutingDockWidget] = None
         # self.settings_dlg: Optional[PluginSettingsDialog] = None
@@ -149,7 +148,6 @@ class ValhallaPlugin:
                     "Do you want us to install these to take advantage of fully local analysis?"
                 )
                 install_btn = msg_box.addButton("Yes", QMessageBox.YesRole)
-                no_btn = msg_box.addButton(QMessageBox.No)
                 ignore_btn = msg_box.addButton("Ignore forever", QMessageBox.RejectRole)
 
                 msg_box.exec()

@@ -10,8 +10,8 @@ force-exclude = '''
       | resources
       | compiled
     )/
-    | valhalla/__init__.py
-    | valhalla/plugin.py
+    | qvalhalla/__init__.py
+    | qvalhalla/plugin.py
     | tests/utilities.py
     | tests/qgis_interface.py
 )
@@ -25,8 +25,8 @@ skip = [
     ".venv",
     "compiled",
     "third_party",
-    "valhalla/__init__.py",
-    "valhalla/plugin.py",
+    "qvalhalla/__init__.py",
+    "qvalhalla/plugin.py",
     "tests/__main__.py",
     "tests/test_e2e.py",
     "tests/utilities.py",
@@ -34,4 +34,4 @@ skip = [
 ]
 
 [tool.qgis-plugin-ci]
-plugin_path = "valhalla"
+plugin_path = "qvalhalla"
