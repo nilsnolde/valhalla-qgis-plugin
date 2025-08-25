@@ -164,21 +164,6 @@ class PyPiState(Enum):
     UP_TO_DATE = 2
 
 
-# Field names are the same in the metafile.json from the uploader
-PkgDetails = namedtuple(
-    "PkgDetails",
-    (
-        "name",
-        "filename",
-        "size",
-        "polyline",
-        "free",
-        "is_purchased",
-        "local_fp",
-    ),
-)
-
-
 class SpOptTypes(str, Enum):
     LSCP = "lscp"
     MCLP = "mclp"

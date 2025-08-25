@@ -35,7 +35,7 @@ from ...gui.widgets.costing_settings.widget_settings_valhalla_base import (
 from ...utils.geom_utils import WGS84
 from ...utils.layer_utils import get_wgs_coords_from_layer
 from ...utils.misc_utils import wrap_in_html_tag
-from ...utils.resource_utils import get_graph_dir, get_icon
+from ...utils.resource_utils import get_icon
 from ..processing_definitions import HELP_DIR
 
 
@@ -69,8 +69,6 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
 
             # we keep the costing params dict for retrieving the parameter values later
             self.costing_defaults = self.get_costing_defaults(costing_widget)
-
-        self.pkgs = [pkg_path.name for pkg_path in get_graph_dir(self.router).iterdir()]
 
     def tr(self, string):
         """

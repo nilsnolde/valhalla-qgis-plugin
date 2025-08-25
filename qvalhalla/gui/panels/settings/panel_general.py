@@ -26,8 +26,6 @@ PACKAGE_NA = "-"
 class PanelGeneral(PanelBase):
     SETTINGS_TYPE = Dialogs.SETTINGS
     RECOVER = [
-        # PluginSettingsDlgElems.ACCOUNT_AUTH,
-        # PluginSettingsDlgElems.SHOP_HTTP_URL,
         PluginSettingsDlgElems.DEBUG,
     ]
 
