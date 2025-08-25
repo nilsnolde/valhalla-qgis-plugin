@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 from typing import Any, List, Union
 
 from qgis.core import QgsSettings
@@ -39,6 +40,8 @@ DEFAULT_PROVIDERS = [
     ProviderSetting("FOSSGIS", "https://valhalla1.openstreetmap.de", "", "access_key"),  # auth_key
     ProviderSetting("localhost", "http://localhost:8002", "", ""),  # auth_key
 ]
+
+DEFAULT_GRAPH_DIR: Path = get_settings_dir().joinpath("graph_dir")
 
 
 class ValhallaSettings(QgsSettings):
@@ -85,19 +88,6 @@ class ValhallaSettings(QgsSettings):
 
         return str_to_bool(self.get(Dialogs.SETTINGS, "debug"))
 
-    def get_shop_url(self) -> str:
-        """Simply returns the shop's base URL from the settings"""
-        return self.get(Dialogs.SETTINGS, PluginSettingsDlgElems.SHOP_HTTP_URL)
-
-    # def get_router_url(self, router: RouterType, profile: Optional[RouterProfile] = None) -> str:
-    #     """Returns the router's URL."""
-    #     t = (
-    #         PROFILE_TO_OSRM_URL[profile]
-    #         if router == RouterType.OSRM
-    #         else PluginSettingsDlgElems.VALHALLA_HTTP_URL
-    #     )
-    #     return self.get(Dialogs.SETTINGS, t)
-
     def get_providers(
         self,
         router: RouterType,
@@ -120,3 +110,29 @@ class ValhallaSettings(QgsSettings):
         self.remove_(Dialogs.PROVIDERS, router.lower())
 
         return current
+
+    def get_graph_dir(self):
+        """
+        Returns the path to the graph directory from the settings.
+        """
+        graph_dir = self.get(Dialogs.SETTINGS, "graph_dir")
+        return Path(graph_dir)
+
+    def set_graph_dir(self, graph_dir: Path):
+        """
+        Sets the path to the graph directory from the settings.
+        """
+        self.set(Dialogs.SETTINGS, "graph_dir", str(graph_dir.resolve()))
+
+    def get_binary_dir(self):
+        """
+        Returns the path to the Valhalla binaries.
+        """
+        binary_dir = self.get(Dialogs.SETTINGS, "binary_dir")
+        return Path(binary_dir)
+
+    def set_binary_dir(self, binary_dir: Path):
+        """
+        Returns the path to the Valhalla binaries.
+        """
+        self.set(Dialogs.SETTINGS, "binary_dir", str(binary_dir.resolve()))

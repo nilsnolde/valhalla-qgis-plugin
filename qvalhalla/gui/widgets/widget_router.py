@@ -1,10 +1,13 @@
-from qgis.PyQt.QtCore import QSize
+import json
+
+from qgis.core import Qgis
+from qgis.PyQt.QtCore import QDir, QProcess, QSize
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QComboBox,
+    QFileSystemModel,
     QFormLayout,
     QHBoxLayout,
-    QPushButton,
     QSizePolicy,
     QSpacerItem,
     QToolButton,
@@ -13,22 +16,13 @@ from qgis.PyQt.QtWidgets import (
 
 from ...core.settings import ProviderSetting, ValhallaSettings
 from ...global_definitions import RouterMethod, RouterProfile, RouterType
+from ...gui.dlg_plugin_settings import PluginSettingsDialog
 from ...gui.dlg_routing_providers import ProviderDialog
-from ...utils.resource_utils import get_icon
-from ..ui_definitions import RouterWidgetElems
-
-BUTTONS = {
-    RouterWidgetElems.PROV_OPT: (
-        ":images/themes/default/console/iconProcessingConsole.svg",
-        "Provider Manager",
-    ),
-    RouterWidgetElems.PED: ("pedestrian.svg", "Bike mode"),
-    RouterWidgetElems.BIKE: ("bike.svg", "Bike mode"),
-    RouterWidgetElems.CAR: ("car.svg", "Car mode"),
-    RouterWidgetElems.TRUCK: ("truck.svg", "Truck mode"),
-    RouterWidgetElems.MBIKE: ("motorbike.svg", "Motorbike mode"),
-}
-
+from ...gui.dlg_server_log import ServerLogDialog
+from ...utils.misc_utils import deep_merge
+from ...utils.qt_utils import FileNameInDirFilterProxy
+from ...utils.resource_utils import check_valhalla_installation, get_icon, get_valhalla_settings_path
+from ..ui_definitions import ID_JSON, RouterWidgetElems
 
 PROFILE_TO_UI = {
     RouterWidgetElems.PED: RouterProfile.PED,
@@ -39,32 +33,55 @@ PROFILE_TO_UI = {
 }
 
 
-FILE_EXT = {RouterType.VALHALLA: ".tar", RouterType.OSRM: ".osrm"}
-
-
 # TODO: make this class a singleton so every dialog gets the same instance
 #   mainly useful for the QFileSystemWatcher
 class RouterWidget(QWidget):
     def __init__(self, parent_dlg: QWidget = None):
-        super().__init__(parent_dlg)
+        super().__init__()
+        self._parent = parent_dlg
         self.setupUi()
 
+        self.settings_dlg = PluginSettingsDialog(self)
+        graph_dir = ValhallaSettings().get_graph_dir()
+
         self._populate_providers()
+        self._on_graph_changed(self.ui_cmb_graphs.currentText())
 
         # assign and update the provider & method
         self._on_provider_method_changed()
         self._profile = RouterProfile.PED
 
-        # add a directory watcher to get notified when a package was downloaded
-        # self.watcher = QFileSystemWatcher()
-        # for e in RouterType:
-        #     path = get_settings_dir().joinpath(e.lower())
-        #     path.mkdir(exist_ok=True, parents=True)
-        #     self.watcher.addPath(str(path))
+        # the process which will start a local valhalla server
+        self.valhalla_service = QProcess(self)
+        self.valhalla_service.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
+        self.dlg_server_log = ServerLogDialog()
+
+        # make the combobox use a similar view/model as the GraphWidget
+        self.graph_dir_model = QFileSystemModel()
+        self.graph_dir_model.setFilter(QDir.Filter.NoDotAndDotDot | QDir.Filter.Dirs)
+        self.graph_dir_model.setRootPath(str(graph_dir.resolve()))
+
+        self.graph_dir_proxy = FileNameInDirFilterProxy(ID_JSON)
+        self.graph_dir_proxy.setSourceModel(self.graph_dir_model)
+        self.graph_dir_proxy.setRootPath(str(graph_dir.resolve()))
+
+        self.ui_cmb_graphs.setModel(self.graph_dir_proxy)
+        self.ui_cmb_graphs.setModelColumn(0)
+        root_idx = self.graph_dir_model.index(str(graph_dir.resolve()))
+        self.ui_cmb_graphs.setRootModelIndex(self.graph_dir_proxy.mapFromSource(root_idx))
 
         # connections
         self.ui_cmb_prov.currentIndexChanged.connect(self._on_provider_method_changed)
+        self.ui_cmb_graphs.currentTextChanged.connect(self._on_graph_changed)
         self.mode_btns.buttonToggled.connect(self._on_profile_change)
+        self.ui_btn_prov_options.clicked.connect(self._on_btn_prov_options_clicked)
+        self.ui_btn_server_conf.clicked.connect(self._on_settings_clicked)
+        self.ui_btn_server_start.clicked.connect(self._on_server_start)
+        self.ui_btn_server_stop.clicked.connect(self._on_server_stop)
+        self.ui_btn_server_log.clicked.connect(self.dlg_server_log.show)
+        self.valhalla_service.readyReadStandardOutput.connect(self._on_server_log_ready)
+        self.valhalla_service.stateChanged.connect(self._on_server_state_changed)
+        self.graph_dir_model.directoryLoaded.connect(self.graph_dir_proxy.invalidateFilter)
         # self.watcher.directoryChanged.connect(self._populate_providers)
 
     @property
@@ -90,6 +107,63 @@ class RouterWidget(QWidget):
     @profile.setter
     def profile(self, profile):
         self._profile = profile
+
+    def _on_graph_changed(self, new_name):
+        if not new_name:
+            return
+
+        # load the current graph settings (tile_dir etc)
+        graph_dir = ValhallaSettings().get_graph_dir()
+        id_json = graph_dir.joinpath(new_name, ID_JSON).resolve()
+        with id_json.open("r") as f:
+            graph_settings = json.load(f)
+
+        # overwrite valhalla.json with those graph settings
+        with get_valhalla_settings_path().open("r+") as f:
+            valhalla_settings = json.load(f)
+            new_settings = deep_merge(valhalla_settings, graph_settings)
+            f.seek(0)
+            f.truncate()
+            json.dump(new_settings, f, indent=2)
+
+    def _on_server_state_changed(self, new_state: QProcess.ProcessState):
+        # default to QProcess.ProcessState.Running
+        msg = "Local Valhalla server started"
+        level = Qgis.Info
+        if new_state == QProcess.ProcessState.NotRunning:
+            msg = "Local Valhalla server stopped"
+            level = Qgis.Warning
+        elif new_state == QProcess.ProcessState.Starting:
+            return
+
+        self._parent.status_bar.pushMessage(msg, level, 3)
+
+    def _on_server_log_ready(self):
+        log = self.valhalla_service.readAll().data().decode()
+        self.dlg_server_log.text_log.append(log)
+
+    def _on_server_start(self):
+        if not check_valhalla_installation():
+            self._parent.status_bar.pushMessage("pyvalhalla-weekly not installed", Qgis.Critical, 3)
+            return
+        args = [str(get_valhalla_settings_path()), "1"]
+
+        # need to run the executable directly
+        # with "python -m valhalla xxx" it'd run 2 processes and only kill the first/outer one
+        valhalla_service = ValhallaSettings().get_binary_dir().joinpath("valhalla_service")
+        self.valhalla_service.start(str(valhalla_service.resolve()), args)
+        self.dlg_server_log.text_log.append(
+            f"Starting valhalla service with PID {self.valhalla_service.processId()}..."
+        )
+
+    def _on_server_stop(self):
+        if not self.valhalla_service.isOpen():
+            return
+        self.dlg_server_log.text_log.append("Stopping valhalla service...")
+        self.valhalla_service.kill()
+
+    def _on_settings_clicked(self):
+        self.settings_dlg.show()
 
     def _on_provider_method_changed(self):
         (
@@ -121,52 +195,19 @@ class RouterWidget(QWidget):
         if prev_idx != -1 and self.ui_cmb_prov.count() >= (prev_idx + 1):
             self.ui_cmb_prov.setCurrentIndex(prev_idx)
 
-        # and all the local packages
-        # for prov in self.watcher.directories():
-        #     router = os.path.basename(prov).lower()
-        #     prov_display = (
-        #         router.capitalize() if router == RouterType.VALHALLA else router.upper()
-        #     )
-        #     for pkg_path in Path(prov).iterdir():
-        #         self.ui_cmb_prov.addItem(
-        #             f"{prov_display} – {pkg_path.name}",
-        #             (RouterType(router), RouterMethod.LOCAL, pkg_path.name),
-        #         )
-
         self.ui_cmb_prov.blockSignals(False)
 
-    def update_profile_buttons(self):
-        btn: QToolButton
-        for btn in self.mode_btns.buttons():
-            if btn.objectName() in (RouterWidgetElems.TRUCK, RouterWidgetElems.MBIKE):
-                btn.setEnabled(self._router == RouterType.VALHALLA)
-
-        # switch to PED when provider is OSRM and non-available profile is selected
-        getattr(self, RouterWidgetElems.PED.value).setChecked(
-            self.router == RouterType.OSRM and self.profile in (RouterProfile.MBIKE, RouterProfile.TRUCK)
-        )
-
     def setupUi(self):
-        tool_buttons = {
-            # RouterWidgetElems.PROV_OPT: (
-            #     ":images/themes/default/console/iconProcessingConsole.svg",
-            #     "Provider Manager",
-            # ),
-            RouterWidgetElems.PED: ("pedestrian.svg", "Pedestrian mode"),
-            RouterWidgetElems.BIKE: ("bike.svg", "Bike mode"),
-            RouterWidgetElems.CAR: ("car.svg", "Car mode"),
-            RouterWidgetElems.TRUCK: ("truck.svg", "Truck mode"),
-            RouterWidgetElems.MBIKE: ("motorbike.svg", "Motorbike mode"),
-        }
-        # first set up the buttons, then later add them where needed
-        for btn_enum, (icon, tip) in tool_buttons.items():
+        def add_btn(btn_name: str, icon: str, tip: str, checkable=True) -> QToolButton:
             btn = QToolButton(self)
             btn.setIcon(get_icon(icon))
-            btn.setObjectName(btn_enum.value)
+            btn.setObjectName(btn_name)
             btn.setIconSize(QSize(24, 24))
             btn.setToolTip(tip)
-            btn.setCheckable(True)
-            setattr(self, btn_enum.value, btn)
+            btn.setCheckable(checkable)
+            setattr(self, btn_name, btn)
+
+            return btn
 
         self.outer_layout = QFormLayout(self)
 
@@ -174,28 +215,60 @@ class RouterWidget(QWidget):
         self.provider_field = QHBoxLayout(self)
         self.ui_cmb_prov = QComboBox(self)
         self.ui_cmb_prov.setObjectName(RouterWidgetElems.PROV_COMBO.value)
-        self.ui_btn_prov_options = QPushButton()
-        self.ui_btn_prov_options.setObjectName(RouterWidgetElems.PROV_OPT.value)
-        self.ui_btn_prov_options.setIcon(get_icon("server.svg"))
-        self.ui_btn_prov_options.setIconSize(QSize(24, 24))
-        self.ui_btn_prov_options.setFixedSize(self.ui_cmb_prov.height(), self.ui_cmb_prov.height())
-        self.ui_btn_prov_options.setToolTip("Server manager")
-        self.ui_btn_prov_options.clicked.connect(self._on_btn_prov_options_clicked)
+        add_btn(RouterWidgetElems.PROV_OPT.value, "server.svg", "Server manager", False)
 
         self.provider_field.addWidget(self.ui_cmb_prov)
         self.provider_field.addWidget(self.ui_btn_prov_options)
 
         self.outer_layout.addRow("Provider", self.provider_field)
 
+        # the middle row, i.e. local server
+        self.server_layout = QHBoxLayout(self)
+        for btn_name, (icon, tip) in {
+            RouterWidgetElems.SERVER_START: (
+                ":images/themes/default/mActionStart.svg",
+                "Start a local Valhalla server",
+            ),
+            RouterWidgetElems.SERVER_STOP: (
+                ":images/themes/default/mActionStop.svg",
+                "Stop the local Valhalla server",
+            ),
+        }.items():
+            self.server_layout.addWidget(add_btn(btn_name, icon, tip, False))
+        self.ui_cmb_graphs = QComboBox(self)
+        self.ui_cmb_graphs.setObjectName(RouterWidgetElems.SERVER_GRAPHS_COMBO.value)
+        self.ui_cmb_graphs.setToolTip("List of locally available graphs")
+        self.server_layout.addWidget(self.ui_cmb_graphs)
+        for btn_name, (icon, tip) in {
+            RouterWidgetElems.SERVER_CONF: (
+                ":images/themes/default/propertyicons/layerconfiguration.svg",
+                "Configure the local server",
+            ),
+            RouterWidgetElems.SERVER_LOG: (
+                ":images/themes/default/mMessageLog.svg",
+                "View local server logs",
+            ),
+        }.items():
+            self.server_layout.addWidget(add_btn(btn_name, icon, tip, False))
+
+        self.outer_layout.addRow("Local Server", self.server_layout)
+        # TODO: add a button for "graph management" with the nice visualizations we had before
+
         # the lower row, i.e. profiles
+        mode_buttons = {
+            RouterWidgetElems.PED: ("pedestrian.svg", "Pedestrian mode"),
+            RouterWidgetElems.BIKE: ("bike.svg", "Bike mode"),
+            RouterWidgetElems.CAR: ("car.svg", "Car mode"),
+            RouterWidgetElems.TRUCK: ("truck.svg", "Truck mode"),
+            RouterWidgetElems.MBIKE: ("motorbike.svg", "Motorbike mode"),
+        }
         self.profile_layout = QHBoxLayout(self)
         self.mode_btns = QButtonGroup()
         self.mode_btns.setExclusive(True)
-        for btn_enum in PROFILE_TO_UI.keys():
-            btn = getattr(self, btn_enum.value)
+        for btn_enum, (icon, tip) in mode_buttons.items():
+            btn = add_btn(btn_enum.value, icon, tip)
             self.mode_btns.addButton(btn)
             self.profile_layout.addWidget(btn)
-
         self.mode_btns.buttons()[0].setChecked(True)  # set pedestrian as checked button
 
         self.profile_layout.insertSpacerItem(

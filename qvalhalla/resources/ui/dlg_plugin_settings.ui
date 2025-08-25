@@ -9,221 +9,125 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>693</width>
+    <width>582</width>
     <height>525</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string notr="true">Valhalla - Settings</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QListWidget" name="menu_widget">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>200</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>153</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QListWidget{
-	background-color: rgb(69, 69, 69, 220);
-	outline: 0;
-}
-QListWidget::item {
-	color: white;
-	padding: 3px;
-}
-QListWidget::item::selected {
-	color: black;
-	background-color:palette(Window);
-    padding-right: 0px;
-}</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="lineWidth">
-      <number>0</number>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="spacing">
-      <number>10</number>
-     </property>
-     <property name="uniformItemSizes">
-      <bool>false</bool>
-     </property>
-     <property name="currentRow">
-      <number>-1</number>
-     </property>
-     <item>
-      <property name="text">
-       <string>General</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="0" column="1">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
     <layout class="QVBoxLayout" name="main_layout">
      <item>
-      <widget class="QStackedWidget" name="ui_stacked_panels">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="general_page">
-        <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Binaries</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QGroupBox" name="ui_deps_group">
-           <property name="title">
-            <string>Dependencies</string>
+          <widget class="QgsFileWidget" name="ui_binary_path">
+           <property name="toolTip">
+            <string>Change the binary directory for Valhalla</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QTableWidget" name="ui_deps_table">
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <property name="showDropIndicator" stdset="0">
-               <bool>false</bool>
-              </property>
-              <property name="dragDropOverwriteMode">
-               <bool>false</bool>
-              </property>
-              <property name="selectionMode">
-               <enum>QAbstractItemView::NoSelection</enum>
-              </property>
-              <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectRows</enum>
-              </property>
-              <property name="showGrid">
-               <bool>false</bool>
-              </property>
-              <column>
-               <property name="text">
-                <string>Package</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Installed</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Available</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string/>
-               </property>
-              </column>
-             </widget>
-            </item>
-           </layout>
+           <property name="storageMode">
+            <enum>QgsFileWidget::GetDirectory</enum>
+           </property>
+           <property name="options">
+            <set>QFileDialog::DontResolveSymlinks|QFileDialog::ReadOnly|QFileDialog::ShowDirsOnly</set>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="ui_url_group">
-           <property name="title">
-            <string>Misc</string>
+          <widget class="QToolButton" name="ui_btn_default_binary_path">
+           <property name="toolTip">
+            <string>Set the binary path to the pyvalhalla-weekly Python package (if installed)</string>
            </property>
-           <layout class="QFormLayout" name="formLayout_2">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Debug</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QCheckBox" name="ui_debug">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <property name="text">
+            <string>...</string>
+           </property>
           </widget>
          </item>
         </layout>
-       </widget>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_9">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>With :heart: from GIS-OPS UG</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="toolButton_2">
-         <property name="text">
-          <string>Help</string>
-         </property>
-         <property name="icon">
-          <iconset theme=":images/themes/default/mActionHelpContents.svg">
-           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-        </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="ui_deps_group">
+       <property name="title">
+        <string>Dependencies</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QTableWidget" name="ui_deps_table">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="showDropIndicator" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="dragDropOverwriteMode">
+           <bool>false</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::NoSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="showGrid">
+           <bool>false</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>Package</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Installed</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Available</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string/>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>menu_widget</tabstop>
- </tabstops>
+ <customwidgets>
+  <customwidget>
+   <class>QgsFileWidget</class>
+   <extends>QWidget</extends>
+   <header>qgsfilewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

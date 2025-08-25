@@ -1,5 +1,7 @@
 from enum import Enum, unique
 
+ID_JSON = "id.json"
+
 
 @unique
 class PluginSettingsDlgElems(str, Enum):
@@ -7,13 +9,7 @@ class PluginSettingsDlgElems(str, Enum):
     VALHALLA_HTTP_URL = "ui_valhalla_http_url"
     VALHALLA_HTTP_PARAM = "ui_valhalla_http_param"
     VALHALLA_HTTP_SECRET = "ui_valhalla_http_secret"
-    # OSRM_HTTP_URL_PED = "ui_osrm_http_url_ped"
-    # OSRM_HTTP_URL_BIKE = "ui_osrm_http_url_bike"
-    # OSRM_HTTP_URL_CAR = "ui_osrm_http_url_car"
-    # OSRM_HTTP_PARAM = "ui_osrm_http_param"
-    # OSRM_HTTP_SECRET = "ui_osrm_http_secret"
-    # SHOP_HTTP_URL = "ui_shop_http_url"
-    # ACCOUNT_AUTH = "ui_account_auth"
+    VALHALLA_GRAPH_DIRECTORY = "ui_btn_graph_folder"
     DEBUG = "debug"
 
 
@@ -26,3 +22,8 @@ class RouterWidgetElems(str, Enum):
     CAR = "ui_btn_car"
     TRUCK = "ui_btn_truck"
     MBIKE = "ui_btn_mbike"
+    SERVER_START = "ui_btn_server_start"
+    SERVER_STOP = "ui_btn_server_stop"
+    SERVER_LOG = "ui_btn_server_log"
+    SERVER_CONF = "ui_btn_server_conf"
+    SERVER_GRAPHS_COMBO = "ui_cmb_graphs"

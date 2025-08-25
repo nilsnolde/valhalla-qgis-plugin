@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'valhalla/resources/ui/widget_routing_dock.ui'
+# Form implementation generated from reading ui file 'qvalhalla/resources/ui/widget_routing_dock.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
