@@ -153,7 +153,7 @@ class RouterWidget(QWidget):
         valhalla_service = ValhallaSettings().get_binary_dir().joinpath("valhalla_service")
         self.valhalla_service.start(str(valhalla_service.resolve()), args)
         self.dlg_server_log.text_log.append(
-            f"Starting valhalla service with PID {self.valhalla_service.processId()}..."
+            f"Starting {valhalla_service} with PID {self.valhalla_service.processId()}..."
         )
 
     def _on_server_stop(self):

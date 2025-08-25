@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 
 from qgis.core import QgsSettings
 from qgis.PyQt.QtCore import QSettings
@@ -111,12 +111,12 @@ class ValhallaSettings(QgsSettings):
 
         return current
 
-    def get_graph_dir(self):
+    def get_graph_dir(self) -> Optional[Path]:
         """
         Returns the path to the graph directory from the settings.
         """
         graph_dir = self.get(Dialogs.SETTINGS, "graph_dir")
-        return Path(graph_dir)
+        return Path(graph_dir) if graph_dir else None
 
     def set_graph_dir(self, graph_dir: Path):
         """
@@ -124,12 +124,12 @@ class ValhallaSettings(QgsSettings):
         """
         self.set(Dialogs.SETTINGS, "graph_dir", str(graph_dir.resolve()))
 
-    def get_binary_dir(self):
+    def get_binary_dir(self) -> Optional[Path]:
         """
         Returns the path to the Valhalla binaries.
         """
         binary_dir = self.get(Dialogs.SETTINGS, "binary_dir")
-        return Path(binary_dir)
+        return Path(binary_dir) if binary_dir else None
 
     def set_binary_dir(self, binary_dir: Path):
         """

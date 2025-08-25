@@ -1,10 +1,11 @@
 from functools import partial
 from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 from typing import Optional
 
 from packaging.version import parse as Version
 from qgis.core import Qgis
-from qgis.gui import QgisInterface
+from qgis.gui import QgisInterface, QgsFileWidget
 from qgis.PyQt.QtCore import QRect, QSize, Qt
 from qgis.PyQt.QtWidgets import QDialog, QLabel, QTableWidgetItem, QToolButton, QWidget
 
@@ -43,6 +44,11 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
 
         # connections
         self.ui_btn_default_binary_path.clicked.connect(self._on_default_binary_path)
+        self.ui_binary_path: QgsFileWidget
+        self.ui_binary_path.fileChanged.connect(self._on_binary_path_change)
+
+    def _on_binary_path_change(self, path: str):
+        ValhallaSettings().set_binary_dir(Path(path))
 
     def _on_default_binary_path(self):
         default_path = get_default_valhalla_binary_dir()
