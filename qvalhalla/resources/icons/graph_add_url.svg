@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="24"
+   width="24"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="graph_add_url.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5">
+    <linearGradient
+       xlink:href="#d"
+       id="e"
+       x1="5.4060001"
+       x2="13.188"
+       y1="4.9380002"
+       y2="11.531"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2335122,0,0,1.2335122,5.1160707,8.574792)" />
+    <linearGradient
+       id="d">
+      <stop
+         offset="0"
+         style="stop-color:#cbd9ef;stop-opacity:1"
+         id="stop1" />
+      <stop
+         offset="1"
+         style="stop-color:#93b1d1;stop-opacity:1"
+         id="stop2" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="23.960422"
+     inkscape:cx="11.623334"
+     inkscape:cy="13.334489"
+     inkscape:window-width="2256"
+     inkscape:window-height="1420"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <g
+     fill="none"
+     stroke="#d0d0d0"
+     stroke-opacity=".996"
+     transform="matrix(.99986 0 0 1 1.993 1.99)"
+     id="g1">
+    <rect
+       height="20"
+       rx=".728"
+       stroke-linejoin="round"
+       width="20"
+       x="1.51"
+       y="1.51"
+       id="rect1" />
+    <path
+       d="m1.47 5.85h20.5m-20.44 6.35 20.3.027m-20.22 5.573 20.3-.027m-16.41-16.273v20m6-20v20m6-20v20"
+       id="path1" />
+  </g>
+  <g
+     fill="none"
+     stroke="#000"
+     transform="matrix(.99986 0 0 1 1.993 1.99)"
+     id="g2">
+    <rect
+       height="20"
+       rx=".728"
+       stroke-linejoin="round"
+       width="20"
+       x=".507"
+       y=".507"
+       id="rect2" />
+    <path
+       d="m.473 4.85h20.5m-20.446 6.35 20.3.027m-20.218 5.573 20.3-.027m-16.409-16.273v20m6-20v20m6-20v20"
+       id="path2" />
+  </g>
+  <path
+     d="m 14.649885,13.057375 a 4.3209931,4.3209931 0 0 0 -4.255617,4.287688 v 0.20723 l -0.194895,-0.05551 a 2.0488637,2.0488637 0 0 0 -2.1512448,0.674731 2.0463967,2.0463967 0 0 0 -0.4144601,1.708415 l 0.019736,0.09375 -0.074011,0.05798 a 1.8996087,1.8996087 0 0 0 1.1817046,3.38229 H 21.497111 c 0.957206,0 1.763923,-0.714204 1.881106,-1.665241 0.185027,-1.507352 -1.050952,-1.852736 -1.486382,-2.030362 0.308378,-0.983109 -0.02837,-1.641804 -0.626624,-2.432486 a 2.69029,2.69029 0 0 0 -2.0723,-0.96954 h -0.11225 l -0.173925,0.01234 -0.0333,-0.119651 h 0.0025 a 4.3222266,4.3222266 0 0 0 -4.226013,-3.151623 z"
+     style="fill:url(#e);fill-opacity:1;stroke:#476280;stroke-width:1.23351;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+     id="path8" />
+</svg>

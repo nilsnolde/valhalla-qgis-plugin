@@ -79,8 +79,8 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         # make sure we have some default settings:
         # - at least one remote HTTP API URL and localhost
         # - a default graph dir in the settings
-        # - a valhalla.json we can overwrite with the current graph
         # - the default binary path
+        # - a valhalla.json we can overwrite with the current graph settings
         settings = ValhallaSettings()
         if not settings.get_providers(RouterType.VALHALLA):
             for prov in DEFAULT_PROVIDERS:

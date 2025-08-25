@@ -23,7 +23,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QToolButton" name="ui_btn_graph_add">
+         <widget class="QToolButton" name="ui_btn_graph_add_tar">
           <property name="toolTip">
            <string>Add an external graph to the library (will move the file)</string>
           </property>

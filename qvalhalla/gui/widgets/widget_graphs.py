@@ -4,13 +4,23 @@ from shutil import move, rmtree
 
 from qgis.core import Qgis
 from qgis.PyQt.QtCore import QDir
-from qgis.PyQt.QtWidgets import QFileDialog, QFileSystemModel, QListView, QMessageBox, QWidget
+from qgis.PyQt.QtWidgets import (
+    QAction,
+    QFileDialog,
+    QFileSystemModel,
+    QListView,
+    QMenu,
+    QMessageBox,
+    QToolButton,
+    QWidget,
+)
 
 from ...core.settings import ValhallaSettings
 from ...utils.qt_utils import FileNameInDirFilterProxy
 from ...utils.resource_utils import get_icon
 from ..compiled.widget_graphs_ui import Ui_GraphWidget
 from ..dlg_config_editor import ConfigEditorDialog
+from ..dlg_graph_from_url import GraphFromURLDialog
 from ..ui_definitions import ID_JSON
 
 FOLDER_BUTTON_TOOLTIP = "Set the graph library directory\nCurrently: {}"
@@ -20,12 +30,13 @@ class GraphWidget(QWidget, Ui_GraphWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.setupUi(self)
+        self.extendUi()
         self._parent = parent
 
         self.graph_dir = ValhallaSettings().get_graph_dir()
 
         # button icons
-        self.ui_btn_graph_add.setIcon(get_icon(":images/themes/default/grid.svg"))
+        # self.ui_btn_graph_add.setIcon(get_icon(":images/themes/default/grid.svg"))
         self.ui_btn_graph_remove.setIcon(get_icon("graph_remove.svg"))
         self.ui_btn_settings.setIcon(get_icon(":images/themes/default/console/iconSettingsConsole.svg"))
         self.ui_btn_graph_folder.setIcon(get_icon("graph_folder.svg"))
@@ -46,13 +57,38 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         self.ui_list_graphs.setRootIndex(self.graph_dir_proxy.mapFromSource(root_idx))
 
         # connections
-        self.ui_btn_graph_add.clicked.connect(self._on_graph_add)
         self.ui_btn_graph_remove.clicked.connect(self._on_graph_remove)
         self.ui_btn_graph_folder.clicked.connect(self._on_graph_folder_change)
         self.ui_btn_graph_remove.clicked.connect(self._on_graph_remove)
         self.ui_btn_settings.clicked.connect(self._on_config_edit)
         self.graph_dir_model.directoryLoaded.connect(self.graph_dir_proxy.invalidateFilter)
         self.graph_dir_model.rootPathChanged.connect(self.graph_dir_proxy.invalidateFilter)
+
+    def extendUi(self):
+        # turn the "graph add" button into a menu to choose from HTTP, local graph build etc
+        self.ui_btn_graph_add_tar.setPopupMode(QToolButton.MenuButtonPopup)
+        self.ui_btn_graph_add_tar.setAutoRaise(False)
+        self.ui_btn_graph_add_tar.triggered.connect(self.ui_btn_graph_add_tar.setDefaultAction)
+
+        dropdown_menu = QMenu()
+        actions = list()
+        for icon, title, connect_fn in (
+            (get_icon("graph_add_tar.svg"), "From Tar", self._on_graph_add_tar),
+            (
+                get_icon("graph_add_url.svg"),
+                "From URL",
+                self._on_graph_add_url,
+            ),
+            (get_icon("graph_add_build.svg"), "From PBF", self._on_graph_add_build),
+        ):
+            action = QAction(icon, title, self)
+            action.triggered.connect(connect_fn)
+            action.setToolTip(f"Add Graph {title}")
+            dropdown_menu.addAction(action)
+            actions.append(action)
+
+        self.ui_btn_graph_add_tar.setMenu(dropdown_menu)
+        self.ui_btn_graph_add_tar.setDefaultAction(actions[0])
 
     def _check_list_view(self):
         root = self.ui_list_graphs.rootIndex()
@@ -72,13 +108,33 @@ class GraphWidget(QWidget, Ui_GraphWidget):
             return
         idx = idx[0]
         path = Path(self.graph_dir_model.filePath(self.graph_dir_proxy.mapToSource(idx)))
+
+        # make sure this was not by accident
+        ret = QMessageBox.warning(
+            self,
+            "Remove graph",
+            f"You're sure you want to delete\n{path}",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.Yes,
+        )
+
+        if ret == QMessageBox.No:
+            return
+
         try:
             rmtree(path)
         except:
             pass
         self._parent.status_bar.pushMessage("Removed graph", f"{path.stem}", Qgis.Warning, 3)
 
-    def _on_graph_add(self):
+    def _on_graph_add_url(self):
+        dlg = GraphFromURLDialog(self._parent)
+        dlg.exec()
+
+    def _on_graph_add_build(self):
+        pass
+
+    def _on_graph_add_tar(self):
         try:
             in_tar_path = QFileDialog.getOpenFileName(
                 self,
@@ -95,10 +151,10 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         except FileExistsError:
             ret = QMessageBox.warning(
                 self,
-                "File exists",
+                "Graph exists",
                 f"The graph {out_tar_dir} already exists. Should it be replaced?",
                 QMessageBox.Yes | QMessageBox.No,
-                QMessageBox.Yes,
+                QMessageBox.No,
             )
             if ret == QMessageBox.No:
                 return
