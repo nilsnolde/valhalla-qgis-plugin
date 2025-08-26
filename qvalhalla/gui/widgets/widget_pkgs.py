@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import Enum
 from functools import partial
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 from qgis.core import Qgis
 from qgis.PyQt.QtCore import Qt
@@ -12,7 +12,7 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QToolButton, QTreeWidget, QTreeWidgetItem, QWidget
 
 from ...core.settings import ValhallaSettings
-from ...global_definitions import PkgDetails, RouterType
+from ...global_definitions import RouterType
 from ...utils.downloader import Downloader
 from ...utils.geom_utils import decode_polyline
 from ...utils.resource_utils import get_local_pkg_path
@@ -28,7 +28,7 @@ class PkgWidget(QTreeWidget):
     def __init__(
         self,
         parent_widget: Optional[QWidget],
-        all_pkgs: List[PkgDetails],
+        all_pkgs: list,
         router: RouterType,
     ):
         super().__init__()

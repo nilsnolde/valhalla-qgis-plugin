@@ -31,7 +31,7 @@ class ProcessingBase(HTTPTestCase):
 
         # copy the graphs if necessary
         for router, fname in GRAPHS:
-            out_fp = get_settings_dir().joinpath(router, fname)
+            out_fp = get_settings_dir().joinpath(fname)
             if not out_fp.exists():
                 shutil.copy2(BASE_DIR.parent.joinpath("tests", "data", fname), out_fp)
 

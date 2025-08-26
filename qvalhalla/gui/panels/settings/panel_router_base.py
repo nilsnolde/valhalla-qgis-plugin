@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from qgis.core import (
     QgsCoordinateReferenceSystem,
@@ -22,7 +22,7 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
 )
 
-from ....global_definitions import Dialogs, PkgDetails, RouterType
+from ....global_definitions import Dialogs, RouterType
 from ....gui.panels.settings.panel_base import PanelBase
 from ....gui.widgets.widget_pkgs import PkgWidget
 from ...compiled.dlg_plugin_settings_ui import Ui_PluginSettingsDialog
@@ -48,7 +48,7 @@ class PanelRouterBase(PanelBase):
     def __init__(
         self,
         dlg: Union[Ui_PluginSettingsDialog, QDialog],
-        pkgs: List[PkgDetails],
+        pkgs: list,
     ):
         super().__init__(dlg)
         self.pkgs = pkgs
