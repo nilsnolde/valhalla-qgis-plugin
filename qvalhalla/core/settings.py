@@ -118,11 +118,15 @@ class ValhallaSettings(QgsSettings):
         graph_dir = self.get(Dialogs.SETTINGS, "graph_dir")
         return Path(graph_dir) if graph_dir else None
 
-    def set_graph_dir(self, graph_dir: Path):
+    def set_graph_dir(self, graph_dir: Path | str):
         """
         Sets the path to the graph directory from the settings.
         """
-        self.set(Dialogs.SETTINGS, "graph_dir", str(graph_dir.resolve()))
+        self.set(
+            Dialogs.SETTINGS,
+            "graph_dir",
+            str(graph_dir.resolve()) if isinstance(graph_dir, Path) else graph_dir,
+        )
 
     def get_binary_dir(self) -> Optional[Path]:
         """
@@ -131,8 +135,12 @@ class ValhallaSettings(QgsSettings):
         binary_dir = self.get(Dialogs.SETTINGS, "binary_dir")
         return Path(binary_dir) if binary_dir else None
 
-    def set_binary_dir(self, binary_dir: Path):
+    def set_binary_dir(self, binary_dir: Path | str):
         """
         Returns the path to the Valhalla binaries.
         """
-        self.set(Dialogs.SETTINGS, "binary_dir", str(binary_dir.resolve()))
+        self.set(
+            Dialogs.SETTINGS,
+            "binary_dir",
+            str(binary_dir.resolve()) if isinstance(binary_dir, Path) else binary_dir,
+        )
