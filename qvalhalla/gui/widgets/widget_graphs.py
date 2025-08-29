@@ -1,11 +1,13 @@
 import json
+import os
 from pathlib import Path
 from shutil import move, rmtree
 
 from qgis.core import Qgis
-from qgis.PyQt.QtCore import QDir
+from qgis.PyQt.QtCore import QDir, QProcess
 from qgis.PyQt.QtWidgets import (
     QAction,
+    QDialog,
     QFileDialog,
     QFileSystemModel,
     QListView,
@@ -20,7 +22,9 @@ from ...utils.qt_utils import FileNameInDirFilterProxy
 from ...utils.resource_utils import get_icon
 from ..compiled.widget_graphs_ui import Ui_GraphWidget
 from ..dlg_config_editor import ConfigEditorDialog
+from ..dlg_graph_from_pbf import GraphFromPBFDialog
 from ..dlg_graph_from_url import GraphFromURLDialog
+from ..dlg_server_log import ServerLogDialog
 from ..ui_definitions import ID_JSON
 
 FOLDER_BUTTON_TOOLTIP = "Set the graph library directory\nCurrently: {}"
@@ -35,11 +39,34 @@ class GraphWidget(QWidget, Ui_GraphWidget):
 
         self.graph_dir = ValhallaSettings().get_graph_dir()
 
+        self.dlg_log = ServerLogDialog()
+        self.from_url_dlg = GraphFromURLDialog(self._parent)
+        self.config_dlg = ConfigEditorDialog(self._parent)
+
+        # building the graph needs a bit more setup, it's a whole orchestration of processes...
+        self.from_pbf_dlg = GraphFromPBFDialog(self._parent)
+        self.pbf_graph_dir = ""
+        self.pbf_path = ""
+        self.thread_count = os.cpu_count() or 1
+
+        def make_build_process() -> QProcess:
+            proc = QProcess(self)
+            proc.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
+            proc.readyReadStandardOutput.connect(self._on_build_pbf_log_ready)
+
+            return proc
+
+        self.valhalla_build_admins = make_build_process()
+        self.valhalla_build_admins.finished.connect(self._on_admins_finished)
+        self.valhalla_build_tiles = make_build_process()
+        self.valhalla_build_tiles.finished.connect(self._on_tiles_finished)
+
         # button icons
         # self.ui_btn_graph_add.setIcon(get_icon(":images/themes/default/grid.svg"))
         self.ui_btn_graph_remove.setIcon(get_icon("graph_remove.svg"))
         self.ui_btn_settings.setIcon(get_icon(":images/themes/default/console/iconSettingsConsole.svg"))
         self.ui_btn_graph_folder.setIcon(get_icon("graph_folder.svg"))
+        self.ui_btn_graph_log.setIcon(get_icon(":images/themes/default/mMessageLog.svg"))
         self.ui_btn_graph_folder.setToolTip(FOLDER_BUTTON_TOOLTIP.format(self.graph_dir))
 
         # use the graph dir as model for the list view with the restriction that a directory
@@ -59,8 +86,8 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         # connections
         self.ui_btn_graph_remove.clicked.connect(self._on_graph_remove)
         self.ui_btn_graph_folder.clicked.connect(self._on_graph_folder_change)
-        self.ui_btn_graph_remove.clicked.connect(self._on_graph_remove)
-        self.ui_btn_settings.clicked.connect(self._on_config_edit)
+        self.ui_btn_settings.clicked.connect(self.config_dlg.exec)
+        self.ui_btn_graph_log.clicked.connect(self.dlg_log.exec)
         self.graph_dir_model.directoryLoaded.connect(self.graph_dir_proxy.invalidateFilter)
         self.graph_dir_model.rootPathChanged.connect(self.graph_dir_proxy.invalidateFilter)
 
@@ -77,7 +104,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
             (
                 get_icon("graph_add_url.svg"),
                 "From URL",
-                self._on_graph_add_url,
+                lambda: self.from_url_dlg.exec(),
             ),
             (get_icon("graph_add_build.svg"), "From PBF", self._on_graph_add_build),
         ):
@@ -90,6 +117,98 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         self.ui_btn_graph_add_tar.setMenu(dropdown_menu)
         self.ui_btn_graph_add_tar.setDefaultAction(actions[0])
 
+    def _on_graph_add_build(self):
+        ret = self.from_pbf_dlg.exec()
+        if ret == QDialog.Rejected:
+            return
+
+        if (
+            self.valhalla_build_admins.state() == QProcess.ProcessState.Running
+            or self.valhalla_build_tiles.state() == QProcess.ProcessState.Running
+        ):
+            self._parent.status_bar.pushWarning(
+                "Other graph build is currently running, try again after it finished...", 6
+            )
+            return
+
+        temp_dir = self.graph_dir.joinpath("temp_build_dir")
+        inline_config = {"mjolnir": {"admin": str(temp_dir.joinpath("admins.sqlite").resolve())}}
+
+        args = ["-i", json.dumps(inline_config), self.from_pbf_dlg.pbf_path]
+        build_admins_exe = ValhallaSettings().get_binary_dir().joinpath("valhalla_build_admins")
+        self.valhalla_build_admins.start(str(build_admins_exe.resolve()), args)
+        self._parent.status_bar.pushInfo("", "Started building admins...")
+        self.dlg_log.text_log.append(
+            f"Executing {self.valhalla_build_admins.program()} {' '.join(self.valhalla_build_admins.arguments())}"
+        )
+
+    def _on_admins_finished(self, exit_code: int, exit_status: QProcess.ExitStatus):
+        self.dlg_log.text_log.append(f"Finished building admins with exit code {exit_code}")
+        if exit_status == QProcess.ExitStatus.CrashExit:
+            self._parent.status_bar.pushMessage("Building admins failed, see log!", Qgis.Critical, 0)
+            return
+
+        self._parent.status_bar.pushMessage("Building admins succeeded...", Qgis.Success, 0)
+
+        temp_dir = self.graph_dir.joinpath("temp_build_dir")
+        graph_dir = self.from_pbf_dlg.graph_dir
+        inline_config = {
+            "mjolnir": {
+                "admin": str(temp_dir.joinpath("admins.sqlite")),
+                "tile_dir": str(temp_dir.joinpath(graph_dir.name)),
+                # TODO: "timezone":
+            }
+        }
+
+        args = [
+            "-i",
+            json.dumps(inline_config),
+            "-j",
+            str(self.from_pbf_dlg.ui_int_threads.value() or os.cpu_count()),
+            self.from_pbf_dlg.pbf_path,
+        ]
+        build_tiles_exe = ValhallaSettings().get_binary_dir().joinpath("valhalla_build_tiles")
+        self.valhalla_build_tiles.start(str(build_tiles_exe.resolve()), args)
+        self._parent.status_bar.pushInfo("", "Started building graph tiles...")
+        self.dlg_log.text_log.append(
+            f"Executing {self.valhalla_build_tiles.program()} {' '.join(self.valhalla_build_tiles.arguments())}"
+        )
+
+    def _on_tiles_finished(self, exit_code: int, exit_status: QProcess.ExitStatus):
+        self.dlg_log.text_log.append(f"Finished building tiles with exit code {exit_code}")
+        if exit_status == QProcess.ExitStatus.CrashExit:
+            self._parent.status_bar.pushMessage("Building tiles failed, see log!", Qgis.Critical, 0)
+            return
+
+        self._parent.status_bar.pushMessage("Building tiles succeeded...", Qgis.Success, 0)
+
+        temp_dir = self.graph_dir.joinpath("temp_build_dir")
+        graph_dir = Path(self.from_pbf_dlg.graph_dir).resolve()
+
+        # TODO: produce an extract and remove tile_dir
+
+        # create the id.json
+        # TODO: to auto-update the list & combobox we need to create this file at the same time as the directory
+        id_json_path = temp_dir.joinpath(ID_JSON)
+        with id_json_path.open("w") as f:
+
+            json.dump(
+                {
+                    "mjolnir": {
+                        "tile_dir": str(graph_dir.joinpath(graph_dir.name).resolve()),
+                        "tile_extract": str(graph_dir.joinpath(graph_dir.name + ".tar").resolve()),
+                        "tile_url": "",
+                        "tile_url_user_pw": "",
+                    },
+                    "loki": {"use_connectivity": True},
+                },
+                f,
+                indent=2,
+            )
+
+        # move the whole directory which will finally update the graph list/dropdown
+        move(temp_dir, graph_dir)
+
     def _check_list_view(self):
         root = self.ui_list_graphs.rootIndex()
         if not self.ui_list_graphs.model().rowCount(root):
@@ -97,9 +216,9 @@ class GraphWidget(QWidget, Ui_GraphWidget):
                 "No graphs", f"Couldn't find any usable graph in {self.graph_dir}", Qgis.Warning, 6
             )
 
-    def _on_config_edit(self):
-        dlg = ConfigEditorDialog(self._parent)
-        dlg.exec()
+    def _on_build_pbf_log_ready(self):
+        log = self.sender().readAll().data().decode()
+        self.dlg_log.text_log.append(log)
 
     def _on_graph_remove(self):
         self.ui_list_graphs: QListView
@@ -118,7 +237,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
             QMessageBox.Yes,
         )
 
-        if ret == QMessageBox.No:
+        if ret != QMessageBox.Yes:
             return
 
         try:
@@ -126,13 +245,6 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         except:
             pass
         self._parent.status_bar.pushMessage("Removed graph", f"{path.stem}", Qgis.Warning, 3)
-
-    def _on_graph_add_url(self):
-        dlg = GraphFromURLDialog(self._parent)
-        dlg.exec()
-
-    def _on_graph_add_build(self):
-        pass
 
     def _on_graph_add_tar(self):
         try:

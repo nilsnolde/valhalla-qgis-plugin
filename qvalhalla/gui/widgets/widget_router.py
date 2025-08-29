@@ -1,4 +1,5 @@
 import json
+import platform
 
 from qgis.core import Qgis
 from qgis.PyQt.QtCore import QDir, QProcess, QSize
@@ -51,6 +52,23 @@ class RouterWidget(QWidget):
         self._on_provider_method_changed()
         self._profile = RouterProfile.PED
 
+        # connections
+        self.ui_cmb_prov.currentIndexChanged.connect(self._on_provider_method_changed)
+        self.mode_btns.buttonToggled.connect(self._on_profile_change)
+        self.ui_btn_prov_options.clicked.connect(self._on_btn_prov_options_clicked)
+
+        # TODO: https://github.com/kevinkreiser/prime_server/pull/137
+        # Windows has no service support yet, so no need to enable local servers
+        if platform.system() == "Windows":
+            self.ui_btn_server_start.setEnabled(False)
+            self.ui_btn_server_stop.setEnabled(False)
+            self.ui_btn_server_log.setEnabled(False)
+            self.ui_btn_server_conf.setEnabled(False)
+            self.ui_cmb_graphs.setEnabled(False)
+            return
+
+        # below ONLY for linux/osx
+
         # the process which will start a local valhalla server
         self.valhalla_service = QProcess(self)
         self.valhalla_service.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
@@ -70,19 +88,15 @@ class RouterWidget(QWidget):
         root_idx = self.graph_dir_model.index(str(graph_dir.resolve()))
         self.ui_cmb_graphs.setRootModelIndex(self.graph_dir_proxy.mapFromSource(root_idx))
 
-        # connections
-        self.ui_cmb_prov.currentIndexChanged.connect(self._on_provider_method_changed)
-        self.ui_cmb_graphs.currentTextChanged.connect(self._on_graph_changed)
-        self.mode_btns.buttonToggled.connect(self._on_profile_change)
-        self.ui_btn_prov_options.clicked.connect(self._on_btn_prov_options_clicked)
+        # more connections
         self.ui_btn_server_conf.clicked.connect(self._on_settings_clicked)
         self.ui_btn_server_start.clicked.connect(self._on_server_start)
         self.ui_btn_server_stop.clicked.connect(self._on_server_stop)
         self.ui_btn_server_log.clicked.connect(self.dlg_server_log.show)
+        self.ui_cmb_graphs.currentTextChanged.connect(self._on_graph_changed)
         self.valhalla_service.readyReadStandardOutput.connect(self._on_server_log_ready)
         self.valhalla_service.stateChanged.connect(self._on_server_state_changed)
         self.graph_dir_model.directoryLoaded.connect(self.graph_dir_proxy.invalidateFilter)
-        # self.watcher.directoryChanged.connect(self._populate_providers)
 
     @property
     def router(self) -> RouterType:
@@ -153,7 +167,7 @@ class RouterWidget(QWidget):
         valhalla_service = ValhallaSettings().get_binary_dir().joinpath("valhalla_service")
         self.valhalla_service.start(str(valhalla_service.resolve()), args)
         self.dlg_server_log.text_log.append(
-            f"Starting {valhalla_service} with PID {self.valhalla_service.processId()}..."
+            f"Started {valhalla_service} with PID {self.valhalla_service.processId()}..."
         )
 
     def _on_server_stop(self):
@@ -252,7 +266,6 @@ class RouterWidget(QWidget):
             self.server_layout.addWidget(add_btn(btn_name, icon, tip, False))
 
         self.outer_layout.addRow("Local Server", self.server_layout)
-        # TODO: add a button for "graph management" with the nice visualizations we had before
 
         # the lower row, i.e. profiles
         mode_buttons = {
