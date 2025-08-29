@@ -203,12 +203,12 @@ def get_settings_dir() -> Path:
     return d
 
 
-def get_valhalla_settings_path():
+def get_valhalla_config_path():
     return get_settings_dir().joinpath("valhalla.json")
 
 
 def create_valhalla_config(force=False):
-    config_path = get_valhalla_settings_path()
+    config_path = get_valhalla_config_path()
     if config_path.exists() and not force:
         return
 

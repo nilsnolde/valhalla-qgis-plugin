@@ -22,7 +22,7 @@ from ...gui.dlg_routing_providers import ProviderDialog
 from ...gui.dlg_server_log import ServerLogDialog
 from ...utils.misc_utils import deep_merge
 from ...utils.qt_utils import FileNameInDirFilterProxy
-from ...utils.resource_utils import check_valhalla_installation, get_icon, get_valhalla_settings_path
+from ...utils.resource_utils import check_valhalla_installation, get_icon, get_valhalla_config_path
 from ..ui_definitions import ID_JSON, RouterWidgetElems
 
 PROFILE_TO_UI = {
@@ -133,7 +133,7 @@ class RouterWidget(QWidget):
             graph_settings = json.load(f)
 
         # overwrite valhalla.json with those graph settings
-        with get_valhalla_settings_path().open("r+") as f:
+        with get_valhalla_config_path().open("r+") as f:
             valhalla_settings = json.load(f)
             new_settings = deep_merge(valhalla_settings, graph_settings)
             f.seek(0)
@@ -157,14 +157,29 @@ class RouterWidget(QWidget):
         self.dlg_server_log.text_log.append(log)
 
     def _on_server_start(self):
+        binary_dir = ValhallaSettings().get_binary_dir()
+        no_binary_dir = False
+        msg = "Can't find Valhalla executables."
+        level = Qgis.Critical
+        if not binary_dir:
+            no_binary_dir = True
+        elif not binary_dir.exists():
+            no_binary_dir = True
         if not check_valhalla_installation():
-            self._parent.status_bar.pushMessage("pyvalhalla-weekly not installed", Qgis.Critical, 3)
+            level = Qgis.Critical if no_binary_dir else Qgis.Warning
+            no_binary_dir = no_binary_dir or False
+            msg += " pyvalhalla-weekly is not installed."
+
+        if no_binary_dir:
+            self._parent.status_bar.pushMessage(msg, level, 6)
+            self.settings_dlg.open()
             return
-        args = [str(get_valhalla_settings_path()), "1"]
+
+        args = [str(get_valhalla_config_path()), "1"]
 
         # need to run the executable directly
         # with "python -m valhalla xxx" it'd run 2 processes and only kill the first/outer one
-        valhalla_service = ValhallaSettings().get_binary_dir().joinpath("valhalla_service")
+        valhalla_service = binary_dir.joinpath("valhalla_service")
         self.valhalla_service.start(str(valhalla_service.resolve()), args)
         self.dlg_server_log.text_log.append(
             f"Started {valhalla_service} with PID {self.valhalla_service.processId()}..."

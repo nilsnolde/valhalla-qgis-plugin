@@ -53,7 +53,7 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
     def _on_default_binary_path(self):
         default_path = get_default_valhalla_binary_dir()
         if not default_path:
-            self._parent.status_bar.pushMessage("pyvalhalla-weekly not installed", Qgis.Critical, 3)
+            self.status_bar.pushMessage("pyvalhalla-weekly not installed", Qgis.Critical, 3)
             return
         ValhallaSettings().set_binary_dir(default_path)
         self.ui_binary_path.setFilePath(str(default_path))

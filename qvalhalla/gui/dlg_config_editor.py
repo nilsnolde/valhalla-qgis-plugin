@@ -4,7 +4,7 @@ from qgis.core import Qgis
 from qgis.PyQt.QtWidgets import QDialog
 
 from ..gui.compiled.dlg_config_editor_ui import Ui_ConfigEditor
-from ..utils.resource_utils import get_valhalla_settings_path
+from ..utils.resource_utils import get_valhalla_config_path
 
 
 class ConfigEditorDialog(QDialog, Ui_ConfigEditor):
@@ -13,7 +13,7 @@ class ConfigEditorDialog(QDialog, Ui_ConfigEditor):
         self._parent = parent
         self.setupUi(self)
 
-        with get_valhalla_settings_path().open("r") as f:
+        with get_valhalla_config_path().open("r") as f:
             self.ui_text.setText(json.dumps(json.load(f), indent=2))
 
     # override
@@ -26,7 +26,7 @@ class ConfigEditorDialog(QDialog, Ui_ConfigEditor):
             )
             return super().accept()
 
-        with get_valhalla_settings_path().open("w") as f:
+        with get_valhalla_config_path().open("w") as f:
             json.dump(text, f, indent=2)
 
         return super().accept()
