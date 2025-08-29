@@ -4,6 +4,9 @@ QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhal
 
 It features:
 - UI & processing algorithms to routing, isochrones, matrix & expansion endpoints for `pedestrian`, `bicycle`, `car`, `truck` & `motorcycle`
+- **all local** calculations after installing [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) with the full flexibility of local Valhalla processes:
+  - start a local server while reading from remmote graphs, e.g. a tar file on some server (only support HTTP basic auth)
+  - build your own graph from a OSM PBF file
 - support for most[^1] of Valhalla costing options in both UI & processing algorithms for **all endpoints**, e.g.
   - time-dependent routing
   - exclude polygons to avoid user-defined areas
@@ -22,10 +25,15 @@ It features:
 
 ## How To
 
+### Routing UI
+
 ![explanatory UI pic](./docs/img/RoutingUI_explained.png)
 
 1. Select the endpoint/action to "Execute". Note that some endpoints expect multiple waypoints.
 2. Manage the servers which are shown in the "Provider" drop-down
+3. Start or stop a Valhalla service on `localhost` with the local graph shown in the dropdown menu
+4. Manage settings for the local setup, see ["Settings UI"](#settings-ui)
+5. Watch logs for the local Valhalla service
 3. Add/remove/clear waypoints in the table:
 
     - to add waypoints, click the "add" button and then in the map canvas. To end the adding session, either double-click in the map canvas or click the "add" button again.
@@ -36,7 +44,6 @@ It features:
     - "From Point Layer": parses waypoints from the features of a user-specified point layer
     - "From Valhalla JSON": parses waypoints from a Valhalla `locations` request array (TODO: [#27](https://github.com/nilsnolde/valhalla-qgis-plugin/issues/27))
     - "From OSRM URL": parses waypoints from a OSRM GET request URL, also sets `bearing` etc in the "Extra" column
-5. Shows/hides the "Valhalla waypoints" annotation layer
 6. Moves the _selected_ waypoint rows up & down, also updates the "Valhalla waypoints" annotation layer
 7. Set a radius for each waypoint which will snap more roads
 8. Set extra Valhalla waypoint properties in URL query parameter form (i.e.`k1=v1&k2=v2`), e.g. `waiting=1800&date_time=2025-07-25T09:00`
@@ -44,6 +51,23 @@ It features:
 10. View the full most recent request, mostly useful when reporting issues, or debugging.
 11. Check the remote graph for admin & timezone DBs (they should exist) and loads the graph extent of the currently set Valhalla server as a polygon layer (if available).
 12. Some information about the plugin and (if available) the currently set Valhalla server.
+
+### Settings UI
+
+![explanatory UI pic](./docs/img/SettingsUI_explained.png)
+
+1. Change the parent directory of the local Valhalla executables; useful mostly for debugging
+2. Defaults the binary directory back to the Python bindings one
+3. Lets the user add graphs from mulitple sources:
+    - from a tar file, e.g. built with one of [Valhalla's docker images](https://github.com/valhalla/valhalla/tree/master/docker)
+    - from a URL, which could be a remote tar file or graph directory; also support HTTP basic auth
+    - from a OSM PBF file, which will build the graph from scratch
+4. Remove a local graph
+5. Change the directory or disk for local graphs
+6. Edit the Valhalla configuration which will control both the local graph build and the local service
+7. View the local graph build logs
+8. List of locally registered graphs available for `localhost`
+9. A list of dependencies; currently only [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) is supported. After plugin installation you can install the package from here. On QGIS startup it'll check if there's a new version available and let you update.
 
 ## Test
 
@@ -74,14 +98,3 @@ Without going into too much detail, this plugin had once a **much** wider scope.
 We were also planning to open a web shop where you could buy Valhalla & OSRM graphs right from QGIS and load them locally in a heartbeat. The idea was grand and a lot of OSS was being released as the result of it, e.g. the python bindings to Valhalla & OSRM and Windows support for `pyvroom`. Sadly the work to get there was grand as well and we never ended up releasing the full plugin.
 
 The current Valhalla plugin still has all the source code though, mostly just commented out. In case anyone ever feels the urge to rival ESRI Network Analyst, please contact me on nilsnolde+github@proton.me.
-
-## Python Bindings
-
-Originally we wanted to make this plugin work with https://pypi.org/project/pyvalhalla and other Python bindings, so no one would have to install Valhalla locally (QGIS users are not always comfy with that sort of thing).
-
-However, that's not possible with PyPI distributions, because the wheels vendor the dependencies and Valhalla & QGIS share a lot of dependencies. That makes QGIS crash as it's basically UB what happens when two versions of the same library are loaded into the same process.
-
-There are 2 ways to make this work:
-1. either not use the bindings directly, but rather the packaged Valhalla C++ executables. Obvious downside is performance: if used like that, for every single request Valhalla will have to load the relevant graph tiles, because there is of course no persisted cache. On the upside: it's possible today, even including building the graph.
-2. publish Valhalla (with `-DENABLE_PYTHON_BINDINGS=ON`) on all package management platforms that QGIS uses for distribution. That's of course the harder solution: apt/dnf/pacman for Linux, God knows what we'd need to do or who to bribe for OSX & Win. I saw some `vcpkg` mentions in the QGIS repo and know Matthias was advocating for it (at least OSX builds), but have no idea about the current state or platform-scope. If `vcpkg` would be the future of > 90% of QGIS distributions, it could make this option fairly easy.
-3. (yeah right..) Add libvalhalla directly to QGIS and have its functionalities built-in 😄
