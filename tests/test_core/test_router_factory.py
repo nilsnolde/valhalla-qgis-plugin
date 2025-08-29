@@ -18,7 +18,7 @@ class TestRouterFactory(HTTPTestCase):
             RouterType.VALHALLA,
             RouterMethod.REMOTE,
             RouterProfile.PED,
-            url="https://valhalla1.openstreetmap.de",
+            url="http://localhost:8002",
         )
         direction: Direction = factory.request(
             RouterEndpoint.DIRECTIONS,
