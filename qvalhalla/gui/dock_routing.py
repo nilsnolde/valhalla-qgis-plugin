@@ -23,26 +23,31 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from ..core.results_factory import ResultsFactory
-from ..core.settings import DEFAULT_PROVIDERS, ProviderSetting, ValhallaSettings
+from ..core.settings import DEFAULT_GRAPH_DIR, DEFAULT_PROVIDERS, ProviderSetting, ValhallaSettings
 from ..exceptions import ValhallaError
 from ..global_definitions import (
     DEFAULT_LAYER_FIELDS,
     Dialogs,
     RouterEndpoint,
-    RouterMethod,
     RouterType,
 )
-from ..gui.widgets.widget_router import PROFILE_TO_UI, RouterWidget
-from ..gui.widgets.widget_routing_params import RoutingParamsWidget
-from ..gui.widgets.widget_waypoints import WaypointsWidget
 from ..third_party.routingpy import routingpy
 from ..third_party.routingpy.routingpy.utils import deep_merge_dicts
 from ..utils.http_utils import get_status_response
 from ..utils.layer_utils import post_process_layer
-from ..utils.resource_utils import get_graph_dir, get_icon, get_resource_path
+from ..utils.resource_utils import (
+    check_valhalla_installation,
+    create_valhalla_config,
+    get_default_valhalla_binary_dir,
+    get_icon,
+    get_resource_path,
+)
 from .compiled.widget_routing_dock_ui import Ui_routing_widget
 from .dlg_about import AboutDialog
 from .gui_utils import add_msg_bar
+from .widgets.widget_router import PROFILE_TO_UI, RouterWidget
+from .widgets.widget_routing_params import RoutingParamsWidget
+from .widgets.widget_waypoints import WaypointsWidget
 
 MENU_TABS = {
     RouterEndpoint.DIRECTIONS: "ui_directions_params",
@@ -71,11 +76,23 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.log_params = dict()
         self.endpoint = ""
 
-        # make sure we have at least one remote HTTP API URL
+        # make sure we have some default settings:
+        # - at least one remote HTTP API URL and localhost
+        # - a default graph dir in the settings
+        # - the default binary path
+        # - a valhalla.json we can overwrite with the current graph settings
         settings = ValhallaSettings()
         if not settings.get_providers(RouterType.VALHALLA):
             for prov in DEFAULT_PROVIDERS:
                 settings.set_provider(RouterType.VALHALLA.lower(), prov)
+        DEFAULT_GRAPH_DIR.mkdir(exist_ok=True, parents=False)
+        if not settings.get_graph_dir():
+            settings.set_graph_dir(DEFAULT_GRAPH_DIR)
+        if not settings.get_binary_dir():
+            settings.set_binary_dir(
+                get_default_valhalla_binary_dir() if check_valhalla_installation() else ""
+            )
+        create_valhalla_config()
 
         # add custom widgets to this dialog
         self.router_widget = RouterWidget(self)
@@ -96,7 +113,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self._on_profile_change()
 
         # connections
-        self.menu_widget.currentRowChanged["int"].connect(self._on_router_or_menu_change)
+        self.menu_widget.currentRowChanged["int"].connect(self._on_menu_change)
         self.menu_widget.currentRowChanged["int"].connect(self.ui_params_stacked.setCurrentIndex)
         self.router_widget.ui_cmb_prov.currentIndexChanged.connect(self._on_provider_changed)
         self.execute_btn.clicked.connect(self._on_execute)
@@ -268,29 +285,8 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         attr = widget.objectName() if widget else self.sender().objectName()
         ValhallaSettings().set(Dialogs.ROUTING, attr, str(new_text))
 
-    def _on_router_or_menu_change(self, menu_index: int):
+    def _on_menu_change(self, menu_index: int):
         """Disables/enables some widgets if it's OSRM isochrone/expansion"""
-        # is_osrm = self.router_widget.router == RouterType.OSRM
-        # is_osrm_forbidden_endpoint = menu_index in (1, 3) and is_osrm
-
-        # # disable a few widgets
-        # self.routing_params_widget.exclude_locations.setEnabled(not is_osrm)
-        # self.routing_params_widget.exclude_polygons.setEnabled(not is_osrm)
-        # self.routing_params_widget.ui_settings_stacked.setEnabled(not is_osrm)
-        # self.routing_params_widget.ui_metric_box.setEnabled(not is_osrm)
-        # self.routing_params_widget.ui_reset_settings.setEnabled(not is_osrm)
-
-        # self.waypoints_widget.setEnabled(not is_osrm_forbidden_endpoint)
-        # self.ui_valhalla_isochrones_params.setEnabled(not is_osrm_forbidden_endpoint)
-        # self.ui_valhalla_expansion_params.setEnabled(not is_osrm_forbidden_endpoint)
-        # self.execute_btn.setEnabled(not is_osrm_forbidden_endpoint)
-
-        # # update their tooltips
-        # tooltip = "Methods Isochrones and Expansion not available with OSRM"
-        # self.waypoints_widget.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        # self.execute_btn.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        # self.ui_valhalla_isochrones_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
-        # self.ui_valhalla_expansion_params.setToolTip(tooltip if is_osrm_forbidden_endpoint else "")
 
         if menu_index == 0:
             # self.ui_endpoint_label.setText("Routing")
@@ -334,27 +330,14 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         """
         Enables/disables certain UI elements depending on the provider.
         """
-        # updates the profile tool buttons (OSRM only gets foot/bike/car for now)
-        self.router_widget.update_profile_buttons()
         # disables/enables other widgets in this dialog
-        self._on_router_or_menu_change(self.menu_widget.currentRow())
+        self._on_menu_change(self.menu_widget.currentRow())
 
         router_type = self.router_widget.router
         method = self.router_widget.method
         profile = self.router_widget.profile
         pkg_path = ""
         provider: ProviderSetting = self.router_widget.provider
-        if method == RouterMethod.LOCAL:
-            try:
-                if router_type == RouterType.VALHALLA:
-                    import qvalhalla  # noqa: F401
-                elif router_type == RouterType.OSRM:
-                    import osrm  # type: ignore # noqa: F401
-                pkg_name = self.router_widget.ui_cmb_prov.itemData(row_id)[2]
-                pkg_path = get_graph_dir(router_type) / pkg_name
-            except (ImportError, ModuleNotFoundError) as e:
-                self.status_bar.pushMessage("Python package not installed", str(e), Qgis.Critical, 8)
-                return
 
         # reset the factory
         self.factory = ResultsFactory(router_type, method, profile, pkg_path=pkg_path, url=provider.url)

@@ -1,13 +1,11 @@
-import bz2
 import importlib
 import json
 import platform
 import shlex
-import shutil
 import subprocess
 from enum import Enum
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 from packaging.version import Version
 from packaging.version import parse as parse_version
@@ -18,7 +16,7 @@ from qgis.PyQt.QtNetwork import QNetworkReply, QNetworkRequest
 
 from .. import PLUGIN_NAME, RESOURCE_PATH
 from ..exceptions import ValhallaCmdError
-from ..global_definitions import PYTHON_EXE, PyPiPkg, PyPiState, RouterType
+from ..global_definitions import PYTHON_EXE, PyPiPkg, PyPiState
 from ..third_party.routingpy.routingpy import exceptions
 
 PYPI_URL = "https://pypi.org/pypi/{pkg_name}/json"
@@ -41,64 +39,6 @@ def get_icon(filename: str) -> QIcon:
 def get_resource_path(*args) -> Path:
     """All args are interpreted as string"""
     return RESOURCE_PATH.joinpath(*args)
-
-
-# def normalize_pkgs(
-#     server_pkgs: dict, user_pkgs: dict, router: RouterType
-# ) -> List[PkgDetails]:
-#     """
-#     Builds the final package list for each router and adds a "purchased" flag
-
-#     :param server_pkgs: The available list from the server: this will be modified right here!
-#     :param user_pkgs: The pkg list the user purchased
-#     :param router: The router type
-#     """
-#     server_pkgs = server_pkgs[router.value]
-#     user_pkgs = user_pkgs[router.value]
-
-#     pkg_details: List[PkgDetails] = list()
-
-#     user_pkg_names = [pkg["name"] for pkg in user_pkgs]
-#     for pkg in server_pkgs:
-#         is_purchased = True if pkg["name"] in user_pkg_names else False
-#         pkg_fp = get_local_pkg_path(pkg["filename"], router)
-#         local_fp = str(pkg_fp) if pkg_fp.exists() else ""
-
-#         pkg_details.append(
-#             PkgDetails(**pkg, is_purchased=is_purchased, local_fp=local_fp)
-#         )
-
-#     return pkg_details
-
-
-def get_local_pkg_path(filename: str, router: RouterType) -> Path:
-    """
-    Get the full path to the local package. Also create the router
-    directory if it doesn't exist yet.
-
-    :param filename: The package's filename as .bz2
-    :param router: the router type
-    :return: the absolute path of the local package
-    """
-    router_dir = get_settings_dir().joinpath(router.value)
-    router_dir.mkdir(exist_ok=True, parents=True)
-
-    filename = filename[:-4] if filename.endswith(".bz2") else filename
-
-    return router_dir.joinpath(filename).resolve()
-
-
-def decompress_pkg(fp: Path):
-    """
-    Decompresses the BZ2 compressed file to the same directory.
-
-    :param fp: the filepath with .bz2 extension
-    """
-    uncompressed_fp = fp.parent.joinpath(fp.stem)
-    with bz2.BZ2File(fp) as fr, open(uncompressed_fp, "wb") as fw:
-        shutil.copyfileobj(fr, fw)
-
-    fp.unlink()
 
 
 def check_local_lib_version(pypi_pkg: PyPiPkg, available_version: Version) -> PyPiState:
@@ -226,15 +166,56 @@ def get_settings_dir() -> Path:
         .joinpath(PLUGIN_NAME.replace(" ", "_").lower())
         .resolve()
     )
-    for e in RouterType:
-        dd = d.joinpath(e.lower())
-        dd.mkdir(exist_ok=True, parents=True)
+    d.mkdir(exist_ok=True, parents=True)
 
     return d
 
 
-def get_graph_dir(provider: RouterType):
-    """
-    Returns the path to the graph directory of the passed provider
-    """
-    return Path(get_settings_dir().joinpath(provider.lower()))
+def get_valhalla_config_path():
+    return get_settings_dir().joinpath("valhalla.json")
+
+
+def create_valhalla_config(force=False):
+    config_path = get_valhalla_config_path()
+    if config_path.exists() and not force:
+        return
+
+    try:
+        from valhalla.config import get_config
+    except ModuleNotFoundError:
+        return
+
+    # need to remove the items we store in each graph folder's 'id.json'
+    config = get_config("", "", True)
+    del config["mjolnir"]["tile_dir"]
+    del config["mjolnir"]["tile_extract"]
+    try:
+        del config["mjolnir"]["tile_url"]
+        del config["mjolnir"]["tile_url_user_pw"]
+        del config["loki"]["use_connectivity"]
+    except KeyError:
+        pass
+
+    # allow verbose status for bbox
+    config["service_limits"]["status"]["allow_verbose"] = True
+
+    with config_path.open("w") as f:
+        json.dump(config, f, indent=2)
+
+
+def check_valhalla_installation() -> bool:
+    try:
+        import valhalla  # noqa: F401
+    except ModuleNotFoundError:
+        return False
+
+    return True
+
+
+def get_default_valhalla_binary_dir() -> Optional[Path]:
+    if not check_valhalla_installation():
+        return None
+
+    import valhalla
+
+    return Path(valhalla.__file__).parent.joinpath("bin")

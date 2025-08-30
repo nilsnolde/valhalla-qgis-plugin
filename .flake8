@@ -15,16 +15,17 @@ extend-exclude =
 per-file-ignores =
     # import file after initializing QGIS
     tests/__init__.py: E402
-    tests/test_e2e.py: E402
-    tests/test_processing/test_routing/test_valhalla_directions.py: E402
-    tests/test_processing/test_routing/test_valhalla_isochrones.py: E402
-    tests/test_processing/test_routing/test_valhalla_expansion.py: E402
-    tests/test_processing/test_routing/test_valhalla_matrix.py: E402
-    tests/test_utils/test_layer_utils.py: E402
-    tests/test_core/test_results_factory.py: E402
-    tests/test_gui/test_widgets/test_waypoint_widget.py: E402
-    tests/test_gui/test_widgets/test_router_widget.py: E402
-    tests/test_gui/test_routing_dlg.py: E402
-    qvalhalla/gui/panels/settings/__init__.py: F401
+    tests/test_localhost_docker/test_e2e.py: E402
+    tests/test_localhost_docker/test_processing/test_routing/test_valhalla_directions.py: E402
+    tests/test_localhost_docker/test_processing/test_routing/test_valhalla_isochrones.py: E402
+    tests/test_localhost_docker/test_processing/test_routing/test_valhalla_expansion.py: E402
+    tests/test_localhost_docker/test_processing/test_routing/test_valhalla_matrix.py: E402
+    tests/test_localhost_docker/test_utils/test_layer_utils.py: E402
+    tests/test_localhost_docker/test_core/test_results_factory.py: E402
+    tests/test_localhost_docker/test_gui/test_widgets/test_waypoint_widget.py: E402
+    tests/test_localhost_docker/test_gui/test_widgets/test_router_widget.py: E402
+    tests/test_localhost_docker/test_gui/test_routing_dlg.py: E402
+    tests/test_localhost_docker/test_gui/test_about_dlg.py: E402
+    tests/test_localhost_plugin/test_gui/test_widgets/test_widget_router.py: E402
 ignore = E203,E266,E501,W503,F403,E722, QGS105
 max-complexity = 10

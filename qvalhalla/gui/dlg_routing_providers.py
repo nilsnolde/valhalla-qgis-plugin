@@ -60,10 +60,10 @@ class ProviderDialog(QDialog, Ui_RoutingProviders):
             ui_props = ProvUiProps(current_provider)
             current_provider.auth_key = box.findChild(QLineEdit, ui_props.KEY_TEXT).text()
             current_provider.url = box.findChild(QLineEdit, ui_props.URL_TEXT).text()
+            current_provider.auth_param = box.findChild(QLineEdit, ui_props.PARAM_TEXT).text()
             ValhallaSettings().set_provider(RouterType.VALHALLA, current_provider)
-            print(current_provider)
 
-        self.close()
+        return super().accept()
 
     def _add_provider(self):
         """Adds an empty provider box to be filled out by the user."""
@@ -93,7 +93,6 @@ class ProviderDialog(QDialog, Ui_RoutingProviders):
         )
         if ok:
             box_remove = self.findChild(QgsCollapsibleGroupBox, prov_name)
-            print(box_remove.objectName())
             self.provider_layout.removeWidget(box_remove)
 
             ValhallaSettings().remove_provider(RouterType.VALHALLA, prov_name)
