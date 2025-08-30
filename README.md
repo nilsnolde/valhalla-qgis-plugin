@@ -103,7 +103,7 @@ Since this plugin is pretty flexible, so the tests need to be too:
     docker start valhalla-router
 
     # or if it doesn't exist yet
-    # docker run --rm -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
+    # docker run -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
 
     # uninstall python package if it's installed
     python -m pip uninstall -y --break-system-packages pyvalhalla-weekly

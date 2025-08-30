@@ -60,6 +60,7 @@ class ProviderDialog(QDialog, Ui_RoutingProviders):
             ui_props = ProvUiProps(current_provider)
             current_provider.auth_key = box.findChild(QLineEdit, ui_props.KEY_TEXT).text()
             current_provider.url = box.findChild(QLineEdit, ui_props.URL_TEXT).text()
+            current_provider.auth_param = box.findChild(QLineEdit, ui_props.PARAM_TEXT).text()
             ValhallaSettings().set_provider(RouterType.VALHALLA, current_provider)
 
         return super().accept()
