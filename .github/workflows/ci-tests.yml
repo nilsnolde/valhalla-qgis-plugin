@@ -45,6 +45,8 @@ jobs:
           docker stop valhalla-router
           docker exec qgis-testing-environment bash -c "python3 -m pip install --break-system-packages pyvalhalla-weekly"
           docker exec qgis-testing-environment bash -c "/tests_directory/tests/scripts/qgis_test_setup.sh ${{ matrix.qgis_tags }} ${{ env.PLUGIN_PATH }} tests/test_localhost_plugin"
+          # do the coverage
+          docker exec qgis-testing-environment bash -c "cd /tests_directory && python3 -m coverage report && python3 -m coverage lcov --include \"qvalhalla/*\""
 
       - name: Upload coverage artifact
         if: matrix.qgis_tags == '3.44.1'

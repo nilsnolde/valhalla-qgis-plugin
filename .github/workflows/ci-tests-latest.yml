@@ -38,7 +38,5 @@ jobs:
           docker stop valhalla-router
           docker exec qgis-testing-environment bash -c "python3 -m pip install --break-system-packages pyvalhalla-weekly"
           docker exec qgis-testing-environment bash -c "/tests_directory/tests/scripts/qgis_test_setup.sh latest ${{ env.PLUGIN_PATH }} tests/test_localhost_plugin"
-          # do the coverage
-          docker exec qgis-testing-environment bash -c "python3 -m coverage report && python3 -m coverage lcov --include \"qvalhalla/*\""
 
 
