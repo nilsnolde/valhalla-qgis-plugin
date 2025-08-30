@@ -12,10 +12,15 @@ server=False
 # End of mandatory metadata
 
 about=Valhalla provides access to most of the functions of the open-source Valhalla routing engine.
-    The tool set includes routing, isochrones and matrix calculations, either interactive in the map canvas or from Point/LineString files within the processing framework.
+    The tool set includes routing, isochrones, matrix and expansion calculations, either interactive in the map canvas or from Point/LineString files within the processing framework.
     Extensive attributes are set for output files, incl. duration, length and start/end locations.
 
-    The plugin accesses remote or local Valhalla HTTP APIs. If you want to quickly get a local setup, try our Valhalla Docker image: https://github.com/gis-ops/docker-valhalla.
+    The plugin accesses remote or local Valhalla HTTP APIs. Linux & OSX users can install https://pypi.org/project/pyvalhalla-weekly/ to gain access to:
+
+        - a local and fully configurable Valhalla service on a button click
+        - locally build graphs from OSM PBF files on a button click
+
+    For more information see https://github.com/nilsnolde/valhalla-qgis-plugin?tab=readme-ov-file#how-to.
 
 homepage=https://github.com/nilsnolde/valhalla-qgis-plugin
 tracker=https://github.com/nilsnolde/valhalla-qgis-plugin/issues
@@ -29,4 +34,5 @@ deprecated=False
 
 # done by CI
 changelog=
-    - Complete re-write from v2.x, for earlier changes refer to `valhalla/metadata.txt` in the [last 2.x commit](https://github.com/nilsnolde/valhalla-qgis-plugin/blob/78c2c71585f23beba796ee85f70b906dbe615f5a/valhalla/metadata.txt)
+    - 3.1.0: Introduce pyvalhalla-weekly and make all local calculations possible (currently restricted to Linux & OSX)
+    - 3.0.0: Complete re-write from v2.x, for earlier changes refer to `valhalla/metadata.txt` in the [last 2.x commit](https://github.com/nilsnolde/valhalla-qgis-plugin/blob/78c2c71585f23beba796ee85f70b906dbe615f5a/valhalla/metadata.txt)

@@ -27,7 +27,7 @@ It features:
 
 ### Routing UI
 
-![explanatory UI pic](./docs/img/RoutingUI_explained.png)
+![explanatory UI pic](./docs/img/RoutingUIv2_explained.png)
 
 1. Select the endpoint/action to "Execute". Note that some endpoints expect multiple waypoints.
 2. Manage the servers which are shown in the "Provider" drop-down
