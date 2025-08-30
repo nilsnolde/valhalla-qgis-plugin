@@ -29,13 +29,13 @@ class TestProviderDialog(LocalhostDockerTestCase):
         localhost_box = dlg.findChildren(QgsCollapsibleGroupBox)[1]
         old_prov = ValhallaSettings().get_providers(RouterType.VALHALLA)[1]
         ui_props = ProvUiProps(old_prov)
-        localhost_box.findChild(QLineEdit, ui_props.URL_TEXT).setText("https://test.com")
+        localhost_box.findChild(QLineEdit, ui_props.PARAM_TEXT).setText("bla")
 
         # only after clicking "OK" should it update the settings with the new URL
         dlg.accept()
 
         new_prov = ValhallaSettings().get_providers(RouterType.VALHALLA)[1]
-        self.assertEqual(new_prov.url, "https://test.com")
+        self.assertEqual(new_prov.auth_param, "bla")
 
         # cleanup
         ValhallaSettings().remove_provider(RouterType.VALHALLA, new_prov.name)
