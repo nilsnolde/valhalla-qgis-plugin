@@ -11,7 +11,7 @@ from ..utils.http_utils import get_status_response
 class AboutDialog(QDialog, Ui_AboutDialog):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self.parent = parent
+        self._parent = parent
         self.setupUi(self)
         self.ui_plugin_version_text.setText(__version__)
 
@@ -20,7 +20,7 @@ class AboutDialog(QDialog, Ui_AboutDialog):
         self.ui_valhalla_version_text.setText("NA")
         self.ui_data_age_text.setText("NA")
         try:
-            result = get_status_response(self.parent.router_widget.provider.url)
+            result = get_status_response(self._parent.router_widget.provider.url)
             valhalla_version: str = result["version"]
             if "-" in valhalla_version:
                 std_version, commit_id = valhalla_version.split("-")

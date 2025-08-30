@@ -84,6 +84,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         self.ui_list_graphs.setRootIndex(self.graph_dir_proxy.mapFromSource(root_idx))
 
         # connections
+        self.from_pbf_dlg.finished.connect(self._on_graph_add_build)
         self.ui_btn_graph_remove.clicked.connect(self._on_graph_remove)
         self.ui_btn_graph_folder.clicked.connect(self._on_graph_folder_change)
         self.ui_btn_settings.clicked.connect(self.config_dlg.exec)
@@ -106,7 +107,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
                 "From URL",
                 lambda: self.from_url_dlg.exec(),
             ),
-            (get_icon("graph_add_build.svg"), "From PBF", self._on_graph_add_build),
+            (get_icon("graph_add_build.svg"), "From PBF", lambda: self.from_pbf_dlg.open()),
         ):
             action = QAction(icon, title, self)
             action.triggered.connect(connect_fn)
@@ -117,9 +118,8 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         self.ui_btn_graph_add_tar.setMenu(dropdown_menu)
         self.ui_btn_graph_add_tar.setDefaultAction(actions[0])
 
-    def _on_graph_add_build(self):
-        ret = self.from_pbf_dlg.exec()
-        if ret == QDialog.Rejected:
+    def _on_graph_add_build(self, result: QDialog.DialogCode):
+        if result == QDialog.DialogCode.Rejected:
             return
 
         if (
@@ -207,6 +207,8 @@ class GraphWidget(QWidget, Ui_GraphWidget):
             )
 
         # move the whole directory which will finally update the graph list/dropdown
+        if graph_dir.exists():
+            rmtree(graph_dir)
         move(temp_dir, graph_dir)
 
     def _check_list_view(self):
@@ -251,7 +253,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
             in_tar_path = QFileDialog.getOpenFileName(
                 self,
                 "Import graph",
-                "/home/nilsnolde/dev/cpp/valhalla/site",
+                QDir.homePath(),
                 "Tar Files (*.tar)",
                 options=QFileDialog.Option.ShowDirsOnly,
             )[0]

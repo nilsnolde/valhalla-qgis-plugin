@@ -137,7 +137,7 @@ class ValhallaSettings(QgsSettings):
 
     def set_binary_dir(self, binary_dir: Path | str):
         """
-        Returns the path to the Valhalla binaries.
+        Sets the path to the Valhalla binaries.
         """
         self.set(
             Dialogs.SETTINGS,

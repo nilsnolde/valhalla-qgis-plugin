@@ -5,8 +5,8 @@
 set -euo pipefail
 
 # Check if version argument is provided
-if [ -z "$1" ] || [ -z "$2" ]; then
-  echo "Usage: $0 <QGIS docker version, e.g., 3.44.1> <plugin name, e.g. valhalla>"
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+  echo "Usage: $0 <QGIS docker version, e.g., 3.44.1> <plugin path, e.g. qvalhalla>"
   exit 1
 fi
 
@@ -19,7 +19,8 @@ elif [[ "$DOCKER_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   BRANCH="final-${DOCKER_VERSION//./_}"
 fi
 
-PLUGIN_NAME="$2"
+PLUGIN_PATH="$2"
+TEST_PATH="$3"
 
 SETUP_SCRIPT_URL="https://raw.githubusercontent.com/qgis/QGIS/${BRANCH}/.docker/qgis_resources/test_runner/qgis_setup.sh"
 SETUP_SCRIPT_PATH="/usr/bin/$(basename ${SETUP_SCRIPT_URL})"
@@ -35,13 +36,13 @@ chmod +x "$SETUP_SCRIPT_PATH"
 chmod +x "$STARTUP_SCRIPT_PATH"
 
 # do the setup
-$SETUP_SCRIPT_PATH "$PLUGIN_NAME"
+$SETUP_SCRIPT_PATH "$PLUGIN_PATH"
 apt-get update && apt-get install -y pre-commit python3-coverage
 git config --global --add safe.directory /tests_directory
 
 # run the linter/formatter & tests
 cd tests_directory
 pre-commit run --all-files
-python3 -m coverage run -m unittest discover
+python3 -m coverage run -m unittest discover -s "$TEST_PATH" -t .
 python3 -m coverage report
 python3 -m coverage lcov --include "qvalhalla/*"

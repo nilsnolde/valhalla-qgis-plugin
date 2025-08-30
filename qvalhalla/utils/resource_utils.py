@@ -1,9 +1,7 @@
-import bz2
 import importlib
 import json
 import platform
 import shlex
-import shutil
 import subprocess
 from enum import Enum
 from pathlib import Path
@@ -18,7 +16,7 @@ from qgis.PyQt.QtNetwork import QNetworkReply, QNetworkRequest
 
 from .. import PLUGIN_NAME, RESOURCE_PATH
 from ..exceptions import ValhallaCmdError
-from ..global_definitions import PYTHON_EXE, PyPiPkg, PyPiState, RouterType
+from ..global_definitions import PYTHON_EXE, PyPiPkg, PyPiState
 from ..third_party.routingpy.routingpy import exceptions
 
 PYPI_URL = "https://pypi.org/pypi/{pkg_name}/json"
@@ -41,36 +39,6 @@ def get_icon(filename: str) -> QIcon:
 def get_resource_path(*args) -> Path:
     """All args are interpreted as string"""
     return RESOURCE_PATH.joinpath(*args)
-
-
-def get_local_pkg_path(filename: str, router: RouterType) -> Path:
-    """
-    Get the full path to the local package. Also create the router
-    directory if it doesn't exist yet.
-
-    :param filename: The package's filename as .bz2
-    :param router: the router type
-    :return: the absolute path of the local package
-    """
-    router_dir = get_settings_dir().joinpath(router.value)
-    router_dir.mkdir(exist_ok=True, parents=True)
-
-    filename = filename[:-4] if filename.endswith(".bz2") else filename
-
-    return router_dir.joinpath(filename).resolve()
-
-
-def decompress_pkg(fp: Path):
-    """
-    Decompresses the BZ2 compressed file to the same directory.
-
-    :param fp: the filepath with .bz2 extension
-    """
-    uncompressed_fp = fp.parent.joinpath(fp.stem)
-    with bz2.BZ2File(fp) as fr, open(uncompressed_fp, "wb") as fw:
-        shutil.copyfileobj(fr, fw)
-
-    fp.unlink()
 
 
 def check_local_lib_version(pypi_pkg: PyPiPkg, available_version: Version) -> PyPiState:

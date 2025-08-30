@@ -13,8 +13,10 @@ class ConfigEditorDialog(QDialog, Ui_ConfigEditor):
         self._parent = parent
         self.setupUi(self)
 
-        with get_valhalla_config_path().open("r") as f:
-            self.ui_text.setText(json.dumps(json.load(f), indent=2))
+        config = get_valhalla_config_path()
+        if config.exists():
+            with config.open("r") as f:
+                self.ui_text.setText(json.dumps(json.load(f), indent=2))
 
     # override
     def accept(self):

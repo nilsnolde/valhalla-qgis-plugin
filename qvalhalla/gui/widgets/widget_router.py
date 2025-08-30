@@ -133,7 +133,11 @@ class RouterWidget(QWidget):
             graph_settings = json.load(f)
 
         # overwrite valhalla.json with those graph settings
-        with get_valhalla_config_path().open("r+") as f:
+        config = get_valhalla_config_path()
+        if not config.exists():
+            return
+
+        with config.open("r+") as f:
             valhalla_settings = json.load(f)
             new_settings = deep_merge(valhalla_settings, graph_settings)
             f.seek(0)
@@ -186,7 +190,7 @@ class RouterWidget(QWidget):
         )
 
     def _on_server_stop(self):
-        if not self.valhalla_service.isOpen():
+        if self.valhalla_service.state() == QProcess.ProcessState.NotRunning:
             return
         self.dlg_server_log.text_log.append("Stopping valhalla service...")
         self.valhalla_service.kill()
@@ -195,6 +199,9 @@ class RouterWidget(QWidget):
         self.settings_dlg.show()
 
     def _on_provider_method_changed(self):
+        if self.ui_cmb_prov.currentIndex() == -1:
+            return
+
         (
             self._router,
             self._method,

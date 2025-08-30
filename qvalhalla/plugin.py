@@ -61,9 +61,6 @@ class ValhallaPlugin:
 
         for title, callback, icon in (
             ("Routing Functions", self.open_routing_dlg, valhalla_icon),
-            # NOTE, the below code still exists, but it's non-functional since we never came up with a graph store
-            # ("Settings", self.open_settings_dlg, get_icon("settings_logo.svg")),
-            # ('Optimization Functions', self.open_optimization_dlg, ":images/themes/default/mActionCalculateField.svg")
         ):
             self.add_action(icon, title, callback)
 
@@ -90,13 +87,6 @@ class ValhallaPlugin:
     def open_routing_dlg(self):
         """Create and open the version dialog."""
         self.routing_dock.setVisible(not self.routing_dock.isVisible())
-
-    # def open_settings_dlg(self):
-    #     """Create and open the settings dialog."""
-    #     if not self.settings_dlg:
-    #         self.settings_dlg = PluginSettingsDialog(self.iface.mainWindow())
-    #         # self._check_libs(self.settings_dlg.status_bar)
-    #     self.settings_dlg.open()
 
     def open_optimization_dlg(self):
         """Create and open the optimization dialog."""
