@@ -40,14 +40,14 @@ class TestRouterWidget(LocalhostPluginTestCase):
     def test_server_start_stop(self):
         QTest.mouseClick(self.dlg.router_widget.ui_btn_server_start, Qt.LeftButton)
         self.assertEqual(self.dlg.router_widget.valhalla_service.state(), QProcess.ProcessState.Starting)
-        sleep(0.1)
+        sleep(0.5)
 
         # test that it's reachable
         parsed_url = urlparse(URL)
         try_connection(parsed_url.hostname, parsed_url.port)
 
         QTest.mouseClick(self.dlg.router_widget.ui_btn_server_stop, Qt.LeftButton)
-        sleep(0.1)
+        sleep(0.5)
 
         # test that it's _not_ reachable
         with self.assertRaises(ConnectionRefusedError):

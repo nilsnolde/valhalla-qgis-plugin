@@ -44,5 +44,3 @@ git config --global --add safe.directory /tests_directory
 cd tests_directory
 pre-commit run --all-files
 python3 -m coverage run --append -m unittest discover -s "$TEST_PATH" -t .
-python3 -m coverage report
-python3 -m coverage lcov --include "qvalhalla/*"
