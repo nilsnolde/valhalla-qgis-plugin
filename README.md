@@ -71,7 +71,7 @@ It features:
 
 ## Notes on `localhost`
 
-> [!INFO]
+> [!NOTE]
 > Integration of `pyvalhalla-weekly` is only available for Linux x64 & OSX arm64. For Windows x64 I [couldn't make `valhalla_service` work yet](https://github.com/valhalla/valhalla/issues/5314).
 
 The main distinguishing features of this plugin (compared to other routing plugins) is the ability to:
