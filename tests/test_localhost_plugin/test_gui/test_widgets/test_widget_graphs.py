@@ -1,5 +1,4 @@
 from shutil import rmtree
-from unittest import skip
 
 from qgis.PyQt.QtTest import QSignalSpy
 from qvalhalla.core.settings import ValhallaSettings
@@ -10,7 +9,6 @@ from .... import TEST_DIR, LocalhostPluginTestCase
 
 
 class TestWidget(LocalhostPluginTestCase):
-    @skip
     def test_pbf_build(self):
         pbf_path = TEST_DIR.joinpath("data", "andorra-latest.osm.pbf")
         self.assertTrue(pbf_path.exists())
