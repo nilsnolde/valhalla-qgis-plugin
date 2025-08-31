@@ -4,7 +4,7 @@ QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhal
 
 It features:
 - UI & processing algorithms to routing, isochrones, matrix & expansion endpoints for `pedestrian`, `bicycle`, `car`, `truck` & `motorcycle`
-- **all local** calculations after installing [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) with the full flexibility of local Valhalla processes:
+- (**linux-x86_64 & macos-arm64 only**) **all local** calculations after installing [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) with the full flexibility of local Valhalla processes:
   - start a local server while reading from remmote graphs, e.g. a tar file on some server (only support HTTP basic auth)
   - build your own graph from a OSM PBF file
 - support for most[^1] of Valhalla costing options in both UI & processing algorithms for **all endpoints**, e.g.
@@ -70,6 +70,9 @@ It features:
 9. A list of dependencies; currently only [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) is supported. After plugin installation you can install the package from here. On QGIS startup it'll check if there's a new version available and let you update.
 
 ## Notes on `localhost`
+
+> [!INFO]
+> Integration of `pyvalhalla-weekly` is only available for Linux x64 & OSX arm64. For Windows x64 I [couldn't make `valhalla_service` work yet](https://github.com/valhalla/valhalla/issues/5314).
 
 The main distinguishing features of this plugin (compared to other routing plugins) is the ability to:
 

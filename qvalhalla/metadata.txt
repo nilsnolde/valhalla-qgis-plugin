@@ -15,7 +15,7 @@ about=Valhalla provides access to most of the functions of the open-source Valha
     The tool set includes routing, isochrones, matrix and expansion calculations, either interactive in the map canvas or from Point/LineString files within the processing framework.
     Extensive attributes are set for output files, incl. duration, length and start/end locations.
 
-    The plugin accesses remote or local Valhalla HTTP APIs. Linux & OSX users can install https://pypi.org/project/pyvalhalla-weekly/ to gain access to:
+    The plugin accesses remote or local Valhalla HTTP APIs. Linux & OSX users can even install https://pypi.org/project/pyvalhalla-weekly/ to gain access to:
 
         - a local and fully configurable Valhalla service on a button click
         - locally build graphs from OSM PBF files on a button click
