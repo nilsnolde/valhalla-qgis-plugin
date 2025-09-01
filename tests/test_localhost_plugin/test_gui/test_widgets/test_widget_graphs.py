@@ -15,7 +15,7 @@ class TestWidget(LocalhostPluginTestCase):
 
         old_graph_dir = ValhallaSettings().get_graph_dir()
         new_graph_dir = pbf_path.parent.joinpath("graph_dir")
-        new_graph_dir.mkdir()
+        new_graph_dir.mkdir(exist_ok=True, parents=True)
         ValhallaSettings().set_graph_dir(new_graph_dir)
 
         settings_dlg = PluginSettingsDialog()  # technically already has a graph widget..

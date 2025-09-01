@@ -1,10 +1,7 @@
-from unittest import skip
-
 from qgis.core import QgsCoordinateReferenceSystem, QgsRectangle
 from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtTest import QTest
-from qgis.PyQt.QtWidgets import QApplication
 
 from .... import LocalhostDockerTestCase
 from ....utilities import get_qgis_app
@@ -12,7 +9,6 @@ from ....utilities import get_qgis_app
 CANVAS: QgsMapCanvas
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.global_definitions import RouterMethod, RouterType
 from qvalhalla.gui.dock_routing import RoutingDockWidget
 from qvalhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
     ValhallaSettingsMbikeWidget,
@@ -20,7 +16,6 @@ from qvalhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike impor
 from qvalhalla.gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
     ValhallaSettingsPedestrianWidget,
 )
-from qvalhalla.utils.resource_utils import get_settings_dir
 
 
 class TestRouterWidget(LocalhostDockerTestCase):
@@ -75,28 +70,3 @@ class TestRouterWidget(LocalhostDockerTestCase):
             self.dlg.routing_params_widget.ui_settings_stacked.currentWidget(),
             ValhallaSettingsMbikeWidget,
         )
-
-    @skip
-    def test_add_packages(self):
-        """Add/remove providers and see if the provider list updated"""
-        # the first 2 providers should be the default HTTPs
-        for idx, prov in enumerate(RouterType):
-            cmb_text = self.dlg.router_widget.ui_cmb_prov.itemText(idx).lower()
-            self.assertIn(prov.lower(), cmb_text)
-            self.assertIn(RouterMethod.REMOTE, cmb_text)
-
-        old_prov_count = self.dlg.router_widget.ui_cmb_prov.count()
-
-        # add valhalla package
-        new_pkg = get_settings_dir().joinpath(RouterType.VALHALLA.lower(), "test.tar")
-        new_pkg.touch(exist_ok=False)
-        QApplication.processEvents()
-        self.assertEqual(self.dlg.router_widget.ui_cmb_prov.count(), old_prov_count + 1)
-        new_pkg.unlink()
-
-        # add osrm package
-        new_pkg = get_settings_dir().joinpath(RouterType.OSRM.lower(), "test.bz2")
-        new_pkg.touch(exist_ok=False)
-        QApplication.processEvents()
-        self.assertEqual(self.dlg.router_widget.ui_cmb_prov.count(), old_prov_count + 1)
-        new_pkg.unlink()
