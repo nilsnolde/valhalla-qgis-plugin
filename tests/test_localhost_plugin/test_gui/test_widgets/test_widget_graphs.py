@@ -1,6 +1,6 @@
 from shutil import rmtree
 
-from qgis.PyQt.QtTest import QSignalSpy
+from qgis.PyQt.QtTest import QSignalSpy, QTest
 from qvalhalla.core.settings import ValhallaSettings
 from qvalhalla.gui.dlg_plugin_settings import PluginSettingsDialog
 from qvalhalla.gui.widgets.widget_graphs import GraphWidget
@@ -15,6 +15,7 @@ class TestWidget(LocalhostPluginTestCase):
 
         old_graph_dir = ValhallaSettings().get_graph_dir()
         new_graph_dir = pbf_path.parent.joinpath("graph_dir")
+        new_graph_dir.mkdir()
         ValhallaSettings().set_graph_dir(new_graph_dir)
 
         settings_dlg = PluginSettingsDialog()  # technically already has a graph widget..
@@ -42,6 +43,9 @@ class TestWidget(LocalhostPluginTestCase):
         self.assertTrue(spy_fin.wait(10000))
         exit_code, _ = spy_fin[-1]
         self.assertEqual(exit_code, 0)
+
+        # give it time to update the list
+        QTest.qWait(100)
 
         # the list updated
         root = graphs_dlg.ui_list_graphs.rootIndex()

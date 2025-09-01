@@ -1,3 +1,4 @@
+from pathlib import Path
 from shutil import rmtree
 
 from qgis.core import Qgis
@@ -13,7 +14,8 @@ class GraphFromPBFDialog(QDialog, Ui_GraphFromPBF):
         self._parent = parent
         self.setupUi(self)
 
-        self.graph_dir: str
+        self.graph_dir: Path
+        self.temp_graph_dir: Path
         self.pbf_path: str
 
     # override
@@ -28,7 +30,6 @@ class GraphFromPBFDialog(QDialog, Ui_GraphFromPBF):
             return super().reject()
 
         try:
-            # don't create the directory yet; it needs the proper id.json to show up in the dropdown/list
             self.graph_dir = ValhallaSettings().get_graph_dir().joinpath(graph_name)
         except FileExistsError:
             ret = QMessageBox.warning(
@@ -42,5 +43,7 @@ class GraphFromPBFDialog(QDialog, Ui_GraphFromPBF):
                 return
 
             rmtree(self.graph_dir)
+
+        self.graph_dir.mkdir(parents=True, exist_ok=True)
 
         return super().accept()
