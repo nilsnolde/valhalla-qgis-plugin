@@ -85,7 +85,6 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         if not settings.get_providers(RouterType.VALHALLA):
             for prov in DEFAULT_PROVIDERS:
                 settings.set_provider(RouterType.VALHALLA.lower(), prov)
-        DEFAULT_GRAPH_DIR.mkdir(exist_ok=True, parents=False)
         if not settings.get_graph_dir():
             settings.set_graph_dir(DEFAULT_GRAPH_DIR)
         if not settings.get_binary_dir():
@@ -93,6 +92,8 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
                 get_default_valhalla_binary_dir() if check_valhalla_installation() else ""
             )
         create_valhalla_config()
+        # graph_dir needs to exist
+        ValhallaSettings().get_graph_dir().mkdir(exist_ok=True, parents=True)
 
         # add custom widgets to this dialog
         self.router_widget = RouterWidget(self)

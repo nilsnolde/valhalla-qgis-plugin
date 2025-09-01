@@ -306,6 +306,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
 
         # update everything that's got to do with the graph dir
         self.graph_dir = Path(new_graph_dir).resolve()
+        self.graph_dir.mkdir(parents=True, exist_ok=True)
 
         ValhallaSettings().set_graph_dir(self.graph_dir)
         self.ui_btn_graph_folder.setToolTip(FOLDER_BUTTON_TOOLTIP.format(self.graph_dir))
