@@ -128,6 +128,20 @@ Since this plugin is pretty flexible, so the tests need to be too:
 
 In CI we run the tests with the QGIS docker image, have a look [there](.github/workflows/ci-tests.yml).
 
+## Release
+
+To keep unintended files out of the zip, use the following:
+
+```
+find qvalhalla \
+  \( -type d -name '__pycache__' \
+     -o \( -path 'qvalhalla/third_party/routingpy/*' \
+           ! -path 'qvalhalla/third_party/routingpy/routingpy' \
+           ! -path 'qvalhalla/third_party/routingpy/routingpy/*' \) \
+  \) -prune -o -type f -print \
+| zip -r dist/qvalhalla_4.0.0.zip -@
+```
+
 ## History
 
 Without going into too much detail, this plugin had once a **much** wider scope. Back when I was still running [GIS-OPS](https://github.com/gis-ops), I was a bit obsessed with providing an alternative to ESRI's network analyst, one of the last areas where QGIS is very very far behind ESRI. That's a crazy huge task, especially including all those optimization algorithms. However, we actually did come a pretty long way:

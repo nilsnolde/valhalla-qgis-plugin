@@ -22,7 +22,12 @@ from ...gui.dlg_routing_providers import ProviderDialog
 from ...gui.dlg_server_log import ServerLogDialog
 from ...utils.misc_utils import deep_merge
 from ...utils.qt_utils import FileNameInDirFilterProxy
-from ...utils.resource_utils import check_valhalla_installation, get_icon, get_valhalla_config_path
+from ...utils.resource_utils import (
+    check_valhalla_installation,
+    create_valhalla_config,
+    get_icon,
+    get_valhalla_config_path,
+)
 from ..ui_definitions import ID_JSON, RouterWidgetElems
 
 PROFILE_TO_UI = {
@@ -169,6 +174,9 @@ class RouterWidget(QWidget):
             no_binary_dir = True
         elif not binary_dir.exists():
             no_binary_dir = True
+        if self.ui_cmb_graphs.currentIndex() == -1:
+            msg += " No graph selected."
+            no_binary_dir = True
         if not check_valhalla_installation():
             level = Qgis.Critical if no_binary_dir else Qgis.Warning
             no_binary_dir = no_binary_dir or False
@@ -178,6 +186,9 @@ class RouterWidget(QWidget):
             self._parent.status_bar.pushMessage(msg, level, 6)
             self.settings_dlg.open()
             return
+
+        # at this point the valhalla.json might not exist yet
+        create_valhalla_config()
 
         args = [str(get_valhalla_config_path()), "1"]
 
