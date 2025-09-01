@@ -1,4 +1,5 @@
 from shutil import rmtree
+from time import sleep
 from unittest import skip
 
 from qgis.PyQt.QtTest import QSignalSpy
@@ -44,6 +45,9 @@ class TestWidget(LocalhostPluginTestCase):
         self.assertTrue(spy_fin.wait(10000))
         exit_code, _ = spy_fin[-1]
         self.assertEqual(exit_code, 0)
+
+        # give it time to update the list
+        sleep(0.5)
 
         # the list updated
         root = graphs_dlg.ui_list_graphs.rootIndex()
