@@ -131,8 +131,8 @@ class GraphWidget(QWidget, Ui_GraphWidget):
             )
             return
 
-        temp_dir = self.graph_dir.joinpath("temp_build_dir")
-        inline_config = {"mjolnir": {"admin": str(temp_dir.joinpath("admins.sqlite").resolve())}}
+        graph_dir = self.from_pbf_dlg.graph_dir
+        inline_config = {"mjolnir": {"admin": str(graph_dir.joinpath("admins.sqlite").resolve())}}
 
         args = ["-i", json.dumps(inline_config), self.from_pbf_dlg.pbf_path]
         build_admins_exe = ValhallaSettings().get_binary_dir().joinpath("valhalla_build_admins")
@@ -150,12 +150,11 @@ class GraphWidget(QWidget, Ui_GraphWidget):
 
         self._parent.status_bar.pushMessage("Building admins succeeded...", Qgis.Success, 0)
 
-        temp_dir = self.graph_dir.joinpath("temp_build_dir")
         graph_dir = self.from_pbf_dlg.graph_dir
         inline_config = {
             "mjolnir": {
-                "admin": str(temp_dir.joinpath("admins.sqlite")),
-                "tile_dir": str(temp_dir.joinpath(graph_dir.name)),
+                "admin": str(graph_dir.joinpath("admins.sqlite")),
+                "tile_dir": str(graph_dir.joinpath(graph_dir.name)),
                 # TODO: "timezone":
             }
         }
@@ -182,14 +181,12 @@ class GraphWidget(QWidget, Ui_GraphWidget):
 
         self._parent.status_bar.pushMessage("Building tiles succeeded...", Qgis.Success, 0)
 
-        temp_dir = self.graph_dir.joinpath("temp_build_dir")
         graph_dir = Path(self.from_pbf_dlg.graph_dir).resolve()
 
         # TODO: produce an extract and remove tile_dir
 
         # create the id.json
-        # TODO: to auto-update the list & combobox we need to create this file at the same time as the directory
-        id_json_path = temp_dir.joinpath(ID_JSON)
+        id_json_path = graph_dir.joinpath(ID_JSON)
         with id_json_path.open("w") as f:
 
             json.dump(
@@ -206,10 +203,8 @@ class GraphWidget(QWidget, Ui_GraphWidget):
                 indent=2,
             )
 
-        # move the whole directory which will finally update the graph list/dropdown
-        if graph_dir.exists():
-            rmtree(graph_dir)
-        move(temp_dir, graph_dir)
+        # trigger the filesystem watcher explicitly
+        self.graph_dir_proxy.invalidateFilter()
 
     def _check_list_view(self):
         root = self.ui_list_graphs.rootIndex()
@@ -295,6 +290,9 @@ class GraphWidget(QWidget, Ui_GraphWidget):
                 f,
                 indent=2,
             )
+
+        # trigger the filesystem watcher explicitly
+        self.graph_dir_proxy.invalidateFilter()
 
     def _on_graph_folder_change(self):
         new_graph_dir = QFileDialog.getExistingDirectory(
