@@ -40,7 +40,7 @@ class Ui_GraphFromUrl(object):
         self.label_3 = QtWidgets.QLabel(GraphFromUrl)
         self.label_3.setObjectName("label_3")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_3)
-        self.ui_text_password = gui.QgsPasswordLineEdit(GraphFromUrl)
+        self.ui_text_password = QgsPasswordLineEdit(GraphFromUrl)
         self.ui_text_password.setObjectName("ui_text_password")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.ui_text_password)
         self.ui_text_user = QtWidgets.QLineEdit(GraphFromUrl)
@@ -66,4 +66,4 @@ class Ui_GraphFromUrl(object):
         self.ui_text_password.setPlaceholderText(_translate("GraphFromUrl", "optional"))
         self.ui_text_user.setToolTip(_translate("GraphFromUrl", "Optional username for HTTP basic auth"))
         self.ui_text_user.setPlaceholderText(_translate("GraphFromUrl", "optional"))
-from qgis import gui
+from qgspasswordlineedit import QgsPasswordLineEdit

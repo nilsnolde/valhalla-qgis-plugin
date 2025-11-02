@@ -51,17 +51,20 @@ class RouterClient(BaseClient):
         if is_debug:
             qgis_log(f"URL: {url_object.url()}\nParameters:\n{json.dumps(post_params or {}, indent=2)}")
 
-        try:
-            result = get_json_body(response)
-            return result
-        # TODO: handle retriable request similar to the default routingpy client
-        except exceptions.RouterApiError:
-            if not self.skip_api_error:
-                raise
-            elif is_debug:
-                qgis_log(
-                    "Router {} returned an API error with "
-                    "the following message:\n{}".format(self.__class__.__name__, response.content()),
-                    Qgis.Warning,
-                )
-            return
+        if response.rawHeader(b"Content-Type").data().decode() == "image/tiff":
+            return bytes(response.content())
+        else:
+            try:
+                result = get_json_body(response)
+                return result
+            # TODO: handle retriable request similar to the default routingpy client
+            except exceptions.RouterApiError:
+                if not self.skip_api_error:
+                    raise
+                elif is_debug:
+                    qgis_log(
+                        "Router {} returned an API error with "
+                        "the following message:\n{}".format(self.__class__.__name__, response.content()),
+                        Qgis.Warning,
+                    )
+                return

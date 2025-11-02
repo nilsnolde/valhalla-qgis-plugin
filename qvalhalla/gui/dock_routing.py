@@ -3,13 +3,16 @@ import webbrowser
 from copy import deepcopy
 from typing import List, Optional, Tuple
 
+from osgeo import gdal
 from qgis.core import (  # noqa: F811
     Qgis,
     QgsFeature,
     QgsFields,
     QgsGeometry,
+    QgsMapLayer,
     QgsPointXY,
     QgsProject,
+    QgsRasterLayer,
     QgsVectorLayer,
     QgsWkbTypes,
 )
@@ -138,7 +141,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
 
         self.setWidget(widget)
 
-    def _get_params(self, endpoint: RouterEndpoint) -> dict:
+    def _get_params(self, endpoint: RouterEndpoint) -> dict:  # noqa: C901
         """Returns the current parameters"""
 
         def get_intervals(widget: QLineEdit) -> List[float]:
@@ -164,6 +167,8 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
                 params["polygons"] = True
                 params["denoise"] = float(self.ui_isochrone_denoise.value())
                 params["generalize"] = int(self.ui_isochrone_generalize.value())
+                if self.ui_isochrone_format.currentText() == "geotiff":
+                    params["format"] = "geotiff"
 
             elif endpoint == RouterEndpoint.EXPANSION:
                 params["intervals"] = get_intervals(self.ui_expansion_intervals)
@@ -194,7 +199,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         endpoint: RouterEndpoint,
         locations: List[Tuple[float, float]],
         params: dict,
-    ) -> QgsVectorLayer:
+    ) -> QgsMapLayer:
         """
         Returns the result features as a single vector layer.
 
@@ -210,25 +215,32 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             self.router_widget.profile.capitalize() if self.router_widget.profile else "",
         )
 
-        out_lyr = QgsVectorLayer(
-            f"{QgsWkbTypes.displayString(self.factory.geom_type(endpoint))}?crs=EPSG:4326",
-            layer_name,
-            "memory",
-        )
-        layer_fields = QgsFields()
-        for f in DEFAULT_LAYER_FIELDS[endpoint]:
-            layer_fields.append(f)
+        if params.get("format") == "geotiff":
+            vsipath = f'/vsimem/{layer_name.replace(" ", "_")}.tif'
+            gdal.FileFromMemBuffer(
+                vsipath, next(self.factory.get_results(RouterEndpoint.RASTER, locations, params))
+            )
+            out_lyr = QgsRasterLayer(vsipath, layer_name)
+        else:
+            out_lyr = QgsVectorLayer(
+                f"{QgsWkbTypes.displayString(self.factory.geom_type(endpoint))}?crs=EPSG:4326",
+                layer_name,
+                "memory",
+            )
+            layer_fields = QgsFields()
+            for f in DEFAULT_LAYER_FIELDS[endpoint]:
+                layer_fields.append(f)
 
-        out_lyr.dataProvider().addAttributes(layer_fields)
-        out_lyr.updateFields()
+            out_lyr.dataProvider().addAttributes(layer_fields)
+            out_lyr.updateFields()
 
-        for feat in self.factory.get_results(endpoint, locations, params):
-            out_lyr.dataProvider().addFeature(feat)
+            for feat in self.factory.get_results(endpoint, locations, params):
+                out_lyr.dataProvider().addFeature(feat)
 
-        out_lyr.updateExtents()
+            out_lyr.updateExtents()
 
-        # give the layer some styling etc.
-        post_process_layer(out_lyr, endpoint)
+            # give the layer some styling etc.
+            post_process_layer(out_lyr, endpoint)
 
         return out_lyr
 

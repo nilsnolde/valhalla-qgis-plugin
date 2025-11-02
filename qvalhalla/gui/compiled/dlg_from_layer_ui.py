@@ -19,7 +19,7 @@ class Ui_FromLayerDialog(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.formLayout = QtWidgets.QFormLayout()
         self.formLayout.setObjectName("formLayout")
-        self.from_layer = gui.QgsMapLayerComboBox(FromLayerDialog)
+        self.from_layer = QgsMapLayerComboBox(FromLayerDialog)
         self.from_layer.setObjectName("from_layer")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.from_layer)
         self.label = QtWidgets.QLabel(FromLayerDialog)
@@ -41,4 +41,4 @@ class Ui_FromLayerDialog(object):
         _translate = QtCore.QCoreApplication.translate
         FromLayerDialog.setWindowTitle(_translate("FromLayerDialog", "Import From Layer"))
         self.label.setText(_translate("FromLayerDialog", "Layer"))
-from qgis import gui
+from qgsmaplayercombobox import QgsMapLayerComboBox

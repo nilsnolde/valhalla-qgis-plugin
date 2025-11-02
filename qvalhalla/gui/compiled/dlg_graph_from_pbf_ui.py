@@ -36,7 +36,7 @@ class Ui_GraphFromPBF(object):
         self.ui_text_name = QtWidgets.QLineEdit(GraphFromPBF)
         self.ui_text_name.setObjectName("ui_text_name")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.ui_text_name)
-        self.ui_pbf_file = gui.QgsFileWidget(GraphFromPBF)
+        self.ui_pbf_file = QgsFileWidget(GraphFromPBF)
         self.ui_pbf_file.setObjectName("ui_pbf_file")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.ui_pbf_file)
         self.ui_int_threads = QtWidgets.QSpinBox(GraphFromPBF)
@@ -61,4 +61,4 @@ class Ui_GraphFromPBF(object):
         self.label_2.setText(_translate("GraphFromPBF", "PBF"))
         self.label_3.setText(_translate("GraphFromPBF", "Threads"))
         self.ui_int_threads.setToolTip(_translate("GraphFromPBF", "If 0, defaults to all available threads"))
-from qgis import gui
+from qgsfilewidget import QgsFileWidget

@@ -76,7 +76,7 @@ class ResultsFactory:
         locations: List[Tuple[float, float]],
         params: dict,
         fields: Optional[QgsFields] = None,
-    ) -> Iterator[QgsFeature]:
+    ) -> Iterator[QgsFeature] | Iterator[bytes]:
         """
         The main method to retrieve routing results that returns a feature iterator.
 
@@ -99,6 +99,10 @@ class ResultsFactory:
                 result = self.router.request(endpoint, loc, **params)
                 for feat in self._process_isochrone_result(result, params, fields):
                     yield feat
+
+        elif endpoint == gd.RouterEndpoint.RASTER:
+            for loc in locations:
+                yield self.router.request(endpoint, loc, **params).image
 
         elif endpoint == gd.RouterEndpoint.MATRIX:
             result = self.router.request(endpoint, locations, **params)

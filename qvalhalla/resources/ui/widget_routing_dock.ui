@@ -276,7 +276,7 @@ QListWidget::item::selected {
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="0">
+                 <item row="2" column="0">
                   <widget class="QLabel" name="label_10">
                    <property name="toolTip">
                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;tr&gt;&lt;td/&gt;&lt;td&gt;&lt;p&gt;A floating point value from &lt;span style=&quot; font-family:'Noto Sans Mono';&quot;&gt;0&lt;/span&gt; to &lt;span style=&quot; font-family:'Noto Sans Mono';&quot;&gt;1&lt;/span&gt; (default of &lt;span style=&quot; font-family:'Noto Sans Mono';&quot;&gt;1&lt;/span&gt;) which can be used to remove smaller contours. A value of &lt;span style=&quot; font-family:'Noto Sans Mono';&quot;&gt;1&lt;/span&gt; will only return the largest contour for a given time value. A value of &lt;span style=&quot; font-family:'Noto Sans Mono';&quot;&gt;0.5&lt;/span&gt; drops any contours that are less than half the area of the largest contour in the set of contours for that same time value.&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -286,7 +286,7 @@ QListWidget::item::selected {
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="1">
+                 <item row="2" column="1">
                   <widget class="QgsDoubleSpinBox" name="ui_isochrone_denoise">
                    <property name="decimals">
                     <number>1</number>
@@ -302,7 +302,7 @@ QListWidget::item::selected {
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="0">
+                 <item row="3" column="0">
                   <widget class="QLabel" name="label_11">
                    <property name="toolTip">
                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A floating point value in meters used as the tolerance for Douglas-Peucker generalization. Note: Generalization of contours can lead to self-intersections, as well as intersections of adjacent contours.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -312,14 +312,14 @@ QListWidget::item::selected {
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="1">
+                 <item row="3" column="1">
                   <widget class="QgsSpinBox" name="ui_isochrone_generalize">
                    <property name="maximum">
                     <number>1000</number>
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="1">
+                 <item row="4" column="1">
                   <layout class="QHBoxLayout" name="horizontalLayout_5">
                    <item>
                     <widget class="QRadioButton" name="ui_isochrone_time">
@@ -353,11 +353,32 @@ QListWidget::item::selected {
                    </item>
                   </layout>
                  </item>
-                 <item row="3" column="0">
+                 <item row="4" column="0">
                   <widget class="QLabel" name="label_12">
                    <property name="text">
                     <string>Metric</string>
                    </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>Format</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QComboBox" name="ui_isochrone_format">
+                   <item>
+                    <property name="text">
+                     <string>vector</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>geotiff</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                 </layout>

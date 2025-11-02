@@ -34,5 +34,6 @@ deprecated=False
 
 # done by CI
 changelog=
+    - 4.1.0: Add GeoTIFF support for isochrones
     - 4.0.0: Introduce pyvalhalla-weekly and make all local calculations possible (currently restricted to Linux & OSX), might not be compatible with v3.0.0, see https://github.com/nilsnolde/valhalla-qgis-plugin/issues/30
     - 3.0.0: Complete re-write from v2.x, for earlier changes refer to `valhalla/metadata.txt` in the [last 2.x commit](https://github.com/nilsnolde/valhalla-qgis-plugin/blob/78c2c71585f23beba796ee85f70b906dbe615f5a/valhalla/metadata.txt)
