@@ -320,9 +320,11 @@ class WaypointsWidget(QWidget):
 
         try:
             json_obj = json.loads(json_dlg.json_field.toPlainText())
-            if not isinstance(json_obj, list):
+            if isinstance(json_obj, dict):
+                json_obj = json_obj["locations"]
+            elif not isinstance(json_obj, list):
                 raise ValueError(
-                    f"Passed JSON is not an array of Valhalla locations: {json_dlg.json_field.toPlainText()}"
+                    f"Passed JSON is not a Valhalla JSON request object or an array of Valhalla locations: {json_dlg.json_field.toPlainText()}"
                 )
         except (json.JSONDecodeError, ValueError) as e:
             self.parent_dlg.status_bar.pushMessage("JSON Error", str(e), Qgis.Critical, 8)
