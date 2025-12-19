@@ -77,7 +77,7 @@ class Ui_PluginSettingsDialog(object):
         _translate = QtCore.QCoreApplication.translate
         self.label.setText(_translate("PluginSettingsDialog", "Binaries"))
         self.ui_binary_path.setToolTip(_translate("PluginSettingsDialog", "Change the binary directory for Valhalla"))
-        self.ui_btn_default_binary_path.setToolTip(_translate("PluginSettingsDialog", "Set the binary path to the pyvalhalla-weekly Python package (if installed)"))
+        self.ui_btn_default_binary_path.setToolTip(_translate("PluginSettingsDialog", "Set the binary path to the pyvalhalla Python package (if installed)"))
         self.ui_btn_default_binary_path.setText(_translate("PluginSettingsDialog", "..."))
         self.ui_deps_group.setTitle(_translate("PluginSettingsDialog", "Dependencies"))
         item = self.ui_deps_table.horizontalHeaderItem(0)

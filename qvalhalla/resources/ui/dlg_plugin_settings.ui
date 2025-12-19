@@ -46,7 +46,7 @@
          <item>
           <widget class="QToolButton" name="ui_btn_default_binary_path">
            <property name="toolTip">
-            <string>Set the binary path to the pyvalhalla-weekly Python package (if installed)</string>
+            <string>Set the binary path to the pyvalhalla Python package (if installed)</string>
            </property>
            <property name="text">
             <string>...</string>

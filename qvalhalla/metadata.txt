@@ -15,7 +15,7 @@ about=Valhalla provides access to most of the functions of the open-source Valha
     The tool set includes routing, isochrones, matrix and expansion calculations, either interactive in the map canvas or from Point/LineString files within the processing framework.
     Extensive attributes are set for output files, incl. duration, length and start/end locations.
 
-    The plugin accesses remote or local Valhalla HTTP APIs. Linux & OSX users can even install https://pypi.org/project/pyvalhalla-weekly/ to gain access to:
+    The plugin accesses remote or local Valhalla HTTP APIs. Linux & OSX users can even install https://pypi.org/project/pyvalhalla/ to gain access to:
 
         - a local and fully configurable Valhalla service on a button click
         - locally build graphs from OSM PBF files on a button click
@@ -34,6 +34,7 @@ deprecated=False
 
 # done by CI
 changelog=
+    - 4.2.0: allow full Valhalla request JSON when extracting locations; manually install pyvalhalla to not pollute QGIS python packages
     - 4.1.0: Add GeoTIFF support for isochrones
-    - 4.0.0: Introduce pyvalhalla-weekly and make all local calculations possible (currently restricted to Linux & OSX), might not be compatible with v3.0.0, see https://github.com/nilsnolde/valhalla-qgis-plugin/issues/30
+    - 4.0.0: Introduce pyvalhalla and make all local calculations possible (currently restricted to Linux & OSX), might not be compatible with v3.0.0, see https://github.com/nilsnolde/valhalla-qgis-plugin/issues/30
     - 3.0.0: Complete re-write from v2.x, for earlier changes refer to `valhalla/metadata.txt` in the [last 2.x commit](https://github.com/nilsnolde/valhalla-qgis-plugin/blob/78c2c71585f23beba796ee85f70b906dbe615f5a/valhalla/metadata.txt)

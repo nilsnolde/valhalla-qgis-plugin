@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from packaging.version import Version
-from qvalhalla.global_definitions import PYPI_PKGS, PyPiPkg, PyPiState
+from qvalhalla.global_definitions import PyPiState
 from qvalhalla.utils.resource_utils import (
     check_local_lib_version,
     check_valhalla_installation,
@@ -17,10 +17,10 @@ from ... import LocalhostPluginTestCase
 class TestResourceUtils(LocalhostPluginTestCase):
     def test_local_lib_version(self):
         # it's the second attribute that will do it
-        v = check_local_lib_version(PyPiPkg("valhalla", "blablabalbla", ""), Version("0.0.0"))
-        self.assertEqual(v, PyPiState.NOT_INSTALLED)
+        v = check_local_lib_version(Version("0.0.0"))
+        self.assertEqual(v, PyPiState.UP_TO_DATE)
 
-        v = check_local_lib_version(PYPI_PKGS[0], Version("99.99.99"))
+        v = check_local_lib_version(Version("99.99.99"))
         self.assertEqual(v, PyPiState.UPGRADEABLE)
 
     def test_create_valhalla_config_failure(self):

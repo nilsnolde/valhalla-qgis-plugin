@@ -9,6 +9,7 @@ extend-exclude =
     qvalhalla/gui/compiled/*
     qvalhalla/__init__.py
     qvalhalla/plugin.py
+    scripts/pyqt5_to_pyqt6.py
     tests/utilities.py
     tests/qgis_interface.py
 

@@ -4,7 +4,7 @@ QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhal
 
 It features:
 - UI & processing algorithms to routing, isochrones, matrix & expansion endpoints for `pedestrian`, `bicycle`, `car`, `truck` & `motorcycle`
-- (**linux-x86_64 & macos-arm64 only**) **all local** calculations after installing [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) with the full flexibility of local Valhalla processes:
+- (**linux-x86_64 & macos-arm64 only**) **all local** calculations after installing [`pyvalhalla`](https://pypi.org/project/pyvalhalla/) with the full flexibility of local Valhalla processes:
   - start a local server while reading from remmote graphs, e.g. a tar file on some server (only support HTTP basic auth)
   - build your own graph from a OSM PBF file
 - support for most[^1] of Valhalla costing options in both UI & processing algorithms for **all endpoints**, e.g.
@@ -67,12 +67,12 @@ It features:
 6. Edit the Valhalla configuration which will control both the local graph build and the local service
 7. View the local graph build logs
 8. List of locally registered graphs available for `localhost`
-9. A list of dependencies; currently only [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) is supported. After plugin installation you can install the package from here. On QGIS startup it'll check if there's a new version available and let you update.
+9. A list of dependencies; currently only [`pyvalhalla`](https://pypi.org/project/pyvalhalla/) is supported. After plugin installation you can install the package from here. On QGIS startup it'll check if there's a new version available and let you update.
 
 ## Notes on `localhost`
 
 > [!NOTE]
-> Integration of `pyvalhalla-weekly` is only available for Linux x64 & OSX arm64. For Windows x64 I [couldn't make `valhalla_service` work yet](https://github.com/valhalla/valhalla/issues/5314).
+> Integration of `pyvalhalla` is only available for Linux x64 & OSX arm64. For Windows x64 I [couldn't make `valhalla_service` work yet](https://github.com/valhalla/valhalla/issues/5314).
 
 The main distinguishing features of this plugin (compared to other routing plugins) is the ability to:
 
@@ -84,12 +84,12 @@ both without any kind of additional setup, all taken care of straight from the p
 - our public [FOSSGIS server](https://valhalla.openstreetmap.de/) is [both rate-limited and distance-limited](https://github.com/valhalla/valhalla/discussions/3373#discussioncomment-1644713) and some use cases require more than is publicly available
 - lots of QGIS users might not be very comfortable or are even prohibited to set up a local Valhalla server via e.g. docker
 
-While the fully integrated solution tries to install the Python package [`pyvalhalla-weekly`](https://pypi.org/project/pyvalhalla-weekly/) for you, there are probably situations where that will fail in some way (note, this plugin is only CI tested on Linux). In those cases, you can still do the following:
+While the fully integrated solution tries to install the Python package [`pyvalhalla`](https://pypi.org/project/pyvalhalla/) for you, there are probably situations where that will fail in some way (note, this plugin is only CI tested on Linux). In those cases, you can still do the following:
 
 - if you have the skills and/or permission, set up a local Valhalla server using one of our [docker images](https://github.com/valhalla/valhalla/tree/master/docker)
 - even if the Python package installation fails, you can still use it if you have permissions to download from [PyPI](https://pypi.org/) **and
 ** permissions to execute "random" programs:
-  - download the latest [`pyvalhalla-weekly` wheel](https://pypi.org/project/pyvalhalla-weekly/#files) for your platform
+  - download the latest [`pyvalhalla` wheel](https://pypi.org/project/pyvalhalla/#files) for your platform
   - the wheel is really just a ZIP file, so you can unzip it to wherever you want
   - go to the plugin's "local server" settings and point the "Binaries" path to `<unzipped_pyvalhalla_path>/bin`
   - now you should be able to use the fully local setup
@@ -108,15 +108,15 @@ Since this plugin is pretty flexible, so the tests need to be too:
     # or if it doesn't exist yet
     # docker run -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
 
-    # uninstall python package if it's installed
-    python -m pip uninstall -y --break-system-packages pyvalhalla-weekly
+    # "uninstall" python package if it's installed
+    rm -r /home/nilsnolde/.local/share/QGIS/QGIS3/profiles/default/valhalla/pyvalhalla
 
     QT_QPA_PLATFORM=offscreen python -m coverage run --append -m unittest discover -s tests/test_localhost_docker -t .
     ```
-- `tests/test_localhost_plugin`:  needs the `pyvalhalla-weekly` Python package installed to provide a local service, e.g.
+- `tests/test_localhost_plugin`:  needs the `pyvalhalla` Python package installed to provide a local service, e.g.
 
     ```shell
-    python -m pip install --break-system-packages pyvalhalla-weekly
+    # install the python bindings from QGIS or unzip the wheel to the appropriate location
 
     # stop docker container if it's running
     docker stop valhalla-router

@@ -1,15 +1,20 @@
 import socket
 import unittest
 from pathlib import Path
-from shutil import copy, move
+from shutil import copy, move, rmtree
 from urllib.parse import urlparse
 
+from qvalhalla.global_definitions import PyPiState
 from tests.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.core.settings import ValhallaSettings
-from qvalhalla.utils.resource_utils import get_settings_dir
+from qvalhalla.core.settings import ValhallaSettings, get_settings_dir
+from qvalhalla.utils.resource_utils import (
+    check_valhalla_installation,
+    get_default_valhalla_binary_dir,
+    install_pyvalhalla,
+)
 
 URL = "http://localhost:8002"
 
@@ -30,18 +35,6 @@ def is_localhost_runing() -> bool:
         return True
 
 
-def is_pyvalhalla_installed() -> bool:
-    is_installed = False
-    try:
-        import valhalla  # noqa: F401
-
-        is_installed = True
-    except ModuleNotFoundError:
-        pass
-
-    return is_installed
-
-
 class LocalhostDockerTestCase(unittest.TestCase):
     """
     Expects localhost via Docker, i.e. localhost not run via plugin.
@@ -55,8 +48,14 @@ class LocalhostDockerTestCase(unittest.TestCase):
             raise ConnectionRefusedError(
                 f"An external Valhalla service needs to be running on {URL} for {cls.__name__} to work"
             )
-        if is_pyvalhalla_installed():
-            raise ImportError(f"pyvalhalla-weekly can'be be installed for {cls.__name__} to work")
+
+        ValhallaSettings().set_binary_dir(get_default_valhalla_binary_dir())
+        if check_valhalla_installation():
+            rmtree(get_default_valhalla_binary_dir().parent.parent)
+            if check_valhalla_installation():
+                raise ImportError(
+                    f"pyvalhalla is installed for {cls.__name__} at {get_default_valhalla_binary_dir()}"
+                )
 
         if SETTINGS_PATH.exists():
             copy(SETTINGS_PATH, TEMP_SETTINGS_PATH)
@@ -84,15 +83,17 @@ class LocalhostPluginTestCase(unittest.TestCase):
             raise ConnectionError(
                 f"An external Valhalla service can't be running on {URL} for {cls.__name__} to work"
             )
-        if not is_pyvalhalla_installed():
-            raise ImportError(f"pyvalhalla-weekly needs to be installed for {cls.__name__} to work")
+
+        ValhallaSettings().set_binary_dir(get_default_valhalla_binary_dir())
+        if not check_valhalla_installation():
+            install_pyvalhalla(PyPiState.NOT_INSTALLED)
+            if not check_valhalla_installation():
+                raise ImportError(
+                    f"pyvalhalla for {cls.__name__} to {get_default_valhalla_binary_dir()}"
+                )
 
         if SETTINGS_PATH.exists():
             copy(SETTINGS_PATH, TEMP_SETTINGS_PATH)
-
-        import valhalla
-
-        ValhallaSettings().set_binary_dir(Path(valhalla.__file__).parent.joinpath("bin"))
 
         return super().setUpClass()
 
@@ -119,7 +120,7 @@ class LocalhostPluginTestCase(unittest.TestCase):
 #         if is_localhost_runing():
 #             raise ConnectionError(f"An external Valhalla service can't be running on {URL} for {cls.__name__} to work")
 #         if is_pyvalhalla_installed():
-#             raise ImportError(f"pyvalhalla-weekly can'be be installed for {cls.__name__} to work")
+#             raise ImportError(f"pyvalhalla can'be be installed for {cls.__name__} to work")
 
 #         if SETTINGS_PATH.exists():
 #             copy(SETTINGS_PATH, TEMP_SETTINGS_PATH)

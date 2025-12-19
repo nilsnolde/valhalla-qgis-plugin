@@ -168,27 +168,25 @@ class RouterWidget(QWidget):
     def _on_server_start(self):
         binary_dir = ValhallaSettings().get_binary_dir()
         no_binary_dir = False
-        msg = "Can't find Valhalla executables."
-        level = Qgis.Critical
-        if not binary_dir:
-            no_binary_dir = True
-        elif not binary_dir.exists():
-            no_binary_dir = True
-        if self.ui_cmb_graphs.currentIndex() == -1:
-            msg += " No graph selected."
-            no_binary_dir = True
+        msg = ""
         if not check_valhalla_installation():
-            level = Qgis.Critical if no_binary_dir else Qgis.Warning
-            no_binary_dir = no_binary_dir or False
-            msg += " pyvalhalla-weekly is not installed."
+            no_binary_dir = True
+            msg += "pyvalhalla is not installed."
+        elif self.ui_cmb_graphs.currentIndex() == -1:
+            msg += "No graph selected."
+            no_binary_dir = True
 
         if no_binary_dir:
-            self._parent.status_bar.pushMessage(msg, level, 6)
+            self._parent.status_bar.pushMessage(msg, Qgis.Critical, 6)
             self.settings_dlg.open()
             return
 
         # at this point the valhalla.json might not exist yet
-        create_valhalla_config()
+        try:
+            create_valhalla_config()
+        except ModuleNotFoundError as e:
+            self._parent.status_bar.pushMessage(e.msg, Qgis.Critical, 6)
+            return
 
         args = [str(get_valhalla_config_path()), "1"]
 
