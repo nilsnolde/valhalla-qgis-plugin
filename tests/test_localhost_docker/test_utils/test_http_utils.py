@@ -1,4 +1,4 @@
-from qvalhalla.utils.http_utils import get_status_response
+from valhalla.utils.http_utils import get_status_response
 
 from ... import URL, LocalhostDockerTestCase
 

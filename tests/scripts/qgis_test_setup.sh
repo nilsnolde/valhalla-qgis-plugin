@@ -6,7 +6,7 @@ set -euo pipefail
 
 # Check if version argument is provided
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-  echo "Usage: $0 <QGIS docker version, e.g., 3.44.1> <plugin path, e.g. qvalhalla>"
+  echo "Usage: $0 <QGIS docker version, e.g., 3.44.1> <plugin path, e.g. valhalla>"
   exit 1
 fi
 

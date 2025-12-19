@@ -3,12 +3,12 @@ max-line-length = 999
 extend-exclude =
     .git
     .venv
-    qvalhalla/third_party
-    qvalhalla/help
-    qvalhalla/resources
-    qvalhalla/gui/compiled/*
-    qvalhalla/__init__.py
-    qvalhalla/plugin.py
+    valhalla/third_party
+    valhalla/help
+    valhalla/resources
+    valhalla/gui/compiled/*
+    valhalla/__init__.py
+    valhalla/plugin.py
     scripts/pyqt5_to_pyqt6.py
     tests/utilities.py
     tests/qgis_interface.py

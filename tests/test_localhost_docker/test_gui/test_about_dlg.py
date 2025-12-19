@@ -1,5 +1,5 @@
-from qvalhalla.gui.dlg_about import AboutDialog
-from qvalhalla.gui.dock_routing import RoutingDockWidget
+from valhalla.gui.dlg_about import AboutDialog
+from valhalla.gui.dock_routing import RoutingDockWidget
 
 from ...utilities import get_qgis_app
 

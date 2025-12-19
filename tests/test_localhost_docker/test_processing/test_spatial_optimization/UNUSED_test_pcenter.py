@@ -1,5 +1,6 @@
 from qgis.core import QgsWkbTypes
-from qvalhalla.processing.spatial_optimization.pcenter import PCenterAlgorithm
+
+from valhalla.processing.spatial_optimization.pcenter import PCenterAlgorithm
 
 from .UNUSED_spopt_base import SpOptProcessingBase
 

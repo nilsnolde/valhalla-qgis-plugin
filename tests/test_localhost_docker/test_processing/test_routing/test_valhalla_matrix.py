@@ -5,8 +5,8 @@ from ..processing_base import ProcessingBase
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.global_definitions import FieldNames, RouterProfile
-from qvalhalla.processing.routing.valhalla.matrix import ValhallaMatrix
+from valhalla.global_definitions import FieldNames, RouterProfile
+from valhalla.processing.routing.valhalla.matrix import ValhallaMatrix
 
 
 class TestValhallaMatrix(ProcessingBase):

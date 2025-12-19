@@ -4,13 +4,14 @@ from pathlib import Path
 from shutil import copy, move, rmtree
 from urllib.parse import urlparse
 
-from qvalhalla.global_definitions import PyPiState
 from tests.utilities import get_qgis_app
+
+from valhalla.global_definitions import PyPiState
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.core.settings import ValhallaSettings, get_settings_dir
-from qvalhalla.utils.resource_utils import (
+from valhalla.core.settings import ValhallaSettings, get_settings_dir
+from valhalla.utils.resource_utils import (
     check_valhalla_installation,
     get_default_valhalla_binary_dir,
     install_pyvalhalla,

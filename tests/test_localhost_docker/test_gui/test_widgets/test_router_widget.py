@@ -9,11 +9,11 @@ from ....utilities import get_qgis_app
 CANVAS: QgsMapCanvas
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.gui.dock_routing import RoutingDockWidget
-from qvalhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
+from valhalla.gui.dock_routing import RoutingDockWidget
+from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
     ValhallaSettingsMbikeWidget,
 )
-from qvalhalla.gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
+from valhalla.gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
     ValhallaSettingsPedestrianWidget,
 )
 

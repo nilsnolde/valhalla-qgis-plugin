@@ -14,7 +14,7 @@ on:
       - master
 
 env:
-  PLUGIN_PATH: qvalhalla
+  PLUGIN_PATH: valhalla
 
 jobs:
   tests:

@@ -8,7 +8,7 @@ from ..utilities import get_first_feature_geometry, get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.gui.dock_routing import RoutingDockWidget
+from valhalla.gui.dock_routing import RoutingDockWidget
 
 # from network_analyst.gui.dlg_spopt import SpoptDialog
 from .. import LocalhostDockerTestCase
