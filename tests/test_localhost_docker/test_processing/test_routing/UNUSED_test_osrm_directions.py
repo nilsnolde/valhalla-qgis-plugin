@@ -3,7 +3,8 @@ from qgis.core import (
     QgsProcessingException,
     QgsProcessingFeedback,
 )
-from qvalhalla.processing.routing.osrm.directions import OSRMDirections
+
+from valhalla.processing.routing.osrm.directions import OSRMDirections
 
 from ....utilities import get_qgis_app
 from ...test_processing.processing_base import ProcessingBase

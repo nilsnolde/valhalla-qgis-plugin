@@ -1,9 +1,10 @@
 from shutil import rmtree
 
 from qgis.PyQt.QtTest import QSignalSpy, QTest
-from qvalhalla.core.settings import ValhallaSettings
-from qvalhalla.gui.dlg_plugin_settings import PluginSettingsDialog
-from qvalhalla.gui.widgets.widget_graphs import GraphWidget
+
+from valhalla.core.settings import ValhallaSettings
+from valhalla.gui.dlg_plugin_settings import PluginSettingsDialog
+from valhalla.gui.widgets.widget_graphs import GraphWidget
 
 from .... import TEST_DIR, LocalhostPluginTestCase
 

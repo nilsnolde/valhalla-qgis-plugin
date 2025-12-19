@@ -7,7 +7,8 @@ from qgis.core import QgsCoordinateReferenceSystem, QgsRectangle
 from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import QProcess, Qt
 from qgis.PyQt.QtTest import QTest
-from qvalhalla.core.settings import ValhallaSettings
+
+from valhalla.core.settings import ValhallaSettings
 
 from .... import URL, LocalhostPluginTestCase
 from ....utilities import get_qgis_app
@@ -15,7 +16,7 @@ from ....utilities import get_qgis_app
 CANVAS: QgsMapCanvas
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.gui.dock_routing import RoutingDockWidget
+from valhalla.gui.dock_routing import RoutingDockWidget
 
 
 def try_connection(host, port):

@@ -2,9 +2,10 @@ from typing import List
 
 from qgis.gui import QgsCollapsibleGroupBox
 from qgis.PyQt.QtWidgets import QLineEdit
-from qvalhalla.core.settings import ProviderSetting, ValhallaSettings
-from qvalhalla.global_definitions import RouterType
-from qvalhalla.gui.dlg_routing_providers import ProviderDialog, ProvUiProps
+
+from valhalla.core.settings import ProviderSetting, ValhallaSettings
+from valhalla.global_definitions import RouterType
+from valhalla.gui.dlg_routing_providers import ProviderDialog, ProvUiProps
 
 from ... import LocalhostDockerTestCase
 

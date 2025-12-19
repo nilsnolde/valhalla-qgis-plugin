@@ -2,8 +2,9 @@ import json
 from pathlib import Path
 
 from packaging.version import Version
-from qvalhalla.global_definitions import PyPiState
-from qvalhalla.utils.resource_utils import (
+
+from valhalla.global_definitions import PyPiState
+from valhalla.utils.resource_utils import (
     check_local_lib_version,
     check_valhalla_installation,
     create_valhalla_config,

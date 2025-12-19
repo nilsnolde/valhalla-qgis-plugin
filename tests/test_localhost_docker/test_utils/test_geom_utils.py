@@ -1,7 +1,8 @@
 import unittest
 
 from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsPointXY
-from qvalhalla.utils.geom_utils import point_to_wgs84
+
+from valhalla.utils.geom_utils import point_to_wgs84
 
 from ...constants import WAYPOINTS_3857, WAYPOINTS_4326
 

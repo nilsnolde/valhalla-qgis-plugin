@@ -116,11 +116,10 @@ Since this plugin is pretty flexible, so the tests need to be too:
 - `tests/test_localhost_plugin`:  needs the `pyvalhalla` Python package installed to provide a local service, e.g.
 
     ```shell
-    # install the python bindings from QGIS or unzip the wheel to the appropriate location
-
     # stop docker container if it's running
     docker stop valhalla-router
 
+    # test will download & install pyvalhalla
     QT_QPA_PLATFORM=offscreen python -m coverage run --append -m unittest discover -s tests/test_localhost_plugin -t .
     ```
 
@@ -133,13 +132,13 @@ In CI we run the tests with the QGIS docker image, have a look [there](.github/w
 To keep unintended files out of the zip, use the following:
 
 ```
-find qvalhalla \
+find valhalla \
   \( -type d -name '__pycache__' \
-     -o \( -path 'qvalhalla/third_party/routingpy/*' \
-           ! -path 'qvalhalla/third_party/routingpy/routingpy' \
-           ! -path 'qvalhalla/third_party/routingpy/routingpy/*' \) \
+     -o \( -path 'valhalla/third_party/routingpy/*' \
+           ! -path 'valhalla/third_party/routingpy/routingpy' \
+           ! -path 'valhalla/third_party/routingpy/routingpy/*' \) \
   \) -prune -o -type f -print \
-| zip -r dist/qvalhalla_4.0.0.zip -@
+| zip -r dist/valhalla_4.0.0.zip -@
 ```
 
 ## History

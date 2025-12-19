@@ -1,4 +1,4 @@
-from qvalhalla.processing.routing.osrm.matrix import OSRMMatrix
+from valhalla.processing.routing.osrm.matrix import OSRMMatrix
 
 from ....utilities import get_qgis_app
 from ...test_processing.processing_base import ProcessingBase

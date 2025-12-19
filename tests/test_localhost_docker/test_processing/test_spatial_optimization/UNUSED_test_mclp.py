@@ -1,5 +1,6 @@
 from qgis.core import QgsProcessingException, QgsWkbTypes
-from qvalhalla.processing.spatial_optimization.mclp import MCLPAlgorithm
+
+from valhalla.processing.spatial_optimization.mclp import MCLPAlgorithm
 
 from .UNUSED_spopt_base import SpOptProcessingBase
 

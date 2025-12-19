@@ -1,11 +1,11 @@
-from qvalhalla.core.router_factory import RouterFactory
-from qvalhalla.global_definitions import (
+from valhalla.core.router_factory import RouterFactory
+from valhalla.global_definitions import (
     RouterEndpoint,
     RouterMethod,
     RouterProfile,
     RouterType,
 )
-from qvalhalla.third_party.routingpy.routingpy.direction import Direction
+from valhalla.third_party.routingpy.routingpy.direction import Direction
 
 from ... import LocalhostDockerTestCase
 from ...constants import WAYPOINTS_4326

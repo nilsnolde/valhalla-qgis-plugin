@@ -3,8 +3,8 @@ from ..processing_base import ProcessingBase
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.global_definitions import RouterProfile
-from qvalhalla.processing.routing.valhalla.isochrones import ValhallaIsochrones
+from valhalla.global_definitions import RouterProfile
+from valhalla.processing.routing.valhalla.isochrones import ValhallaIsochrones
 
 
 class TestValhallaIsochrones(ProcessingBase):

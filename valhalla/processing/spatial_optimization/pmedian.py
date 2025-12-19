@@ -1,5 +1,5 @@
-from qvalhalla.global_definitions import SpOptTypes
-from qvalhalla.processing.spatial_optimization.base_algorithm import (
+from valhalla.global_definitions import SpOptTypes
+from valhalla.processing.spatial_optimization.base_algorithm import (
     SPOPTBaseAlgorithm,
 )
 

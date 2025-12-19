@@ -1,7 +1,8 @@
 from qgis.core import QgsNetworkReplyContent
 from qgis.PyQt.QtNetwork import QNetworkReply, QNetworkRequest
-from qvalhalla.third_party.routingpy.routingpy import exceptions
-from qvalhalla.utils.resource_utils import (
+
+from valhalla.third_party.routingpy.routingpy import exceptions
+from valhalla.utils.resource_utils import (
     check_valhalla_installation,
     create_valhalla_config,
     get_json_body,

@@ -14,7 +14,7 @@ from ...utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qvalhalla.utils.layer_utils import get_wgs_coords_from_layer
+from valhalla.utils.layer_utils import get_wgs_coords_from_layer
 
 
 class TestLayerUtils(LocalhostDockerTestCase):
