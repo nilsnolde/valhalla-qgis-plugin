@@ -1,5 +1,4 @@
 from functools import partial
-from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Optional
 
@@ -7,17 +6,19 @@ from packaging.version import parse as Version
 from qgis.core import Qgis
 from qgis.gui import QgisInterface, QgsFileWidget
 from qgis.PyQt.QtCore import QRect, QSize, Qt
-from qgis.PyQt.QtWidgets import QDialog, QLabel, QTableWidgetItem, QToolButton, QWidget
+from qgis.PyQt.QtWidgets import QApplication, QDialog, QLabel, QTableWidgetItem, QToolButton, QWidget
 
 from ..core.settings import ValhallaSettings
 from ..exceptions import ValhallaCmdError
 from ..global_definitions import PYPI_PKGS, Dialogs, PyPiState
 from ..utils.resource_utils import (
     check_local_lib_version,
+    check_valhalla_installation,
     get_default_valhalla_binary_dir,
     get_icon,
+    get_local_lib_version,
     get_pypi_lib_version,
-    install_pypi,
+    install_pyvalhalla,
 )
 from .compiled.dlg_plugin_settings_ui import Ui_PluginSettingsDialog
 from .gui_utils import add_msg_bar
@@ -48,13 +49,18 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
         self.ui_binary_path.fileChanged.connect(self._on_binary_path_change)
 
     def _on_binary_path_change(self, path: str):
-        ValhallaSettings().set_binary_dir(Path(path))
+        settings = ValhallaSettings()
+        old_path = settings.get_binary_dir()
+        new_path = Path(path)
+        settings.set_binary_dir(new_path)
+        if not check_valhalla_installation():
+            self.status_bar.pushMessage(
+                f"Couldnt find valhalla_service in {new_path}", level=Qgis.Warning, duration=5
+            )
+            settings.set_binary_dir(old_path)
 
     def _on_default_binary_path(self):
         default_path = get_default_valhalla_binary_dir()
-        if not default_path:
-            self.status_bar.pushMessage("pyvalhalla-weekly not installed", Qgis.Critical, 3)
-            return
         ValhallaSettings().set_binary_dir(default_path)
         self.ui_binary_path.setFilePath(str(default_path))
 
@@ -65,15 +71,14 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
         self.ui_deps_table.setHorizontalHeaderLabels(["Package", "Installed", "Available", "Action"])
         for row_id, pkg in enumerate(PYPI_PKGS):
             # get the versions and the currently installed state
-            try:
-                current_version = Version(version(pkg.pypi_name))
-            except PackageNotFoundError:
-                current_version = Version("0.0.0")
+            current_version = Version(get_local_lib_version() or "0.0.0")
             pypi_version = get_pypi_lib_version(pkg)
+            installed_state = check_local_lib_version(pypi_version)
             if pypi_version.base_version == "0.0.0":
                 self.status_bar.pushMessage(f"Couldn't find PyPI package {pkg.pypi_name} online.")
-            installed_state = check_local_lib_version(pkg, pypi_version)
-            if installed_state == PyPiState.NOT_INSTALLED:
+                icon = ":images/themes/default/mTaskCancel.svg"
+                tooltip = f"{pkg.pypi_name} does not exist on PyPI"
+            elif installed_state == PyPiState.NOT_INSTALLED:
                 icon = ":images/themes/default/pluginNew.svg"
                 tooltip = f"Install {pkg.pypi_name}"
             elif installed_state == PyPiState.UPGRADEABLE:
@@ -102,16 +107,19 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
             btn.setIcon(get_icon(icon))
             btn.setEnabled(installed_state != PyPiState.UP_TO_DATE)
             btn.setToolTip(tooltip)
-            f = partial(self._on_pypi_install, f"{pkg.pypi_name}=={pypi_version.public}")
+            f = partial(
+                self._on_pypi_install, f"{pkg.pypi_name}=={pypi_version.public}", installed_state
+            )
             btn.clicked.connect(f)
             self.ui_deps_table.setCellWidget(row_id, 3, btn)
 
         self.ui_deps_table.resizeColumnToContents(3)
 
-    def _on_pypi_install(self, pypi_pkg: str):
+    def _on_pypi_install(self, pypi_pkg: str, installed_state: PyPiState):
         """Install the package from PyPI"""
         try:
-            install_pypi([pypi_pkg])
+            # in case there'll be more packages in the future, this will need to be extended
+            install_pyvalhalla(installed_state)
         except ValhallaCmdError as e:
             self.status_bar.pushMessage(f"Couldn't install the dependencies:\n{e}", Qgis.Critical, 0)
             return
@@ -119,6 +127,7 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
         self.status_bar.pushMessage(f"Successfully installed/upgraded package: {pypi_pkg}")
         # update the table with the new info
         self.setupDepsTable()
+        QApplication.processEvents()
 
     def on_settings_change(self, new_text, widget: Optional[QWidget] = ""):
         attr = widget.objectName() if widget else self.sender().objectName()

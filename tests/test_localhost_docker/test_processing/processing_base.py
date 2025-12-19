@@ -19,7 +19,7 @@ from qgis.core import (
 )
 from qgis.PyQt.QtCore import QVariant
 from qvalhalla import BASE_DIR
-from qvalhalla.utils.resource_utils import get_settings_dir
+from qvalhalla.core.settings import get_settings_dir
 
 from ... import LocalhostDockerTestCase
 from ...constants import GRAPHS, POLYGON_4326, WAYPOINTS_4326

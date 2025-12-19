@@ -17,7 +17,7 @@ from qgis.core import (
 from qgis.gui import QgsMapCanvas, QgsMapMouseEvent
 from qgis.PyQt.QtCore import QEvent, QPoint, Qt, QTimer
 from qgis.PyQt.QtTest import QTest
-from qgis.PyQt.QtWidgets import QApplication, QDialogButtonBox
+from qgis.PyQt.QtWidgets import QApplication, QDialogButtonBox, QTableWidget
 
 from .... import LocalhostDockerTestCase
 from ....constants import WAYPOINTS_3857, WAYPOINTS_4326
@@ -226,14 +226,33 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
             locs_json.append({"lon": pt[0], "lat": pt[1], "radius": 10, **extra_params})
 
         # function to set the right layer
-        def handle_exec():
+        def handle_exec(input_json):
             dlg: FromValhallaJsonDialog = QApplication.activeWindow()
             self.assertIsInstance(dlg, FromValhallaJsonDialog)
-            dlg.json_field.setText(json.dumps(locs_json))
+            dlg.json_field.setText(json.dumps(input_json))
             QTest.mouseClick(dlg.buttonBox.button(QDialogButtonBox.Ok), Qt.LeftButton)
 
         # then press the button and set the right layer when it's open
-        QTimer.singleShot(100, handle_exec)
+        QTimer.singleShot(100, lambda: handle_exec(locs_json))
+        self.dlg.waypoints_widget._handle_from_valhalla_json()
+
+        # test we got 3 points and they were properly transformed to 4326
+        table: QTableWidget = self.dlg.waypoints_widget.ui_table
+        self.assertEqual(self.dlg.waypoints_widget.ui_table.rowCount(), 3)
+        for row_id in range(table.rowCount()):
+            self.assertAlmostEqual(float(table.item(row_id, 0).text()), WAYPOINTS_4326[row_id][1], 5)
+            self.assertAlmostEqual(float(table.item(row_id, 1).text()), WAYPOINTS_4326[row_id][0], 5)
+            self.assertEqual(int(table.cellWidget(row_id, 2).value()), 10)
+            assertQueryStringEqual(table.item(row_id, 3).text(), unquote(urlencode(extra_params)))
+
+        # try the same with a full valhalla request json
+        self.dlg.waypoints_widget._handle_clear_locations()
+        full_json = {
+            "locations": locs_json,
+            "costing": "auto",
+            "costing_options": {"auto": {"use_tolls": 0.2}},
+        }
+        QTimer.singleShot(100, lambda: handle_exec(full_json))
         self.dlg.waypoints_widget._handle_from_valhalla_json()
 
         # test we got 3 points and they were properly transformed to 4326

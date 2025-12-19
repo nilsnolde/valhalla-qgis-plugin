@@ -32,19 +32,21 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Run linters & tests
+      - name: tests
         run: |
           docker pull qgis/qgis:${{ matrix.qgis_tags }}
           docker run -dt --name qgis-testing-environment --network host -v "${GITHUB_WORKSPACE}":/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:${{ matrix.qgis_tags }}
+
           # first run the docker/external valhalla_service tests
           docker run -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
           sudo apt-get update && sudo apt-get install -y moreutils
           jq '.service_limits.status.allow_verbose = true' $PWD/tests/data/valhalla.json | sponge $PWD/tests/data/valhalla.json
           docker restart valhalla-router
           docker exec qgis-testing-environment bash -c "/tests_directory/tests/scripts/qgis_test_setup.sh ${{ matrix.qgis_tags }} ${{ env.PLUGIN_PATH }} tests/test_localhost_docker"
+
           # then with the plugin enabled and no external valhalla_service
+          # the test setup will install the bindings to the right location
           docker stop valhalla-router
-          docker exec qgis-testing-environment bash -c "python3 -m pip install --break-system-packages pyvalhalla-weekly"
           docker exec qgis-testing-environment bash -c "/tests_directory/tests/scripts/qgis_test_setup.sh ${{ matrix.qgis_tags }} ${{ env.PLUGIN_PATH }} tests/test_localhost_plugin"
           # do the coverage
           docker exec qgis-testing-environment bash -c "cd /tests_directory && python3 -m coverage report && python3 -m coverage lcov --include \"qvalhalla/*\""

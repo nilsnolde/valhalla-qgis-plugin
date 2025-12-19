@@ -154,7 +154,7 @@ else:
 
 PyPiPkg = namedtuple("PyPiPkg", ("import_name", "pypi_name", "url"))
 PYPI_PKGS = (
-    PyPiPkg("valhalla", "pyvalhalla-weekly", "https://pypi.org/project/pyvalhalla-weekly/"),
+    PyPiPkg("valhalla", "pyvalhalla", "https://pypi.org/project/pyvalhalla"),
     # PyPiPkg("vroom", "pyvroom", "https://github.com/VROOM-Project/pyvroom"),
     # PyPiPkg("spopt", "spopt", "https://github.com/pysal/spopt"),
 )

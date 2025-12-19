@@ -12,6 +12,7 @@ force-exclude = '''
     )/
     | qvalhalla/__init__.py
     | qvalhalla/plugin.py
+    | scripts/pyqt5_to_pyqt6.py
     | tests/utilities.py
     | tests/qgis_interface.py
 )
@@ -27,6 +28,7 @@ skip = [
     "third_party",
     "qvalhalla/__init__.py",
     "qvalhalla/plugin.py",
+    "scripts/pyqt5_to_pyqt6.py",
     "tests/__main__.py",
     "tests/test_e2e.py",
     "tests/utilities.py",

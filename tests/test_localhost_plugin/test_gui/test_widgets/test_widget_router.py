@@ -82,7 +82,7 @@ class TestRouterWidget(LocalhostPluginTestCase):
         self.assertEqual(
             self.dlg.router_widget.valhalla_service.state(), QProcess.ProcessState.NotRunning
         )
-        self.assertIn("Can't find Valhalla executables.", self.dlg.status_bar.currentItem().text())
+        self.assertIn("pyvalhalla is not installed.", self.dlg.status_bar.currentItem().text())
         parsed_url = urlparse(URL)
         with self.assertRaises(ConnectionRefusedError):
             try_connection(parsed_url.hostname, parsed_url.port)

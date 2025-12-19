@@ -3,8 +3,7 @@ import unittest
 from qgis.core import QgsProject, QgsVectorLayer, QgsWkbTypes
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtTest import QTest
-from qvalhalla.core.settings import DEFAULT_GRAPH_DIR, ValhallaSettings
-from qvalhalla.utils.resource_utils import get_settings_dir
+from qvalhalla.core.settings import DEFAULT_GRAPH_DIR, ValhallaSettings, get_settings_dir
 
 from ...constants import WAYPOINTS_4326
 from ...utilities import get_qgis_app
@@ -13,6 +12,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qvalhalla.global_definitions import DEFAULT_LAYER_FIELDS, RouterEndpoint, RouterType
 from qvalhalla.gui.dock_routing import RoutingDockWidget
+from qvalhalla.utils.resource_utils import get_default_valhalla_binary_dir
 
 
 class TestRoutingDialog(unittest.TestCase):
@@ -91,7 +91,7 @@ class TestRoutingDialog(unittest.TestCase):
         self.assertTrue(settings_ini.exists())
         self.assertEqual(len(ValhallaSettings().get_providers(RouterType.VALHALLA)), 2)
         self.assertEqual(ValhallaSettings().get_graph_dir(), DEFAULT_GRAPH_DIR)
-        self.assertEqual(ValhallaSettings().get_binary_dir(), None)
+        self.assertEqual(ValhallaSettings().get_binary_dir(), get_default_valhalla_binary_dir())
 
     def test_graph_extent_fossgis(self):
         # set FOSSGIS, so we get an info msg

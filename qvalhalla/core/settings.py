@@ -3,13 +3,13 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
-from qgis.core import QgsSettings
+from qgis.core import QgsApplication, QgsSettings
 from qgis.PyQt.QtCore import QSettings
 
+from .. import PLUGIN_NAME
 from ..global_definitions import Dialogs, RouterType
 from ..gui.ui_definitions import PluginSettingsDlgElems
 from ..utils.misc_utils import str_to_bool
-from ..utils.resource_utils import get_settings_dir
 
 DEFAULTS = {
     PluginSettingsDlgElems.VALHALLA_HTTP_URL: "https://valhalla1.openstreetmap.de",
@@ -34,6 +34,23 @@ class ProviderSetting:
     url: str
     auth_key: str
     auth_param: str
+
+
+def get_settings_dir() -> Path:
+    """
+    Returns the permanent directory for this plugin and creates the graph
+    directories if not already done.
+
+    :returns: the permanent directory for this plugin.
+    """
+    d = (
+        Path(QgsApplication.qgisSettingsDirPath())
+        .joinpath(PLUGIN_NAME.replace(" ", "_").lower())
+        .resolve()
+    )
+    d.mkdir(exist_ok=True, parents=True)
+
+    return d
 
 
 DEFAULT_PROVIDERS = [

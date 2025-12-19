@@ -39,7 +39,6 @@ from ..third_party.routingpy.routingpy.utils import deep_merge_dicts
 from ..utils.http_utils import get_status_response
 from ..utils.layer_utils import post_process_layer
 from ..utils.resource_utils import (
-    check_valhalla_installation,
     create_valhalla_config,
     get_default_valhalla_binary_dir,
     get_icon,
@@ -91,10 +90,10 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         if not settings.get_graph_dir():
             settings.set_graph_dir(DEFAULT_GRAPH_DIR)
         if not settings.get_binary_dir():
-            settings.set_binary_dir(
-                get_default_valhalla_binary_dir() if check_valhalla_installation() else ""
-            )
-        create_valhalla_config()
+            bin_dir = get_default_valhalla_binary_dir()
+            bin_dir.parent.parent.mkdir(exist_ok=True, parents=True)
+            settings.set_binary_dir(bin_dir)
+
         # graph_dir needs to exist
         ValhallaSettings().get_graph_dir().mkdir(exist_ok=True, parents=True)
 
@@ -140,6 +139,11 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.ui_debug_btn.setChecked(settings.is_debug())
 
         self.setWidget(widget)
+
+        try:
+            create_valhalla_config()
+        except ModuleNotFoundError:
+            pass
 
     def _get_params(self, endpoint: RouterEndpoint) -> dict:  # noqa: C901
         """Returns the current parameters"""
