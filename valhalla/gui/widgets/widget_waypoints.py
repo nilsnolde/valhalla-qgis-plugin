@@ -476,6 +476,9 @@ class WaypointsWidget(QWidget):
             if self.ui_table.item(row_id, 0).isSelected():
                 rm_idx.append(row_id)
 
+        if not len(rm_idx) and max_row > 0:
+            rm_idx.append(max_row - 1)
+
         # then remove those in reverse order to not mess with table internal ordering
         rm_idx = sorted(rm_idx, reverse=True)
         for idx in rm_idx:

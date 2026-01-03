@@ -5,7 +5,7 @@ QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhal
 It features:
 - UI & processing algorithms to routing, isochrones, matrix & expansion endpoints for `pedestrian`, `bicycle`, `car`, `truck` & `motorcycle`
 - (**linux-x86_64 & macos-arm64 only**) **all local** calculations after installing [`pyvalhalla`](https://pypi.org/project/pyvalhalla/) with the full flexibility of local Valhalla processes:
-  - start a local server while reading from remmote graphs, e.g. a tar file on some server (only support HTTP basic auth)
+  - start a local server while reading from remote graphs, e.g. a tar file on some server (only support HTTP basic auth)
   - build your own graph from a OSM PBF file
 - support for most[^1] of Valhalla costing options in both UI & processing algorithms for **all endpoints**, e.g.
   - time-dependent routing
@@ -24,6 +24,9 @@ It features:
 [^1]: Some costing options make little sense, e.g. transit, some others we didn't get around to yet. Valhalla is also under constant development, we might miss a few recently added ones.
 
 ## How To
+
+> [!NOTE]
+> Waypoints can now be controlled in the map's context menu (right-click in the map).
 
 ### Routing UI
 
