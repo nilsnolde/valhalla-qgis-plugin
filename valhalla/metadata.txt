@@ -5,7 +5,7 @@ qgisMaximumVersion=3.99
 description=Valhalla routing, isochrones, expansion and matrix calculations for QGIS
 version=4.2.0
 author=Nils Nolde
-email=nils@gis-ops.com
+email=nilsnolde@proton.me
 hasProcessingProvider=yes
 server=False
 

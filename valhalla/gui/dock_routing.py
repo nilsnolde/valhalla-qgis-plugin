@@ -129,7 +129,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.menu_widget.item(1).setIcon(get_icon("isochrones_icon.svg"))
         self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
-        self.menu_widget.item(4).setIcon(get_icon("tsp.svg"))
+        self.menu_widget.item(4).setIcon(get_icon("optimized_directions_icon.svg"))
 
         self.setWindowTitle("Valhalla - Routing")
         self.ui_debug_btn.setChecked(settings.is_debug())

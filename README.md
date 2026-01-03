@@ -116,7 +116,7 @@ Since this plugin is pretty flexible, so the tests need to be too:
 
     QT_QPA_PLATFORM=offscreen python -m coverage run --append -m unittest discover -s tests/test_localhost_docker -t .
     ```
-- `tests/test_localhost_plugin`:  needs the `pyvalhalla` Python package installed to provide a local service, e.g.
+- `tests/test_localhost_plugin`:  e.g.
 
     ```shell
     # stop docker container if it's running

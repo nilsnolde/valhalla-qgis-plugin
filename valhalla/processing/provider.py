@@ -7,6 +7,7 @@ from ..processing.routing.valhalla.directions import ValhallaDirections
 from ..processing.routing.valhalla.expansion import ValhallaExpansion
 from ..processing.routing.valhalla.isochrones import ValhallaIsochrones
 from ..processing.routing.valhalla.matrix import ValhallaMatrix
+from ..processing.routing.valhalla.optimized import ValhallaOptimizedDirections
 
 # from valhalla.processing.spatial_optimization.lscp import LSCPAlgorithm
 # from valhalla.processing.spatial_optimization.mclp import MCLPAlgorithm
@@ -28,6 +29,7 @@ class ValhallaProvider(QgsProcessingProvider):
                     ValhallaIsochrones,
                     ValhallaMatrix,
                     ValhallaExpansion,
+                    ValhallaOptimizedDirections,
                 )
             ],
             # *[
