@@ -2,7 +2,7 @@ from typing import List, Tuple, Union
 
 from ..exceptions import ValhallaError
 from ..global_definitions import RouterEndpoint, RouterMethod, RouterProfile, RouterType
-from ..third_party.routingpy.routingpy import Valhalla, get_router_by_name
+from ..third_party.routingpy.routingpy import get_router_by_name
 from .http.router_client import RouterClient
 
 
@@ -76,38 +76,4 @@ class RouterFactory:
         except TypeError:
             pass
 
-        if self.method == RouterMethod.REMOTE:
-            # means we use full routingpy with HTTP API
-            return getattr(self.router, endpoint.lower())(locations, self.profile.lower(), **kwargs)
-
-        # this whole logic is pretty annoying, but somehow better than creating tons of functions
-        if self.provider == RouterType.VALHALLA:
-            if endpoint == RouterEndpoint.DIRECTIONS:
-                params = Valhalla.get_direction_params(locations, self.profile.lower(), **kwargs)
-                route = self.router.route(params)
-                return Valhalla.parse_direction_json(route, "km")
-            elif endpoint == RouterEndpoint.ISOCHRONES:
-                params = Valhalla.get_isochrone_params(locations, self.profile.lower(), **kwargs)
-                iso = self.router.isochrone(params)
-                return Valhalla.parse_isochrone_json(
-                    iso, kwargs["intervals"], locations, kwargs["interval_type"]
-                )
-            elif endpoint == RouterEndpoint.EXPANSION:
-                params = Valhalla.get_expansion_params(locations, self.profile.lower(), **kwargs)
-                exp = self.router.expansion(params)
-                return Valhalla.parse_expansion_json(
-                    exp, locations, ("durations", "distances"), kwargs["interval_type"]
-                )
-            elif endpoint == RouterEndpoint.MATRIX:
-                params = Valhalla.get_matrix_params(locations, self.profile.lower(), **kwargs)
-                matrix = self.router.matrix(params)
-                return Valhalla.parse_matrix_json(matrix, "km")
-        else:
-            pass
-            # TODO: enable OSRM
-            # if endpoint == RouterEndpoint.DIRECTIONS:
-            #     params = OSRM.get_direction_params(locations, profile, **kwargs)
-            #     parse_func = OSRM.parse_direction_json
-            # elif endpoint == RouterEndpoint.MATRIX:
-            #     params_func = OSRM.get_matrix_params
-            #     parse_func = OSRM.parse_matrix_json
+        return getattr(self.router, endpoint.lower())(locations, self.profile.lower(), **kwargs)

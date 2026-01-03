@@ -1,5 +1,5 @@
 import json
-from typing import Iterator, List, Optional, Tuple
+from typing import Iterator, List, Optional, Tuple, Union
 
 from qgis.core import (
     QgsFeature,
@@ -18,6 +18,7 @@ from ..third_party.routingpy.routingpy.direction import Direction
 from ..third_party.routingpy.routingpy.expansion import Expansions
 from ..third_party.routingpy.routingpy.isochrone import Isochrone, Isochrones
 from ..third_party.routingpy.routingpy.matrix import Matrix
+from ..third_party.routingpy.routingpy.optimized import OptimizedDirection
 from .router_factory import RouterFactory
 
 
@@ -62,6 +63,7 @@ class ResultsFactory:
         if endpoint in (
             gd.RouterEndpoint.DIRECTIONS,
             gd.RouterEndpoint.EXPANSION,
+            gd.RouterEndpoint.TSP,
         ):
             return QgsWkbTypes.LineString
         elif endpoint == gd.RouterEndpoint.ISOCHRONES:
@@ -115,7 +117,13 @@ class ResultsFactory:
                 for feat in self._process_expansion_result(result, params, fields):
                     yield feat
 
-    def _process_direction_result(self, direction: Direction, params: dict, fields: QgsFields):
+        elif endpoint == gd.RouterEndpoint.TSP:
+            result = self.router.request(endpoint, locations, **params)
+            yield next(self._process_direction_result(result, params, fields))
+
+    def _process_direction_result(
+        self, direction: Union[Direction | OptimizedDirection], params: dict, fields: QgsFields
+    ):
         feature = QgsFeature()
         line = QgsLineString([QgsPoint(*coords) for coords in direction.geometry])
         feature.setGeometry(QgsGeometry(line))

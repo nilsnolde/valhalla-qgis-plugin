@@ -63,6 +63,8 @@ class Ui_routing_widget(object):
         self.menu_widget.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.menu_widget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.menu_widget.addItem(item)
         self.verticalLayout_5.addWidget(self.menu_widget)
         self.wrapperLayout.addWidget(self.widget)
         self.verticalLayout_6 = QtWidgets.QVBoxLayout()
@@ -281,7 +283,7 @@ class Ui_routing_widget(object):
         self.verticalLayout.addLayout(self.verticalWrapper)
 
         self.retranslateUi(routing_widget)
-        self.menu_widget.setCurrentRow(0)
+        self.menu_widget.setCurrentRow(-1)
         QtCore.QMetaObject.connectSlotsByName(routing_widget)
 
     def retranslateUi(self, routing_widget):

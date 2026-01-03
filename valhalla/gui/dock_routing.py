@@ -50,6 +50,7 @@ MENU_TABS = {
     RouterEndpoint.ISOCHRONES: "ui_isochrones_params",
     RouterEndpoint.MATRIX: "ui_matrix_params",
     RouterEndpoint.EXPANSION: "ui_expansion_params",
+    RouterEndpoint.TSP: "ui_tsp_params",
 }
 
 HELP_URL = "https://github.com/nilsnolde/valhalla-qgis-plugin?tab=readme-ov-file#how-to"
@@ -128,6 +129,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.menu_widget.item(1).setIcon(get_icon("isochrones_icon.svg"))
         self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
+        self.menu_widget.item(4).setIcon(get_icon("tsp.svg"))
 
         self.setWindowTitle("Valhalla - Routing")
         self.ui_debug_btn.setChecked(settings.is_debug())
@@ -157,7 +159,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         # this relies on the fact that we have the order of endpoints in the left menu widget
         params = dict()
         if self.router_widget.router == RouterType.VALHALLA:
-            if endpoint == RouterEndpoint.DIRECTIONS:
+            if endpoint in (RouterEndpoint.DIRECTIONS, RouterEndpoint.TSP):
                 params["instructions"] = False
 
             elif endpoint == RouterEndpoint.ISOCHRONES:
@@ -300,20 +302,21 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         ValhallaSettings().set(Dialogs.ROUTING, attr, str(new_text))
 
     def _on_menu_change(self, menu_index: int):
-        """Disables/enables some widgets if it's OSRM isochrone/expansion"""
+        """Only changes the window title"""
 
+        title = "Valhalla - "
         if menu_index == 0:
-            # self.ui_endpoint_label.setText("Routing")
-            self.setWindowTitle("Valhalla - Routing")
+            title += "Routing"
         elif menu_index == 1:
-            # self.ui_endpoint_label.setText("Isochrones")
-            self.setWindowTitle("Valhalla - Isochrones")
+            title += "Isochrones"
         elif menu_index == 2:
-            # self.ui_endpoint_label.setText("Matrix")
-            self.setWindowTitle("Valhalla - Matrix")
+            title += "Matrix"
         elif menu_index == 3:
-            # self.ui_endpoint_label.setText("Expansion")
-            self.setWindowTitle("Valhalla - Expansion")
+            title += "Expansion"
+        elif menu_index == 4:
+            title += "Traveling Salesman"
+
+        self.setWindowTitle(title)
 
     def _on_about_click(self):
         about = AboutDialog(self)
