@@ -3,10 +3,10 @@ from typing import List, Optional
 from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu, QToolBar
 
 from . import PLUGIN_NAME, __version__
-from .gui.dlg_spopt import SpoptDialog
 from .gui.dock_routing import RoutingDockWidget
 from .processing.provider import ValhallaProvider
 from .utils.resource_utils import get_icon
@@ -78,13 +78,15 @@ class ValhallaPlugin:
             QgsApplication.processingRegistry().removeProvider(self.provider)
 
         self.iface.removeDockWidget(self.routing_dock)
+        self.routing_dock.unload()
 
     def open_routing_dlg(self):
         """Create and open the version dialog."""
         self.routing_dock.setVisible(not self.routing_dock.isVisible())
 
-    def open_optimization_dlg(self):
-        """Create and open the optimization dialog."""
-        if not self.optimization_dlg:
-            self.optimization_dlg = SpoptDialog(self.iface.mainWindow(), self.iface)
-        self.optimization_dlg.open()
+    # def open_optimization_dlg(self):
+    #     """Create and open the optimization dialog."""
+    #     if not self.optimization_dlg:
+    #         self.optimization_dlg = SpoptDialog(self.iface.mainWindow(), self.iface)
+    #     self.optimization_dlg.open()
+
