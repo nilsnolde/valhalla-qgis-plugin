@@ -449,7 +449,13 @@ class WaypointsWidget(QWidget):
         self.ui_table.selectRow(row_id)
 
         # define the annotation's symbol
+        self._reset_annotations()
         self.points_lyr.addItem(self._get_annotation(pt, -1))
+        self._reset_annotations()
+
+        # if from context menu, the dialog can be hidden but already have waypoints
+        if self.parent_dlg.isHidden():
+            self.parent_dlg.show()
 
     def _handle_doubleclick(self):
         """Shows the parent dlg again and restores previous settings"""
@@ -476,6 +482,10 @@ class WaypointsWidget(QWidget):
             self.ui_table.removeRow(idx)
 
         self._reset_annotations()
+
+        # if from context menu, the dialog can be hidden but already have waypoints
+        if self.parent_dlg.isHidden():
+            self.parent_dlg.show()
 
     def _reset_annotations(self):
         """Helper method to reset the annotation layer based on the current locations table."""

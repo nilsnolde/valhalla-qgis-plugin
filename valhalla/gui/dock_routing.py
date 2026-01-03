@@ -17,13 +17,7 @@ from qgis.core import (  # noqa: F811
     QgsWkbTypes,
 )
 from qgis.gui import QgisInterface, QgsDockWidget
-from qgis.PyQt.QtWidgets import (
-    QLineEdit,
-    QMessageBox,
-    QTextEdit,
-    QToolButton,
-    QWidget,
-)
+from qgis.PyQt.QtWidgets import QAction, QLineEdit, QMenu, QMessageBox, QTextEdit, QToolButton, QWidget
 
 from ..core.results_factory import ResultsFactory
 from ..core.settings import DEFAULT_GRAPH_DIR, DEFAULT_PROVIDERS, ProviderSetting, ValhallaSettings
@@ -144,6 +138,9 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             create_valhalla_config()
         except ModuleNotFoundError:
             pass
+
+        # add a context menu to the canvas
+        self.iface.mapCanvas().contextMenuAboutToShow.connect(self._populate_canvas_menu)
 
     def _get_params(self, endpoint: RouterEndpoint) -> dict:  # noqa: C901
         """Returns the current parameters"""
@@ -422,3 +419,36 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             if btn.isChecked():
                 self.routing_params_widget.set_current_costing_widget(profile_enum)
                 return
+
+    def _populate_canvas_menu(self, menu: QMenu, event):
+        """Executed on every right-click in the map canvas"""
+        map_pt = event.mapPoint()
+
+        routing_menu = menu.addMenu("Valhalla")
+        routing_menu.setIcon(get_icon("valhalla_logo.svg"))
+
+        origin = QAction(get_icon("origin.svg"), "Add waypoint", menu)
+        origin.triggered.connect(lambda: self.waypoints_widget._handle_add_pt(map_pt))
+        routing_menu.addAction(origin)
+
+        routing_menu.addSeparator()
+
+        # clear waypoints
+        rm_pt = QAction(
+            get_icon(":images/themes/default/symbologyRemove.svg"), "Clear last waypoint", menu
+        )
+        clear_pts = QAction(
+            get_icon(":images/themes/default/mActionRemove.svg"), "Clear all waypoints", menu
+        )
+
+        rm_pt.triggered.connect(self.waypoints_widget._handle_remove_pt)
+        clear_pts.triggered.connect(self.waypoints_widget._handle_clear_locations)
+
+        routing_menu.addAction(rm_pt)
+        routing_menu.addAction(clear_pts)
+
+    def unload(self):
+        try:
+            self.iface.mapCanvas().contextMenuAboutToShow.disconnect(self._populate_canvas_menu)
+        except TypeError:
+            pass
