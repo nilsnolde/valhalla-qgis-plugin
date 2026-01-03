@@ -48,6 +48,23 @@ class TestHttpRouting(LocalhostDockerTestCase):
             msg=f"Directions layer has unexpected Geometry Type {layer.geometryType()}",
         )
 
+    def test_valhalla_http_optimized_directions(self):
+        self.dlg.menu_widget.setCurrentRow(4)
+        # add the third waypoint to the table
+        self.dlg.waypoints_widget.ui_table.insertRow(2)
+        self.dlg.waypoints_widget._add_row_to_table(2, *list(reversed(WAYPOINTS_4326[2])))
+        # add 4th
+        self.dlg.waypoints_widget.ui_table.insertRow(3)
+        self.dlg.waypoints_widget._add_row_to_table(3, *list(reversed(WAYPOINTS_4326[0])))
+        self.hit_execute()
+        self.assertEqual(len(list(QgsProject.instance().mapLayers())), 1)
+        layer: QgsVectorLayer = list(QgsProject.instance().mapLayers().values())[0]
+        self.assertEqual(layer.featureCount(), 1)
+        self.assertTrue(
+            layer.geometryType() == QgsWkbTypes.LineGeometry,
+            msg=f"Directions layer has unexpected Geometry Type {layer.geometryType()}",
+        )
+
     def test_valhalla_http_isochrones(self):
         self.dlg.menu_widget.setCurrentRow(1)
         self.dlg.ui_isochrone_intervals.setText("20,40")
