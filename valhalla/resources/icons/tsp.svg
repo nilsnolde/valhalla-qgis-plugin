@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="94.50087"
+   height="94.50087"
+   viewBox="0 0 94.50087 94.50087"
+   fill="none"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="tsp.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:clip-to-page="false"
+     inkscape:zoom="4.1967854"
+     inkscape:cx="40.626333"
+     inkscape:cy="56.114378"
+     inkscape:window-width="2256"
+     inkscape:window-height="1420"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6" />
+  <g
+     id="g7"
+     transform="translate(-52.749566,-41.173424)">
+    <path
+       d="m 99.999998,58.689472 c 10.476552,0 20.953112,10.476555 20.953112,20.95311 0,15.714832 -20.953112,36.667938 -20.953112,36.667938 0,0 -20.95311,-20.953106 -20.95311,-36.667938 0,-10.476555 10.476555,-20.95311 20.95311,-20.95311 z"
+       fill="#1f3c88"
+       id="path5"
+       style="stroke-width:1" />
+    <circle
+       cx="100"
+       cy="79.642578"
+       r="6.285933"
+       fill="#ffffff"
+       id="circle6"
+       style="stroke-width:1" />
+  </g>
+  <!-- Curved tour path -->
+  <!-- Stops (nodes) -->
+  <g
+     id="g6"
+     transform="matrix(0.82920207,0,0,0.82920207,-35.669773,-26.070812)"
+     style="stroke-width:1.20598">
+    <circle
+       style="fill:#44aa00;fill-opacity:0;stroke:#fdb147;stroke-width:7.93958;stroke-dasharray:none;stroke-opacity:1"
+       id="path6"
+       cx="100"
+       cy="88.423859"
+       r="53.013226" />
+    <circle
+       cx="54.85746"
+       cy="60.712379"
+       r="6"
+       fill="#f76c5e"
+       id="circle1"
+       style="stroke-width:1.20598" />
+    <circle
+       cx="145.14255"
+       cy="60.712379"
+       r="6"
+       fill="#f76c5e"
+       id="circle3-6"
+       style="stroke-width:1.20598" />
+    <circle
+       cx="54.85746"
+       cy="116.81356"
+       r="6"
+       fill="#f76c5e"
+       id="circle1-3"
+       style="stroke-width:1.20598" />
+    <circle
+       cx="145.14255"
+       cy="116.81356"
+       r="6"
+       fill="#f76c5e"
+       id="circle3-6-5"
+       style="stroke-width:1.20598" />
+  </g>
+  <!-- Central blue marker (same symbol) -->
+  <!-- Label -->
+</svg>

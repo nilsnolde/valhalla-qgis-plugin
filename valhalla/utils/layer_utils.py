@@ -133,7 +133,7 @@ def post_process_layer(layer: QgsVectorLayer, endpoint: RouterEndpoint) -> None:
     """
     if endpoint == RouterEndpoint.MATRIX:
         return
-    elif endpoint == RouterEndpoint.DIRECTIONS:
+    elif endpoint in (RouterEndpoint.DIRECTIONS, RouterEndpoint.TSP):
         layer.loadNamedStyle(str(get_resource_path("styles", "directions.qml")))
         return
 
