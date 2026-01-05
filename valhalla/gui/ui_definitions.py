@@ -11,6 +11,7 @@ class PluginSettingsDlgElems(str, Enum):
     VALHALLA_HTTP_SECRET = "ui_valhalla_http_secret"
     VALHALLA_GRAPH_DIRECTORY = "ui_btn_graph_folder"
     DEBUG = "debug"
+    SETTINGS_SPLITTER_STATE = "settings_splitter_state"
 
 
 @unique

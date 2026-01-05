@@ -14,7 +14,8 @@ from ..utils.misc_utils import str_to_bool
 DEFAULTS = {
     PluginSettingsDlgElems.VALHALLA_HTTP_URL: "https://valhalla1.openstreetmap.de",
     PluginSettingsDlgElems.VALHALLA_HTTP_PARAM: "access_token",
-    PluginSettingsDlgElems.DEBUG: "False"
+    PluginSettingsDlgElems.DEBUG: "False",
+    PluginSettingsDlgElems.SETTINGS_SPLITTER_STATE: ""
     # PluginSettingsDlgElems.SHOP_HTTP_URL: "http://localhost:8080",
 }
 
@@ -161,3 +162,9 @@ class ValhallaSettings(QgsSettings):
             "binary_dir",
             str(binary_dir.resolve()) if isinstance(binary_dir, Path) else binary_dir,
         )
+
+    def get_settings_splitter_state(self) -> bytes:
+        return self.get(Dialogs.SETTINGS, PluginSettingsDlgElems.SETTINGS_SPLITTER_STATE)
+
+    def set_settings_splitter_state(self, state: bytes):
+        self.set(Dialogs.SETTINGS, PluginSettingsDlgElems.SETTINGS_SPLITTER_STATE, state)

@@ -3,14 +3,23 @@ from pathlib import Path
 from typing import Optional
 
 from packaging.version import parse as Version
-from qgis.core import Qgis
+from qgis.core import Qgis, QgsApplication
 from qgis.gui import QgisInterface, QgsFileWidget
 from qgis.PyQt.QtCore import QRect, QSize, Qt
-from qgis.PyQt.QtWidgets import QApplication, QDialog, QLabel, QTableWidgetItem, QToolButton, QWidget
+from qgis.PyQt.QtWidgets import (
+    QApplication,
+    QDialog,
+    QLabel,
+    QTableWidgetItem,
+    QTextBrowser,
+    QToolButton,
+    QWidget,
+)
 
 from ..core.settings import ValhallaSettings
 from ..exceptions import ValhallaCmdError
 from ..global_definitions import PYPI_PKGS, Dialogs, PyPiState
+from ..gui.widgets.widget_splitter import SplitterWithHandleButton
 from ..utils.resource_utils import (
     check_local_lib_version,
     check_valhalla_installation,
@@ -32,8 +41,10 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
         super().__init__(parent)
         self.setupUi(self)
         self.setupDepsTable()
+        self.log_widget = QTextBrowser(self)
+        self.splitter = self._get_splitter()
         # add the graph list after the binary file picker
-        self.main_layout.insertWidget(1, GraphWidget(self))
+        self.main_layout.insertWidget(1, self.splitter)
         # add a status bar last, so it's coming first in the layout
         self.status_bar = add_msg_bar(self.main_layout)
 
@@ -47,6 +58,69 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
         self.ui_btn_default_binary_path.clicked.connect(self._on_default_binary_path)
         self.ui_binary_path: QgsFileWidget
         self.ui_binary_path.fileChanged.connect(self._on_binary_path_change)
+        self.splitter.handle_button.toggled.connect(self._toggle_splitter_button)
+        self.splitter.splitterMoved.connect(self._save_splitter_state)
+
+        # save whatever is the current state at the end of a session
+        # we do that because we don't want to save "hidden" during a session, only when exiting
+        QgsApplication.instance().aboutToQuit.connect(
+            lambda: ValhallaSettings().set_settings_splitter_state(self.splitter.saveState())
+        )
+
+    def _save_splitter_state(self, *_):
+        """Saves the splitter state if side panel is > 50 px wide"""
+        if self.splitter.sizes()[1] > 0:
+            self.splitter.handle_button.setIcon(get_icon("triangle_right.svg"))
+            self.splitter.handle_button.setChecked(True)
+            # we don't save anything < 50, otherwise the tool button has strange UX
+            if self.splitter.sizes()[1] > 50:
+                ValhallaSettings().set_settings_splitter_state(self.splitter.saveState())
+        elif self.splitter.sizes()[1] == 0:
+            self.splitter.handle_button.setIcon(get_icon("triangle_left.svg"))
+            self.splitter.handle_button.setChecked(False)
+
+    def _toggle_splitter_button(self, checked: bool):
+        settings = ValhallaSettings()
+
+        if checked:
+            self.splitter.handle_button.setIcon(get_icon("triangle_right.svg"))
+            # if the side panel is hidden (should be, just making sure)
+            if self.splitter.sizes()[1] == 0:
+                if state := settings.get_settings_splitter_state():
+                    # this can only happen on the very first use of the splitter ever
+                    self.splitter.restoreState(state)
+                # if it's still hidden (because of stored state), we need to change that
+                if self.splitter.sizes()[1] == 0:
+                    self.splitter.setSizes([3, 1])
+
+            settings.set_settings_splitter_state(self.splitter.saveState())
+        else:
+            self.splitter.handle_button.setIcon(get_icon("triangle_left.svg"))
+            self.splitter.setSizes([1, 0])
+
+    def _get_splitter(self) -> SplitterWithHandleButton:
+        splitter = SplitterWithHandleButton(Qt.Horizontal)
+        splitter.addWidget(GraphWidget(self))
+        splitter.addWidget(self.log_widget)
+        splitter.setCollapsible(0, False)
+        splitter.setCollapsible(1, True)
+
+        # try to retrieve some past state, default to hidden
+        if state := ValhallaSettings().get_settings_splitter_state():
+            splitter.restoreState(state)
+        else:
+            splitter.setSizes([1, 0])
+
+        # customize the splitter's tool button depending on state
+        if splitter.sizes()[1] > 0:
+            splitter.handle_button.setIcon(get_icon("triangle_right.svg"))
+            splitter.handle_button.setChecked(True)
+        else:
+            splitter.handle_button.setIcon(get_icon("triangle_left.svg"))
+            splitter.handle_button.setChecked(False)
+        splitter.handle_button.setToolTip("Toggle build log")
+
+        return splitter
 
     def _on_binary_path_change(self, path: str):
         settings = ValhallaSettings()
