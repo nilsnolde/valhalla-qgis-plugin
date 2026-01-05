@@ -24,7 +24,6 @@ from ..compiled.widget_graphs_ui import Ui_GraphWidget
 from ..dlg_config_editor import ConfigEditorDialog
 from ..dlg_graph_from_pbf import GraphFromPBFDialog
 from ..dlg_graph_from_url import GraphFromURLDialog
-from ..dlg_server_log import ServerLogDialog
 from ..ui_definitions import ID_JSON
 
 FOLDER_BUTTON_TOOLTIP = "Set the graph library directory\nCurrently: {}"
@@ -39,7 +38,6 @@ class GraphWidget(QWidget, Ui_GraphWidget):
 
         self.graph_dir = ValhallaSettings().get_graph_dir()
 
-        self.dlg_log = ServerLogDialog()
         self.from_url_dlg = GraphFromURLDialog(self._parent)
         self.config_dlg = ConfigEditorDialog(self._parent)
 
@@ -66,7 +64,6 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         self.ui_btn_graph_remove.setIcon(get_icon("graph_remove.svg"))
         self.ui_btn_settings.setIcon(get_icon(":images/themes/default/console/iconSettingsConsole.svg"))
         self.ui_btn_graph_folder.setIcon(get_icon("graph_folder.svg"))
-        self.ui_btn_graph_log.setIcon(get_icon(":images/themes/default/mMessageLog.svg"))
         self.ui_btn_graph_folder.setToolTip(FOLDER_BUTTON_TOOLTIP.format(self.graph_dir))
 
         # use the graph dir as model for the list view with the restriction that a directory
@@ -88,7 +85,6 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         self.ui_btn_graph_remove.clicked.connect(self._on_graph_remove)
         self.ui_btn_graph_folder.clicked.connect(self._on_graph_folder_change)
         self.ui_btn_settings.clicked.connect(self.config_dlg.exec)
-        self.ui_btn_graph_log.clicked.connect(self.dlg_log.exec)
         self.graph_dir_model.directoryLoaded.connect(self.graph_dir_proxy.invalidateFilter)
         self.graph_dir_model.rootPathChanged.connect(self.graph_dir_proxy.invalidateFilter)
 
@@ -138,12 +134,12 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         build_admins_exe = ValhallaSettings().get_binary_dir().joinpath("valhalla_build_admins")
         self.valhalla_build_admins.start(str(build_admins_exe.resolve()), args)
         self._parent.status_bar.pushInfo("", "Started building admins...")
-        self.dlg_log.text_log.append(
+        self._parent.log_widget.append(
             f"Executing {self.valhalla_build_admins.program()} {' '.join(self.valhalla_build_admins.arguments())}"
         )
 
     def _on_admins_finished(self, exit_code: int, exit_status: QProcess.ExitStatus):
-        self.dlg_log.text_log.append(f"Finished building admins with exit code {exit_code}")
+        self._parent.log_widget.append(f"Finished building admins with exit code {exit_code}")
         if exit_status == QProcess.ExitStatus.CrashExit:
             self._parent.status_bar.pushMessage("Building admins failed, see log!", Qgis.Critical, 0)
             return
@@ -169,12 +165,12 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         build_tiles_exe = ValhallaSettings().get_binary_dir().joinpath("valhalla_build_tiles")
         self.valhalla_build_tiles.start(str(build_tiles_exe.resolve()), args)
         self._parent.status_bar.pushInfo("", "Started building graph tiles...")
-        self.dlg_log.text_log.append(
+        self._parent.log_widget.append(
             f"Executing {self.valhalla_build_tiles.program()} {' '.join(self.valhalla_build_tiles.arguments())}"
         )
 
     def _on_tiles_finished(self, exit_code: int, exit_status: QProcess.ExitStatus):
-        self.dlg_log.text_log.append(f"Finished building tiles with exit code {exit_code}")
+        self._parent.log_widget.append(f"Finished building tiles with exit code {exit_code}")
         if exit_status == QProcess.ExitStatus.CrashExit:
             self._parent.status_bar.pushMessage("Building tiles failed, see log!", Qgis.Critical, 0)
             return
@@ -215,7 +211,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
 
     def _on_build_pbf_log_ready(self):
         log = self.sender().readAll().data().decode()
-        self.dlg_log.text_log.append(log)
+        self._parent.log_widget.append(log)
 
     def _on_graph_remove(self):
         self.ui_list_graphs: QListView
