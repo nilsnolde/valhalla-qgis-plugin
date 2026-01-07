@@ -53,6 +53,7 @@ class RouterEndpoint(IndexableStrEnum):  # TODO: look for case where this can re
     EXPANSION = "expansion"
     RASTER = "raster"
     TSP = "optimized_directions"
+    ELEVATION = "height"
 
 
 class RouterProfile(str, Enum):
@@ -83,6 +84,7 @@ class FieldNames(str, Enum):
     OPTIONS = "options"
     WEIGHT = "weight"
     PREDEFINED = "predefined"
+    HEIGHT = "height"  # /height endpoint
 
 
 DEFAULT_LAYER_FIELDS: Dict[RouterEndpoint, Tuple[QgsField, ...]] = {
@@ -126,6 +128,7 @@ DEFAULT_LAYER_FIELDS: Dict[RouterEndpoint, Tuple[QgsField, ...]] = {
         QgsField(FieldNames.DISTANCE, QVariant.Double),
         QgsField(FieldNames.OPTIONS, QVariant.String),
     ),
+    RouterEndpoint.ELEVATION: tuple(),
 }
 
 

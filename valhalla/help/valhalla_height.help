@@ -1,0 +1,1 @@
+The <b>Valhalla Height</b> endpoint returns a 3D point layer. While lat/lon are the same as the input layer, z comes from Valhalla's elevation model, see <a href="https://registry.opendata.aws/terrain-tiles/">Amazon Open Data</a>.

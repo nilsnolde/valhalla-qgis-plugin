@@ -51,6 +51,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
     IN_FIELD_1 = "INPUT_FIELD_1"
 
     OUT = "OUTPUT"
+    WITH_COSTING_OPTIONS = True
 
     def __init__(
         self,
@@ -114,7 +115,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         # )
         # self.addParameter(url_param)
 
-        if self.router == RouterType.VALHALLA:
+        if self.router == RouterType.VALHALLA and self.WITH_COSTING_OPTIONS:
             mode_param = QgsProcessingParameterEnum(
                 self.IN_MODE,
                 "Mode",
@@ -173,7 +174,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         output_param = QgsProcessingParameterFeatureSink(
             name=self.OUT,
             description=f"{self.router}_{self.endpoint}"
-            f"{f'_{self.profile}' if self.router == RouterType.VALHALLA else str()}",
+            f"{f'_{self.profile}' if self.router == RouterType.VALHALLA and self.profile else str()}",
             createByDefault=True,
         )
         self.addParameter(output_param)
@@ -193,7 +194,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         layer_field_name_1 = self.parameterAsString(parameters, self.IN_FIELD_1, context)
 
         params = dict()
-        if self.router == RouterType.VALHALLA:
+        if self.router == RouterType.VALHALLA and self.WITH_COSTING_OPTIONS:
             params["options"] = dict()
             avoid_locations = self.parameterAsSource(parameters, self.IN_AVOID_LOCATIONS, context)
             if avoid_locations:

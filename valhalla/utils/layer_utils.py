@@ -3,13 +3,16 @@ from typing import Dict, Optional, Union
 
 from qgis.core import (
     QgsCategorizedSymbolRenderer,
+    QgsClassificationEqualInterval,
     QgsColorRamp,
     QgsCoordinateReferenceSystem,
     QgsFeature,
     QgsFeatureRequest,
+    QgsGraduatedSymbolRenderer,
     QgsJsonExporter,
     QgsProcessingFeatureSource,
     QgsRendererCategory,
+    QgsRendererRange,
     QgsSingleSymbolRenderer,
     QgsStyle,
     QgsSymbol,
@@ -27,6 +30,7 @@ STYLE_FIELDS: Dict[RouterEndpoint, Optional[str]] = {
     RouterEndpoint.ISOCHRONES: "contour",
     RouterEndpoint.MATRIX: None,
     RouterEndpoint.EXPANSION: None,
+    RouterEndpoint.ELEVATION: None,
 }
 
 
@@ -124,7 +128,7 @@ def get_wgs_coords_from_layer(
     return coordinates
 
 
-def post_process_layer(layer: QgsVectorLayer, endpoint: RouterEndpoint) -> None:
+def post_process_layer(layer: QgsVectorLayer, endpoint: RouterEndpoint) -> None:  # noqa: C901
     """
     Updates a directions/isochrones result layer's symbology to the predefined style.
 
@@ -161,10 +165,41 @@ def post_process_layer(layer: QgsVectorLayer, endpoint: RouterEndpoint) -> None:
             categories.append(category)
 
         renderer = QgsCategorizedSymbolRenderer(color_field, categories)
-    else:  # some basic styling for Expansion
+    elif endpoint == RouterEndpoint.EXPANSION:
         symbol = QgsSymbol.defaultSymbol(layer.geometryType())
         symbol.setColor(STYLES.SINGLE_COLOR)
         symbol.setWidth(STYLES.LINE_WIDTH)
         renderer = QgsSingleSymbolRenderer(symbol)
+    elif endpoint == RouterEndpoint.ELEVATION:
+        # use expression to extract z value from QgsPoint
+        color_ramp = QgsStyle().defaultStyle().colorRamp("Reds")
+        expression = "z($geometry)"
+
+        # Number of classes
+        num_classes = min(5, layer.featureCount())
+        # Compute class breaks using QGIS classification method
+        renderer_tmp = QgsGraduatedSymbolRenderer()
+        renderer_tmp.setClassAttribute(expression)
+        renderer_tmp.setClassificationMethod(QgsClassificationEqualInterval())
+        renderer_tmp.updateClasses(layer, num_classes)
+
+        # Manually assign ramp colors to new ranges
+        ranges = []
+        classes = renderer_tmp.ranges()
+
+        for i, rng in enumerate(classes):
+            t = i / (len(classes) - 1) if len(classes) > 1 else 0
+            color = color_ramp.color(t)
+
+            symbol = QgsSymbol.defaultSymbol(layer.geometryType())
+            symbol.setColor(color)
+
+            new_range = QgsRendererRange(rng.lowerValue(), rng.upperValue(), symbol, rng.label())
+            ranges.append(new_range)
+
+        # Create new renderer with color-applied ranges
+        renderer = QgsGraduatedSymbolRenderer(expression, ranges)
+        renderer.setClassificationMethod(QgsClassificationEqualInterval())
+
     layer.setRenderer(renderer)
     layer.triggerRepaint()

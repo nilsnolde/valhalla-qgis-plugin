@@ -70,6 +70,8 @@ class ResultsFactory:
             return QgsWkbTypes.Polygon
         elif endpoint == gd.RouterEndpoint.MATRIX:
             return QgsWkbTypes.NoGeometry
+        elif endpoint == gd.RouterEndpoint.ELEVATION:
+            return QgsWkbTypes.PointZ
 
     # flake8: noqa: C901
     def get_results(
@@ -120,6 +122,11 @@ class ResultsFactory:
         elif endpoint == gd.RouterEndpoint.TSP:
             result = self.router.request(endpoint, locations, **params)
             yield next(self._process_direction_result(result, params, fields))
+
+        elif endpoint == gd.RouterEndpoint.ELEVATION:
+            result = self.router.request(endpoint, locations, **params)
+            for feat in self._process_height_result(result, params, fields):
+                yield feat
 
     def _process_direction_result(
         self, direction: Union[Direction | OptimizedDirection], params: dict, fields: QgsFields
@@ -174,7 +181,7 @@ class ResultsFactory:
                 yield feat
 
     def _process_expansion_result(self, expansion: Expansions, params: dict, fields: QgsFields):
-        for idx, gj_feat in enumerate(expansion.raw["features"]):
+        for gj_feat in expansion.raw["features"]:
             feat = QgsFeature()
             feat.setFields(fields)
             geom = QgsLineString([QgsPoint(*coords) for coords in gj_feat["geometry"]["coordinates"]])
@@ -185,5 +192,13 @@ class ResultsFactory:
             feat[FieldNames.DURATION] = gj_feat["properties"]["duration"]
             feat[FieldNames.DISTANCE] = gj_feat["properties"]["distance"]
             feat[FieldNames.OPTIONS] = json.dumps(params)
+
+            yield feat
+
+    def _process_height_result(self, height: dict, params: dict, fields: QgsFields):
+        for idx, coords in enumerate(height["shape"]):
+            feat = QgsFeature()
+            feat.setFields(fields)
+            feat.setGeometry(QgsPoint(coords["lon"], coords["lat"], height["height"][idx]))
 
             yield feat

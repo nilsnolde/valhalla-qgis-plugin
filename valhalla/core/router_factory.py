@@ -1,8 +1,9 @@
-from typing import List, Tuple, Union
+from typing import List, Optional, Sequence, Tuple, Union
 
 from ..exceptions import ValhallaError
 from ..global_definitions import RouterEndpoint, RouterMethod, RouterProfile, RouterType
 from ..third_party.routingpy.routingpy import get_router_by_name
+from ..third_party.routingpy.routingpy.routers.valhalla import Valhalla
 from .http.router_client import RouterClient
 
 
@@ -76,4 +77,33 @@ class RouterFactory:
         except TypeError:
             pass
 
-        return getattr(self.router, endpoint.lower())(locations, self.profile.lower(), **kwargs)
+        if hasattr(self.router, endpoint.lower()):
+            return getattr(self.router, endpoint.lower())(locations, self.profile.lower(), **kwargs)
+        elif hasattr(self, endpoint.lower()):
+            return getattr(self, endpoint.lower())(locations, self.profile.lower(), **kwargs)
+        else:
+            raise RuntimeError(f"Can't find endpoint {endpoint.lower()}")
+
+    def height(
+        self,
+        locations: Optional[Sequence[Tuple[float, float]]] = None,
+        profile: str = "bicycle",
+        encoded_polyline: Optional[str] = None,
+    ):
+        """Shim for missing /height endpoint in routingpy"""
+        params = dict()
+        if locations:
+            # it's routingpy.Valhalla.Waypoint's
+            params["shape"] = []
+            for e in locations:
+                if isinstance(e, Valhalla.Waypoint):
+                    params["shape"].append(e._make_waypoint)
+                else:
+                    params["shape"].append({"lon": e[0], "lat": e[1]})
+        elif encoded_polyline:
+            params["encoded_polyline"] = encoded_polyline
+            params["shape_format"] = "polyline6"
+        else:
+            RuntimeError('/height needs either "shape" or "encoded_polyline"')
+
+        return self.router.client._request("/height", post_params=params)
