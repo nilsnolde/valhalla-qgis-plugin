@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Valhalla - Routing</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -117,6 +117,14 @@ QListWidget::item::selected {
               <string/>
              </property>
              <property name="toolTip">
+              <string>Optimized Routing</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="toolTip">
               <string>Isochrones</string>
              </property>
             </item>
@@ -133,7 +141,7 @@ QListWidget::item::selected {
               <string/>
              </property>
              <property name="toolTip">
-              <string>Expansion</string>
+              <string>Map Match</string>
              </property>
             </item>
             <item>
@@ -141,7 +149,7 @@ QListWidget::item::selected {
               <string/>
              </property>
              <property name="toolTip">
-              <string>Optimized Routing</string>
+              <string>Expansion</string>
              </property>
             </item>
             <item>
@@ -252,6 +260,7 @@ QListWidget::item::selected {
                 <enum>QFrame::Sunken</enum>
                </property>
                <widget class="QWidget" name="ui_valhalla_directions_params"/>
+               <widget class="QWidget" name="ui_valhalla_optimized_directions_params"/>
                <widget class="QWidget" name="ui_valhalla_isochrones_params">
                 <property name="toolTip">
                  <string/>
@@ -400,6 +409,55 @@ QListWidget::item::selected {
                 </layout>
                </widget>
                <widget class="QWidget" name="ui_valhalla_matrix_params"/>
+               <widget class="QWidget" name="ui_valhalla_mapmatch_params">
+                <layout class="QFormLayout" name="formLayout">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_17">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string>Search Radius</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="ui_valhalla_mapmatch_search_radius">
+                   <property name="toolTip">
+                    <string>Search radius in meters associated with supplied trace points.</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_3">
+                   <property name="text">
+                    <string>GPS accuracy</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QSpinBox" name="ui_valhalla_mapmatch_gps_accuracy">
+                   <property name="toolTip">
+                    <string>GPS accuracy in meters associated with supplied trace points.</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>Breakage Distance</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QSpinBox" name="ui_valhalla_mapmatch_breakage_distance">
+                   <property name="toolTip">
+                    <string>Breaking distance in meters between trace points.</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
                <widget class="QWidget" name="ui_valhalla_expansion_params">
                 <layout class="QFormLayout" name="formLayout_4">
                  <property name="leftMargin">
@@ -517,6 +575,7 @@ QListWidget::item::selected {
                  </item>
                 </layout>
                </widget>
+               <widget class="QWidget" name="ui_valhalla_elevation_params"/>
                <widget class="QWidget" name="ui_osrm_directions_params"/>
                <widget class="QWidget" name="ui_osrm_matrix_params"/>
               </widget>

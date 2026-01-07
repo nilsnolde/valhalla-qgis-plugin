@@ -39,22 +39,40 @@ class TestRouterWidget(LocalhostDockerTestCase):
         self.assertTrue(self.dlg.ui_valhalla_directions_params.isEnabled())
         self.assertTrue(self.dlg.execute_btn.isEnabled())
 
+        # Valhalla – Optimized Routing
+        self.dlg.menu_widget.setCurrentRow(0)
+        self.assertTrue(self.dlg.waypoints_widget.isEnabled())
+        self.assertTrue(self.dlg.ui_valhalla_optimized_directions_params.isEnabled())
+        self.assertTrue(self.dlg.execute_btn.isEnabled())
+
         # Valhalla – Isochrones
-        self.dlg.menu_widget.setCurrentRow(1)
+        self.dlg.menu_widget.setCurrentRow(2)
         self.assertTrue(self.dlg.waypoints_widget.isEnabled())
         self.assertTrue(self.dlg.ui_valhalla_isochrones_params.isEnabled())
         self.assertTrue(self.dlg.execute_btn.isEnabled())
 
         # Valhalla – Matrix
-        self.dlg.menu_widget.setCurrentRow(2)
+        self.dlg.menu_widget.setCurrentRow(3)
         self.assertTrue(self.dlg.waypoints_widget.isEnabled())
         self.assertTrue(self.dlg.ui_valhalla_matrix_params.isEnabled())
         self.assertTrue(self.dlg.execute_btn.isEnabled())
 
+        # Valhalla – Map Match
+        self.dlg.menu_widget.setCurrentRow(4)
+        self.assertTrue(self.dlg.waypoints_widget.isEnabled())
+        self.assertTrue(self.dlg.ui_valhalla_mapmatch_params.isEnabled())
+        self.assertTrue(self.dlg.execute_btn.isEnabled())
+
         # Valhalla – Expansion
-        self.dlg.menu_widget.setCurrentRow(3)
+        self.dlg.menu_widget.setCurrentRow(5)
         self.assertTrue(self.dlg.waypoints_widget.isEnabled())
         self.assertTrue(self.dlg.ui_valhalla_expansion_params.isEnabled())
+        self.assertTrue(self.dlg.execute_btn.isEnabled())
+
+        # Valhalla – Height
+        self.dlg.menu_widget.setCurrentRow(6)
+        self.assertTrue(self.dlg.waypoints_widget.isEnabled())
+        self.assertTrue(self.dlg.ui_valhalla_elevation_params.isEnabled())
         self.assertTrue(self.dlg.execute_btn.isEnabled())
 
     def test_profile_change(self):
