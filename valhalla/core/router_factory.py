@@ -97,7 +97,7 @@ class RouterFactory:
             params["shape"] = []
             for e in locations:
                 if isinstance(e, Valhalla.Waypoint):
-                    params["shape"].append(e._make_waypoint)
+                    params["shape"].append(e._make_waypoint())
                 else:
                     params["shape"].append({"lon": e[0], "lat": e[1]})
         elif encoded_polyline:

@@ -141,7 +141,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
         self.menu_widget.item(4).setIcon(get_icon("optimized_directions_icon.svg"))
-        self.menu_widget.item(5).setIcon(get_icon("elevation_icon.svg"))
+        self.menu_widget.item(5).setIcon(get_icon("height_icon.svg"))
         self.menu_widget.setCurrentRow(0)
 
         self.setWindowTitle("Valhalla - Routing")
@@ -228,7 +228,9 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         layer_name = "{} {} {}".format(
             router.capitalize() if router == RouterType.VALHALLA else router.upper(),
             endpoint.capitalize(),
-            self.router_widget.profile.capitalize() if self.router_widget.profile else "",
+            self.router_widget.profile.capitalize()
+            if self.router_widget.profile and endpoint != RouterEndpoint.ELEVATION
+            else "",
         )
 
         if params.get("format") == "geotiff":
