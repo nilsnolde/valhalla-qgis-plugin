@@ -65,6 +65,8 @@ class Ui_routing_widget(object):
         self.menu_widget.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.menu_widget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.menu_widget.addItem(item)
         self.verticalLayout_5.addWidget(self.menu_widget)
         self.wrapperLayout.addWidget(self.widget)
         self.verticalLayout_6 = QtWidgets.QVBoxLayout()

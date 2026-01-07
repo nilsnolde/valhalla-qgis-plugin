@@ -4,6 +4,7 @@ from qgis.PyQt.QtGui import QIcon
 from .. import PLUGIN_NAME, __version__
 from ..global_definitions import RouterProfile
 from ..processing.routing.valhalla.directions import ValhallaDirections
+from ..processing.routing.valhalla.elevation import ValhallaElevation
 from ..processing.routing.valhalla.expansion import ValhallaExpansion
 from ..processing.routing.valhalla.isochrones import ValhallaIsochrones
 from ..processing.routing.valhalla.matrix import ValhallaMatrix
@@ -32,6 +33,7 @@ class ValhallaProvider(QgsProcessingProvider):
                     ValhallaOptimizedDirections,
                 )
             ],
+            ValhallaElevation(None)
             # *[
             #     OSRMMatrix(),
             #     OSRMDirections(),

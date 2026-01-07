@@ -35,6 +35,7 @@ deprecated=False
 
 # done by CI
 changelog=
+    - 4.3.0: add support for /height & /trace_route
     - 4.2.0: allow full Valhalla request JSON when extracting locations; manually install pyvalhalla package to not pollute QGIS python packages; add waypoint editor to map context menu; add Traveling Salesman
     - 4.1.0: Add GeoTIFF support for isochrones
     - 4.0.0: Introduce pyvalhalla and make all local calculations possible (currently restricted to Linux & OSX), might not be compatible with v3.0.0, see https://github.com/nilsnolde/valhalla-qgis-plugin/issues/30

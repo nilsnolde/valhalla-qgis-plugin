@@ -17,7 +17,16 @@ from qgis.core import (  # noqa: F811
     QgsWkbTypes,
 )
 from qgis.gui import QgisInterface, QgsDockWidget
-from qgis.PyQt.QtWidgets import QAction, QLineEdit, QMenu, QMessageBox, QTextEdit, QToolButton, QWidget
+from qgis.PyQt.QtWidgets import (
+    QAction,
+    QLineEdit,
+    QListWidget,
+    QMenu,
+    QMessageBox,
+    QTextEdit,
+    QToolButton,
+    QWidget,
+)
 
 from ..core.results_factory import ResultsFactory
 from ..core.settings import DEFAULT_GRAPH_DIR, DEFAULT_PROVIDERS, ProviderSetting, ValhallaSettings
@@ -51,6 +60,7 @@ MENU_TABS = {
     RouterEndpoint.MATRIX: "ui_matrix_params",
     RouterEndpoint.EXPANSION: "ui_expansion_params",
     RouterEndpoint.TSP: "ui_tsp_params",
+    RouterEndpoint.ELEVATION: "ui_elevation_params",
 }
 
 HELP_URL = "https://github.com/nilsnolde/valhalla-qgis-plugin?tab=readme-ov-file#how-to"
@@ -125,11 +135,14 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         )
 
         # icons on left side menu
+        self.menu_widget: QListWidget
         self.menu_widget.item(0).setIcon(get_icon("directions_icon.svg"))
         self.menu_widget.item(1).setIcon(get_icon("isochrones_icon.svg"))
         self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
         self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
         self.menu_widget.item(4).setIcon(get_icon("optimized_directions_icon.svg"))
+        self.menu_widget.item(5).setIcon(get_icon("height_icon.svg"))
+        self.menu_widget.setCurrentRow(0)
 
         self.setWindowTitle("Valhalla - Routing")
         self.ui_debug_btn.setChecked(settings.is_debug())
@@ -187,7 +200,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
                 **params,
                 **(
                     self.routing_params_widget.get_costing_params()
-                    if self.options_box.isChecked()
+                    if self.options_box.isChecked() and endpoint != RouterEndpoint.ELEVATION
                     else dict()
                 ),
             }
@@ -215,7 +228,9 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         layer_name = "{} {} {}".format(
             router.capitalize() if router == RouterType.VALHALLA else router.upper(),
             endpoint.capitalize(),
-            self.router_widget.profile.capitalize() if self.router_widget.profile else "",
+            self.router_widget.profile.capitalize()
+            if self.router_widget.profile and endpoint != RouterEndpoint.ELEVATION
+            else "",
         )
 
         if params.get("format") == "geotiff":

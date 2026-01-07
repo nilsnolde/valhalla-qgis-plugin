@@ -1,6 +1,6 @@
 from time import sleep
 
-from qgis.core import QgsProject, QgsVectorLayer, QgsWkbTypes
+from qgis.core import Qgis, QgsProject, QgsVectorLayer, QgsWkbTypes
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtTest import QTest
 
@@ -103,6 +103,19 @@ class TestHttpRouting(LocalhostDockerTestCase):
         self.assertGreater(
             layer.featureCount(), 30
         )  # some arbitrary value, actual count should be higher
+
+    def test_valhalla_http_height(self):
+        self.dlg.menu_widget.setCurrentRow(5)
+        self.hit_execute()
+        layers = list(QgsProject.instance().mapLayers().values())
+        layer: QgsVectorLayer = layers[0]
+        self.assertEqual(len(layers), 1)
+        print(layer.geometryType())
+        self.assertTrue(
+            layer.wkbType() == Qgis.WkbType.PointZ,
+            msg=f"Elevation layer has unexpected WKB Type {layer.wkbType()}",
+        )
+        self.assertEqual(layer.featureCount(), 2)
 
     def test_valhalla_car_costing_options(self):
         """Runs directions with and without costing options, compares result differences."""
