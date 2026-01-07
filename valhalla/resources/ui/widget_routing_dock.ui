@@ -140,10 +140,16 @@ QListWidget::item::selected {
              <property name="text">
               <string/>
              </property>
+             <property name="toolTip">
+              <string>Optimized Routing</string>
+             </property>
             </item>
             <item>
              <property name="text">
               <string/>
+             </property>
+             <property name="toolTip">
+              <string>Elevation</string>
              </property>
             </item>
            </widget>

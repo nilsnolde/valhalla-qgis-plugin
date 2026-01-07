@@ -330,6 +330,10 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             title += "Expansion"
         elif menu_index == 4:
             title += "Traveling Salesman"
+        elif menu_index == 5:
+            title += "Elevation"
+        else:
+            raise ValueError(f"Need to update menu index {menu_index}")
 
         self.setWindowTitle(title)
 

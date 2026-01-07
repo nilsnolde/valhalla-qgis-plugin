@@ -28,8 +28,8 @@ class Ui_PluginSettingsDialog(object):
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.ui_binary_path = QgsFileWidget(PluginSettingsDialog)
-        self.ui_binary_path.setStorageMode(QgsFileWidget.GetDirectory)
+        self.ui_binary_path = gui.QgsFileWidget(PluginSettingsDialog)
+        self.ui_binary_path.setStorageMode(gui.QgsFileWidget.GetDirectory)
         self.ui_binary_path.setOptions(QtWidgets.QFileDialog.DontResolveSymlinks|QtWidgets.QFileDialog.ReadOnly|QtWidgets.QFileDialog.ShowDirsOnly)
         self.ui_binary_path.setObjectName("ui_binary_path")
         self.horizontalLayout.addWidget(self.ui_binary_path)
@@ -86,4 +86,4 @@ class Ui_PluginSettingsDialog(object):
         item.setText(_translate("PluginSettingsDialog", "Installed"))
         item = self.ui_deps_table.horizontalHeaderItem(2)
         item.setText(_translate("PluginSettingsDialog", "Available"))
-from qgsfilewidget import QgsFileWidget
+from qgis import gui
