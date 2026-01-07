@@ -60,22 +60,22 @@ class ValhallaElevation(ValhallaBaseAlgorithm):
 
         total_count = layer_1.featureCount()
 
+        locations = []
         for count, feature in enumerate(layer_1.getFeatures()):
-            if feedback.isCanceled():
-                break
-
             coords = get_wgs_coords_from_feature(feature, layer_1.sourceCrs())
-            try:
-                for idx, result_feat in enumerate(
-                    results_factory.get_results(self.endpoint, [coords], params, return_fields)
-                ):
-                    result_feat[FieldNames.ID] = idx
-                    sink.addFeature(result_feat)
-                    feedback.setProgress(int((count + 1) / total_count * 100))
-            except (
-                routingpy.exceptions.RouterApiError,
-                routingpy.exceptions.RouterServerError,
-            ) as e:
-                raise QgsProcessingException(f"HTTP {e.status}: {e.message}")
+            locations.append(coords)
+
+        try:
+            for idx, result_feat in enumerate(
+                results_factory.get_results(self.endpoint, locations, params, return_fields)
+            ):
+                result_feat[FieldNames.ID] = idx
+                sink.addFeature(result_feat)
+                feedback.setProgress(int((count + 1) / total_count * 100))
+        except (
+            routingpy.exceptions.RouterApiError,
+            routingpy.exceptions.RouterServerError,
+        ) as e:
+            raise QgsProcessingException(f"HTTP {e.status}: {e.message}")
 
         return {self.OUT: dest_id}
