@@ -20,12 +20,12 @@ from ....global_definitions import (
 from ....third_party.routingpy import routingpy
 from ....utils.layer_utils import get_wgs_coords_from_feature
 from ....utils.logger_utils import qgis_log
-from ...routing.base_algorithm import (
+from ..base_algorithm import (
     ValhallaBaseAlgorithm,
 )
 
 
-class ValhallaIsochrones(ValhallaBaseAlgorithm):
+class ValhallaIsochronesBase(ValhallaBaseAlgorithm):
     METRICS = {"Time (seconds)": "time", "Distance (meters)": "distance"}
 
     IN_INTERVALS = "INPUT_INTERVALS"
@@ -34,11 +34,17 @@ class ValhallaIsochrones(ValhallaBaseAlgorithm):
     IN_METRIC = "INPUT_METRIC"
 
     def __init__(self, profile: Union[RouterProfile, str]):
-        super(ValhallaIsochrones, self).__init__(
+        super(ValhallaIsochronesBase, self).__init__(
             provider=RouterType.VALHALLA,
             endpoint=RouterEndpoint.ISOCHRONES,
-            profile=RouterProfile(profile),
+            profile=profile,
         )
+
+    def group(self):
+        return "Isochrone"
+
+    def groupId(self):
+        return "valhalla_isochrone"
 
     def initAlgorithm(self, configuration, p_str=None, Any=None, *args, **kwargs):
         self.init_base_params()
@@ -150,3 +156,28 @@ class ValhallaIsochrones(ValhallaBaseAlgorithm):
                 raise QgsProcessingException(f"HTTP {e.status}: {e.message}")
 
         return {self.OUT: dest_id}
+
+
+class ValhallaIsochroneCar(ValhallaIsochronesBase):
+    def __init__(self):
+        super(ValhallaIsochroneCar, self).__init__(profile=RouterProfile.CAR)
+
+
+class ValhallaIsochroneTruck(ValhallaIsochronesBase):
+    def __init__(self):
+        super(ValhallaIsochroneTruck, self).__init__(profile=RouterProfile.TRUCK)
+
+
+class ValhallaIsochroneMotorcycle(ValhallaIsochronesBase):
+    def __init__(self):
+        super(ValhallaIsochroneMotorcycle, self).__init__(profile=RouterProfile.MBIKE)
+
+
+class ValhallaIsochronePedestrian(ValhallaIsochronesBase):
+    def __init__(self):
+        super(ValhallaIsochronePedestrian, self).__init__(profile=RouterProfile.PED)
+
+
+class ValhallaIsochroneBicycle(ValhallaIsochronesBase):
+    def __init__(self):
+        super(ValhallaIsochroneBicycle, self).__init__(profile=RouterProfile.BIKE)

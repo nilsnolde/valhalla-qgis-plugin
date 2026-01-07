@@ -3,8 +3,7 @@ from ..processing_base import ProcessingBase
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.global_definitions import RouterProfile
-from valhalla.processing.routing.valhalla.isochrones import ValhallaIsochrones
+from valhalla.processing.routing.valhalla.isochrones import ValhallaIsochroneCar
 
 
 class TestValhallaIsochrones(ProcessingBase):
@@ -15,7 +14,7 @@ class TestValhallaIsochrones(ProcessingBase):
             "INPUT_INTERVALS": "50, 100",
         }
         params["INPUT_PROVIDER"] = 1
-        alg = ValhallaIsochrones(profile=RouterProfile.CAR)
+        alg = ValhallaIsochroneCar()
         feats, progress_changed_vals = self.run_routing_algorithm(alg, params)
 
         self.assertEqual(len(feats), 6)

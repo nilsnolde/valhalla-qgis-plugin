@@ -1,5 +1,3 @@
-from typing import Union
-
 from qgis.core import (
     QgsField,
     QgsFields,
@@ -11,7 +9,6 @@ from ....global_definitions import (
     DEFAULT_LAYER_FIELDS,
     FieldNames,
     RouterEndpoint,
-    RouterProfile,
     RouterType,
 )
 from ....third_party.routingpy import routingpy
@@ -24,11 +21,9 @@ from ...routing.base_algorithm import (
 class ValhallaElevation(ValhallaBaseAlgorithm):
     WITH_COSTING_OPTIONS = False
 
-    def __init__(self, profile: Union[RouterProfile, str]):
+    def __init__(self):
         super(ValhallaElevation, self).__init__(
-            provider=RouterType.VALHALLA,
-            endpoint=RouterEndpoint.ELEVATION,
-            profile=RouterProfile(profile if profile else RouterProfile.CAR),
+            provider=RouterType.VALHALLA, endpoint=RouterEndpoint.ELEVATION
         )
 
     def initAlgorithm(self, configuration, p_str=None, Any=None, *args, **kwargs):
@@ -58,10 +53,8 @@ class ValhallaElevation(ValhallaBaseAlgorithm):
 
         sink, dest_id = self.get_feature_sink(parameters, context, return_fields)
 
-        total_count = layer_1.featureCount()
-
         locations = []
-        for count, feature in enumerate(layer_1.getFeatures()):
+        for feature in layer_1.getFeatures():
             coords = get_wgs_coords_from_feature(feature, layer_1.sourceCrs())
             locations.append(coords)
 
@@ -71,7 +64,6 @@ class ValhallaElevation(ValhallaBaseAlgorithm):
             ):
                 result_feat[FieldNames.ID] = idx
                 sink.addFeature(result_feat)
-                feedback.setProgress(int((count + 1) / total_count * 100))
         except (
             routingpy.exceptions.RouterApiError,
             routingpy.exceptions.RouterServerError,

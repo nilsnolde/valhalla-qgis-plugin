@@ -6,10 +6,9 @@ from qgis.core import (
 
 from valhalla.global_definitions import (
     FieldNames,
-    RouterProfile,
     RoutingMetric,
 )
-from valhalla.processing.routing.valhalla.optimized import ValhallaOptimizedDirections
+from valhalla.processing.routing.valhalla.optimized import ValhallaOptimizedDirectionsPedestrian
 
 from ....utilities import get_qgis_app
 from ...test_processing.processing_base import ProcessingBase
@@ -20,7 +19,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 class TestValhallaDirections(ProcessingBase):
     def test_single_point(self):
         params = {"INPUT_LAYER_1": self.layer_1}
-        alg = ValhallaOptimizedDirections(profile=RouterProfile.PED)
+        alg = ValhallaOptimizedDirectionsPedestrian()
         feats, _ = self.run_routing_algorithm(alg, params)
 
         self.assertEqual(len(feats), 1)
@@ -35,7 +34,7 @@ class TestValhallaDirections(ProcessingBase):
             "INPUT_MODE": int(RoutingMetric.FASTEST),
         }
 
-        alg = ValhallaOptimizedDirections(profile=RouterProfile.PED)
+        alg = ValhallaOptimizedDirectionsPedestrian()
         feats_shortest, _ = self.run_routing_algorithm(alg, params_shortest)
         feats_fastest, _ = self.run_routing_algorithm(alg, params_fastest)
 
@@ -52,7 +51,7 @@ class TestValhallaDirections(ProcessingBase):
             "INPUT_LAYER_1": self.layer_1,
             "INPUT_AVOID_POLYGONS": self.avoid_polygon_layer,
         }
-        alg = ValhallaOptimizedDirections(profile=RouterProfile.PED)
+        alg = ValhallaOptimizedDirectionsPedestrian()
         feats, _ = self.run_routing_algorithm(alg, params)
 
         # TODO: this doesn't actually test anything
@@ -60,7 +59,7 @@ class TestValhallaDirections(ProcessingBase):
 
     def test_multi_point(self):
         params = {"INPUT_LAYER_1": self.layer_mp}
-        alg = ValhallaOptimizedDirections(profile=RouterProfile.PED)
+        alg = ValhallaOptimizedDirectionsPedestrian()
         feats, progress_changed_vals = self.run_routing_algorithm(alg, params)
 
         self.assertEqual(len(feats), 2)
@@ -74,7 +73,7 @@ class TestValhallaDirections(ProcessingBase):
             "INPUT_FIELD_2": "ID",
             "INPUT_MERGE_STRATEGY": 0,
         }
-        alg = ValhallaOptimizedDirections(profile=RouterProfile.PED)
+        alg = ValhallaOptimizedDirectionsPedestrian()
         feats, progress_changed_vals = self.run_routing_algorithm(alg, params)
 
         self.assertEqual(len(feats), 3)
@@ -86,7 +85,7 @@ class TestValhallaDirections(ProcessingBase):
             "INPUT_LAYER_2": self.layer_2,
             "INPUT_MERGE_STRATEGY": 1,
         }
-        alg = ValhallaOptimizedDirections(profile=RouterProfile.PED)
+        alg = ValhallaOptimizedDirectionsPedestrian()
         feats, progress_changed_vals = self.run_routing_algorithm(alg, params)
 
         self.assertEqual(len(feats), 9)
@@ -101,7 +100,7 @@ class TestValhallaDirections(ProcessingBase):
             "INPUT_MERGE_STRATEGY": 0,
         }
 
-        alg = ValhallaOptimizedDirections(profile=RouterProfile.PED)
+        alg = ValhallaOptimizedDirectionsPedestrian()
         alg.initAlgorithm({})
         ctx = QgsProcessingContext()
         feedback = QgsProcessingFeedback()

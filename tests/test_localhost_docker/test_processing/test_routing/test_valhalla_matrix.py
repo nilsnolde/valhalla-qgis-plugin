@@ -5,8 +5,8 @@ from ..processing_base import ProcessingBase
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.global_definitions import FieldNames, RouterProfile
-from valhalla.processing.routing.valhalla.matrix import ValhallaMatrix
+from valhalla.global_definitions import FieldNames
+from valhalla.processing.routing.valhalla.matrix import ValhallaMatrixCar
 
 
 class TestValhallaMatrix(ProcessingBase):
@@ -17,7 +17,7 @@ class TestValhallaMatrix(ProcessingBase):
             "INPUT_FIELD_1": "ID",
             "INPUT_FIELD_2": "ID_str",
         }
-        alg = ValhallaMatrix(profile=RouterProfile.PED)
+        alg = ValhallaMatrixCar()
         feats, _ = self.run_routing_algorithm(alg, params)
         self.assertEqual(len(feats), 9)
         self.assertEqual(feats[0].fields().field(FieldNames.SOURCE).type(), QVariant.Int)

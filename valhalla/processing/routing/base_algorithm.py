@@ -64,8 +64,8 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         self.router = provider  # avoid overriding QGIS' built-in provider method
         self.providers: List[ProviderSetting] = list()  # will be set in init_base_params
         self.endpoint = endpoint
-        self.profile = RouterProfile(profile) if profile else RouterProfile.CAR
-        if provider == RouterType.VALHALLA:
+        self.profile = profile
+        if provider == RouterType.VALHALLA and endpoint != RouterEndpoint.ELEVATION:
             costing_widget: Type[ValhallaSettingsBase] = SETTINGS_WIDGETS_MAP[self.profile]["widget"]
 
             # we keep the costing params dict for retrieving the parameter values later
@@ -318,36 +318,26 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         )
 
     def createInstance(self):
-        # we can ignore the unfulfilled parameter warning here because we know it will only be
-        # instantiated by subclasses that automatically pass these parameters
-        if self.router == RouterType.VALHALLA:
-            return type(self)(profile=self.profile)
-        else:
-            return type(self)()
-
-    # def group(self) -> str:
-    #     if self.router == RouterType.VALHALLA:
-    #         return self.router.capitalize()
-    #     else:
-    #         return self.router.upper()
-
-    # def groupId(self):
-    #     return self.router
+        return type(self)()
 
     def icon(self) -> QIcon:
         return get_icon(f"{self.endpoint.lower()}_icon.svg")
 
     def name(self):
         if self.router == RouterType.VALHALLA:
+            if self.endpoint == RouterEndpoint.ELEVATION:
+                return "valhalla_elevation"
             return f"{self.router.lower()}_{self.endpoint.lower()}_{self.profile.lower()}"
 
         return f"{self.router.lower()}_{self.endpoint.lower()}"
 
     def displayName(self):
         if self.router == RouterType.VALHALLA:
-            return f"{self.endpoint.capitalize()} | {self.profile.capitalize()}"
+            if self.endpoint == RouterEndpoint.ELEVATION:
+                return "Elevation"
+            return self.profile.capitalize()
 
-        return f"{self.endpoint.capitalize()}"  # there are no profiles for OSRM
+        return self.endpoint.capitalize()  # there are no profiles for OSRM
 
     def shortHelpString(self):
         """Displays the sidebar help in the algorithm window"""

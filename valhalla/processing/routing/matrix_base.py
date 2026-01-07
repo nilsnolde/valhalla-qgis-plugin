@@ -38,6 +38,12 @@ class MatrixBase(ValhallaBaseAlgorithm):
             profile=profile,
         )
 
+    def group(self):
+        return "matrix"
+
+    def groupId(self):
+        return "valhalla_matrix"
+
     def initAlgorithm(self, configuration, p_str=None, Any=None, *args, **kwargs):
         self.init_base_params(multi_layer=True)
         self.addParameter(

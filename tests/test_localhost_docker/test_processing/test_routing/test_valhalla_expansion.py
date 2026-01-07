@@ -3,15 +3,14 @@ from ...test_processing.processing_base import ProcessingBase
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from valhalla.global_definitions import RouterProfile
-from valhalla.processing.routing.valhalla.expansion import ValhallaExpansion
+from valhalla.processing.routing.valhalla.expansion import ValhallaExpansionCar
 
 
 class TestValhallaExpansion(ProcessingBase):
     def test_expansion_basic(self):
         """Valhalla expansion processing algorithm returns features with http method."""
         params = {"INPUT_LAYER_1": self.layer_1, "INPUT_INTERVALS": "50, 100"}
-        alg = ValhallaExpansion(profile=RouterProfile.CAR)
+        alg = ValhallaExpansionCar()
         feats, progress_changed_vals = self.run_routing_algorithm(alg, params)
 
         self.assertGreater(len(feats), 50)

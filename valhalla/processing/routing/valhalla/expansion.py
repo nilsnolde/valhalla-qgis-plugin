@@ -24,18 +24,24 @@ from ...routing.base_algorithm import (
 )
 
 
-class ValhallaExpansion(ValhallaBaseAlgorithm):
+class ValhallaExpansionBase(ValhallaBaseAlgorithm):
     METRICS = {"Time (seconds)": "time", "Distance (meters)": "distance"}
 
     IN_INTERVALS = "INPUT_INTERVALS"
     IN_METRIC = "INPUT_METRIC"
 
     def __init__(self, profile: Union[RouterProfile, str]):
-        super(ValhallaExpansion, self).__init__(
+        super(ValhallaExpansionBase, self).__init__(
             provider=RouterType.VALHALLA,
             endpoint=RouterEndpoint.EXPANSION,
             profile=RouterProfile(profile),
         )
+
+    def group(self):
+        return "Expansion"
+
+    def groupId(self):
+        return "valhalla_expansion"
 
     def initAlgorithm(self, configuration, p_str=None, Any=None, *args, **kwargs):
         self.init_base_params()
@@ -116,3 +122,28 @@ class ValhallaExpansion(ValhallaBaseAlgorithm):
                 raise QgsProcessingException(f"HTTP {e.status}: {e.message}")
 
         return {self.OUT: dest_id}
+
+
+class ValhallaExpansionCar(ValhallaExpansionBase):
+    def __init__(self):
+        super(ValhallaExpansionCar, self).__init__(profile=RouterProfile.CAR)
+
+
+class ValhallaExpansionTruck(ValhallaExpansionBase):
+    def __init__(self):
+        super(ValhallaExpansionTruck, self).__init__(profile=RouterProfile.TRUCK)
+
+
+class ValhallaExpansionMotorcycle(ValhallaExpansionBase):
+    def __init__(self):
+        super(ValhallaExpansionMotorcycle, self).__init__(profile=RouterProfile.MBIKE)
+
+
+class ValhallaExpansionPedestrian(ValhallaExpansionBase):
+    def __init__(self):
+        super(ValhallaExpansionPedestrian, self).__init__(profile=RouterProfile.PED)
+
+
+class ValhallaExpansionBicycle(ValhallaExpansionBase):
+    def __init__(self):
+        super(ValhallaExpansionBicycle, self).__init__(profile=RouterProfile.BIKE)

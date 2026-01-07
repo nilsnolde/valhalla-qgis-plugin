@@ -52,6 +52,16 @@ class DirectionsBase(ValhallaBaseAlgorithm):
             profile=profile,
         )
 
+    def group(self):
+        return "Directions" if self.endpoint == RouterEndpoint.DIRECTIONS else "Optimized Directions"
+
+    def groupId(self):
+        return (
+            "valhalla_directions"
+            if self.endpoint == RouterEndpoint.DIRECTIONS
+            else "valhalla_directions_optimized"
+        )
+
     def initAlgorithm(self, configuration, p_str=None, Any=None, *args, **kwargs):
         self.init_base_params(multi_layer=True)
 

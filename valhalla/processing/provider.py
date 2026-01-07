@@ -2,19 +2,48 @@ from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
 from .. import PLUGIN_NAME, __version__
-from ..global_definitions import RouterProfile
-from ..processing.routing.valhalla.directions import ValhallaDirections
 from ..processing.routing.valhalla.elevation import ValhallaElevation
-from ..processing.routing.valhalla.expansion import ValhallaExpansion
-from ..processing.routing.valhalla.isochrones import ValhallaIsochrones
-from ..processing.routing.valhalla.matrix import ValhallaMatrix
-from ..processing.routing.valhalla.optimized import ValhallaOptimizedDirections
+from ..processing.routing.valhalla.expansion import (
+    ValhallaExpansionBicycle,
+    ValhallaExpansionCar,
+    ValhallaExpansionMotorcycle,
+    ValhallaExpansionPedestrian,
+    ValhallaExpansionTruck,
+)
+from ..processing.routing.valhalla.matrix import (
+    ValhallaMatrixBicycle,
+    ValhallaMatrixCar,
+    ValhallaMatrixMotorcycle,
+    ValhallaMatrixPedestrian,
+    ValhallaMatrixTruck,
+)
+from ..processing.routing.valhalla.optimized import (
+    ValhallaOptimizedDirectionsBicycle,
+    ValhallaOptimizedDirectionsCar,
+    ValhallaOptimizedDirectionsMotorcycle,
+    ValhallaOptimizedDirectionsPedestrian,
+    ValhallaOptimizedDirectionsTruck,
+)
 
 # from valhalla.processing.spatial_optimization.lscp import LSCPAlgorithm
 # from valhalla.processing.spatial_optimization.mclp import MCLPAlgorithm
 # from valhalla.processing.spatial_optimization.pcenter import PCenterAlgorithm
 # from valhalla.processing.spatial_optimization.pmedian import PMedianAlgorithm
 from ..utils.resource_utils import get_icon
+from .routing.valhalla.directions import (
+    ValhallaDirectionsBicycle,
+    ValhallaDirectionsCar,
+    ValhallaDirectionsMotorcycle,
+    ValhallaDirectionsPedestrian,
+    ValhallaDirectionsTruck,
+)
+from .routing.valhalla.isochrones import (
+    ValhallaIsochroneBicycle,
+    ValhallaIsochroneCar,
+    ValhallaIsochroneMotorcycle,
+    ValhallaIsochronePedestrian,
+    ValhallaIsochroneTruck,
+)
 
 
 class ValhallaProvider(QgsProcessingProvider):
@@ -23,17 +52,36 @@ class ValhallaProvider(QgsProcessingProvider):
 
         self.algorithm_list = [
             *[
-                algo(profile=profile)
-                for profile in RouterProfile
+                algo()
                 for algo in (
-                    ValhallaDirections,
-                    ValhallaIsochrones,
-                    ValhallaMatrix,
-                    ValhallaExpansion,
-                    ValhallaOptimizedDirections,
+                    ValhallaElevation,
+                    ValhallaDirectionsCar,
+                    ValhallaDirectionsTruck,
+                    ValhallaDirectionsMotorcycle,
+                    ValhallaDirectionsPedestrian,
+                    ValhallaDirectionsBicycle,
+                    ValhallaIsochroneCar,
+                    ValhallaIsochroneTruck,
+                    ValhallaIsochroneMotorcycle,
+                    ValhallaIsochroneBicycle,
+                    ValhallaIsochronePedestrian,
+                    ValhallaExpansionCar,
+                    ValhallaExpansionTruck,
+                    ValhallaExpansionMotorcycle,
+                    ValhallaExpansionBicycle,
+                    ValhallaExpansionPedestrian,
+                    ValhallaMatrixCar,
+                    ValhallaMatrixTruck,
+                    ValhallaMatrixMotorcycle,
+                    ValhallaMatrixBicycle,
+                    ValhallaMatrixPedestrian,
+                    ValhallaOptimizedDirectionsCar,
+                    ValhallaOptimizedDirectionsTruck,
+                    ValhallaOptimizedDirectionsMotorcycle,
+                    ValhallaOptimizedDirectionsPedestrian,
+                    ValhallaOptimizedDirectionsBicycle,
                 )
             ],
-            ValhallaElevation(None)
             # *[
             #     OSRMMatrix(),
             #     OSRMDirections(),
