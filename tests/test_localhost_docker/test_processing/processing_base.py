@@ -27,6 +27,8 @@ from ...constants import GRAPHS, POLYGON_4326, WAYPOINTS_4326
 
 
 class ProcessingBase(LocalhostDockerTestCase):
+    WAYPOINTS = WAYPOINTS_4326
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -51,7 +53,7 @@ class ProcessingBase(LocalhostDockerTestCase):
         cls.layer_1.dataProvider().addAttributes(layer_fields)
         cls.layer_1.updateFields()
 
-        for i, coords in enumerate(WAYPOINTS_4326):
+        for i, coords in enumerate(cls.WAYPOINTS):
             feat = QgsFeature()
             geom = QgsPoint(*coords)
             feat.setGeometry(geom)
@@ -68,7 +70,7 @@ class ProcessingBase(LocalhostDockerTestCase):
         cls.layer_2.dataProvider().addAttributes(layer_fields)
         cls.layer_2.updateFields()
 
-        for i, coords in enumerate(reversed(WAYPOINTS_4326)):
+        for i, coords in enumerate(reversed(cls.WAYPOINTS)):
             feat = QgsFeature()
             geom = QgsPoint(*coords)
             feat.setGeometry(geom)
@@ -85,7 +87,7 @@ class ProcessingBase(LocalhostDockerTestCase):
         cls.layer_mp.dataProvider().addAttributes(layer_fields)
         cls.layer_mp.updateFields()
 
-        for ix, waypoints in enumerate((WAYPOINTS_4326[0:2], WAYPOINTS_4326[1:])):
+        for ix, waypoints in enumerate((cls.WAYPOINTS[0:2], cls.WAYPOINTS[1:])):
             feat = QgsFeature()
             multipoint = QgsMultiPoint()
             points = [QgsPoint(*coord) for coord in waypoints]
@@ -94,6 +96,18 @@ class ProcessingBase(LocalhostDockerTestCase):
             feat.setAttributes([ix, str(ix)])
             cls.layer_mp.dataProvider().addFeature(feat)
 
+        # line layer
+        cls.layer_line = QgsVectorLayer(
+            f"{QgsWkbTypes.displayString(QgsWkbTypes.LineString)}",
+            "layer_line",
+            "memory",
+        )
+
+        feat = QgsFeature()
+        feat.setGeometry(QgsLineString([QgsPoint(*coord) for coord in cls.WAYPOINTS]))
+        cls.layer_line.dataProvider().addFeature(feat)
+
+        # avoid polygon layer
         cls.avoid_polygon_layer = QgsVectorLayer(
             f"{QgsWkbTypes.displayString(QgsWkbTypes.Polygon)}",
             "layer_avoid_polygon",

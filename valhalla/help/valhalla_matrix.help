@@ -4,4 +4,4 @@ Specify points and/or polygons to be avoided with the <i>avoid locations</i> / <
 The output layer is a table layer with the attributes <i>durations</i>, <i>distances</i>, and <i>ID</i>.
 
 Valhalla has a dynamic cost model. You can set an extensive amount of costing options in the <b>Advanced Parameters</b> section. Refer to
-<a href="https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md">the documentation</a> for an in-depth explanation.
+<a href="https://valhalla.github.io/valhalla/api/matrix/api-reference/">the documentation</a> for an in-depth explanation.

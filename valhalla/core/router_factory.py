@@ -77,6 +77,7 @@ class RouterFactory:
         except TypeError:
             pass
 
+        # either routingpy has the method or we're implementing in this class, see below
         if hasattr(self.router, endpoint.lower()):
             return getattr(self.router, endpoint.lower())(locations, self.profile.lower(), **kwargs)
         elif hasattr(self, endpoint.lower()):
