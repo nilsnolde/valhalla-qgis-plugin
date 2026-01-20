@@ -12,7 +12,7 @@ from valhalla.gui.dock_routing import RoutingDockWidget
 
 # from network_analyst.gui.dlg_spopt import SpoptDialog
 from .. import LocalhostDockerTestCase
-from ..constants import WAYPOINTS_4326
+from ..constants import WAYPOINTS_4326, WAYPOINTS_4326_MAP_MATCH
 
 
 class TestHttpRouting(LocalhostDockerTestCase):
@@ -49,7 +49,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         )
 
     def test_valhalla_http_optimized_directions(self):
-        self.dlg.menu_widget.setCurrentRow(4)
+        self.dlg.menu_widget.setCurrentRow(1)
         # add the third waypoint to the table
         self.dlg.waypoints_widget.ui_table.insertRow(2)
         self.dlg.waypoints_widget._add_row_to_table(2, *list(reversed(WAYPOINTS_4326[2])))
@@ -66,12 +66,12 @@ class TestHttpRouting(LocalhostDockerTestCase):
         )
 
     def test_valhalla_http_isochrones(self):
-        self.dlg.menu_widget.setCurrentRow(1)
+        self.dlg.menu_widget.setCurrentRow(2)
         self.dlg.ui_isochrone_intervals.setText("20,40")
         self.hit_execute()
         layers = list(QgsProject.instance().mapLayers().values())
-        layer: QgsVectorLayer = layers[0]
         self.assertEqual(len(layers), 1)
+        layer: QgsVectorLayer = layers[0]
         self.assertTrue(
             layer.geometryType() == QgsWkbTypes.PolygonGeometry,
             msg=f"Isochrone layer has unexpected Geometry Type {layer.geometryType()}",
@@ -79,23 +79,43 @@ class TestHttpRouting(LocalhostDockerTestCase):
         self.assertEqual(layer.featureCount(), 4)
 
     def test_valhalla_http_matrix(self):
-        self.dlg.menu_widget.setCurrentRow(2)
+        self.dlg.menu_widget.setCurrentRow(3)
         self.hit_execute()
         layers = list(QgsProject.instance().mapLayers().values())
-        layer: QgsVectorLayer = layers[0]
         self.assertEqual(len(layers), 1)
+        layer: QgsVectorLayer = layers[0]
         self.assertTrue(
             layer.geometryType() == QgsWkbTypes.NullGeometry,
             msg=f"Matrix layer has unexpected Geometry Type {layer.geometryType()}",
         )
 
+    def test_valhalla_http_map_match(self):
+        self.dlg.menu_widget.setCurrentRow(4)
+        # set to auto
+        self.dlg.router_widget.mode_btns.buttons()[2].setChecked(True)
+        # add custom map matching waypoints
+        self.dlg.waypoints_widget.ui_table.setRowCount(0)
+        for ix, _ in enumerate(WAYPOINTS_4326_MAP_MATCH):
+            self.dlg.waypoints_widget.ui_table.insertRow(ix)
+            self.dlg.waypoints_widget._add_row_to_table(
+                ix, *list(reversed(WAYPOINTS_4326_MAP_MATCH[ix]))
+            )
+        self.hit_execute()
+        self.assertEqual(len(list(QgsProject.instance().mapLayers())), 1)
+        layer: QgsVectorLayer = list(QgsProject.instance().mapLayers().values())[0]
+        self.assertEqual(layer.featureCount(), 1)
+        self.assertTrue(
+            layer.geometryType() == QgsWkbTypes.LineGeometry,
+            msg=f"Directions layer has unexpected Geometry Type {layer.geometryType()}",
+        )
+
     def test_valhalla_http_expansion(self):
-        self.dlg.menu_widget.setCurrentRow(3)
+        self.dlg.menu_widget.setCurrentRow(5)
         self.dlg.ui_expansion_intervals.setText("500")
         self.hit_execute()
         layers = list(QgsProject.instance().mapLayers().values())
-        layer: QgsVectorLayer = layers[0]
         self.assertEqual(len(layers), 1)
+        layer: QgsVectorLayer = layers[0]
         self.assertTrue(
             layer.geometryType() == QgsWkbTypes.LineGeometry,
             msg=f"Expansion layer has unexpected Geometry Type {layer.geometryType()}",
@@ -105,12 +125,11 @@ class TestHttpRouting(LocalhostDockerTestCase):
         )  # some arbitrary value, actual count should be higher
 
     def test_valhalla_http_height(self):
-        self.dlg.menu_widget.setCurrentRow(5)
+        self.dlg.menu_widget.setCurrentRow(6)
         self.hit_execute()
         layers = list(QgsProject.instance().mapLayers().values())
-        layer: QgsVectorLayer = layers[0]
         self.assertEqual(len(layers), 1)
-        print(layer.geometryType())
+        layer: QgsVectorLayer = layers[0]
         self.assertTrue(
             layer.wkbType() == Qgis.WkbType.PointZ,
             msg=f"Elevation layer has unexpected WKB Type {layer.wkbType()}",

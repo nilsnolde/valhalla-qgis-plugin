@@ -2,6 +2,7 @@ import json
 from typing import Dict, Optional, Union
 
 from qgis.core import (
+    Qgis,
     QgsCategorizedSymbolRenderer,
     QgsClassificationEqualInterval,
     QgsColorRamp,
@@ -84,21 +85,42 @@ def get_wgs_coords_from_layer(
     if not layer.featureCount():
         return []
 
-    # outer rings only for polygons
-    is_poly = (
-        layer.wkbType()
-        in (  # yes, this is cumbersome, but QgsFeatureSource is missing .geometryType()
-            QgsWkbTypes.Polygon,
-            QgsWkbTypes.MultiPolygon,
-            QgsWkbTypes.Polygon25D,
-            QgsWkbTypes.PolygonM,
-            QgsWkbTypes.PolygonZ,
-            QgsWkbTypes.PolygonZM,
-            QgsWkbTypes.MultiPolygon25D,
-            QgsWkbTypes.MultiPolygonM,
-            QgsWkbTypes.MultiPolygonZ,
-            QgsWkbTypes.MultiPolygonZM,
-        )
+    # yes, this is cumbersome, but QgsFeatureSource is missing .geometryType()
+    is_poly = layer.wkbType() in (
+        Qgis.WkbType.Polygon,
+        Qgis.WkbType.MultiPolygon,
+        Qgis.WkbType.Polygon25D,
+        Qgis.WkbType.PolygonM,
+        Qgis.WkbType.PolygonZ,
+        Qgis.WkbType.PolygonZM,
+        Qgis.WkbType.MultiPolygon25D,
+        Qgis.WkbType.MultiPolygonM,
+        Qgis.WkbType.MultiPolygonZ,
+        Qgis.WkbType.MultiPolygonZM,
+    )
+    is_line = layer.wkbType() in (
+        Qgis.WkbType.LineString,
+        Qgis.WkbType.MultiLineString,
+        Qgis.WkbType.LineString25D,
+        Qgis.WkbType.LineStringM,
+        Qgis.WkbType.LineStringZ,
+        Qgis.WkbType.LineStringZM,
+        Qgis.WkbType.MultiLineString25D,
+        Qgis.WkbType.MultiLineStringM,
+        Qgis.WkbType.MultiLineStringZ,
+        Qgis.WkbType.MultiLineStringZM,
+    )
+    is_point = layer.wkbType() in (
+        Qgis.WkbType.Point,
+        Qgis.WkbType.MultiPoint,
+        Qgis.WkbType.Point25D,
+        Qgis.WkbType.PointM,
+        Qgis.WkbType.PointZ,
+        Qgis.WkbType.PointZM,
+        Qgis.WkbType.MultiPoint25D,
+        Qgis.WkbType.MultiPointM,
+        Qgis.WkbType.MultiPointZ,
+        Qgis.WkbType.MultiPointZM,
     )
     is_multi = QgsWkbTypes.isMultiType(layer.wkbType())
     coordinates = []
@@ -116,14 +138,19 @@ def get_wgs_coords_from_layer(
         json_feature = json.loads(exporter.exportFeature(feature))
         coords = json_feature["geometry"]["coordinates"]
 
+        # outer rings only for polygons
         if is_multi and is_poly:
             _ = [coordinates.append(coord[0]) for coord in coords]
-        elif is_multi and not is_poly:
+        elif is_multi and is_point:
+            _ = [coordinates.append(coord) for coord in coords]
+        elif is_multi and is_line:
             _ = [coordinates.append(coord) for coord in coords]
         elif not is_multi and is_poly:
             coordinates.append(coords[0])
-        elif not is_multi and not is_poly:
+        elif not is_multi and is_point:
             coordinates.append(coords)
+        elif not is_multi and is_line:
+            _ = [coordinates.append(coord) for coord in coords]
 
     return coordinates
 
@@ -137,7 +164,7 @@ def post_process_layer(layer: QgsVectorLayer, endpoint: RouterEndpoint) -> None:
     """
     if endpoint == RouterEndpoint.MATRIX:
         return
-    elif endpoint in (RouterEndpoint.DIRECTIONS, RouterEndpoint.TSP):
+    elif endpoint in (RouterEndpoint.DIRECTIONS, RouterEndpoint.TSP, RouterEndpoint.MAP_MATCH):
         layer.loadNamedStyle(str(get_resource_path("styles", "directions.qml")))
         return
 
@@ -147,7 +174,7 @@ def post_process_layer(layer: QgsVectorLayer, endpoint: RouterEndpoint) -> None:
         field: int = layer.fields().lookupField(color_field)
         unique_values = sorted(layer.uniqueValues(field))
 
-        if layer.wkbType() == QgsWkbTypes.Polygon:
+        if layer.wkbType() == Qgis.WkbType.Polygon:
             layer.setOpacity(STYLES.POLYGON_OPACITY)
         if color_field == "contour":
             unique_values = list(reversed(unique_values))
@@ -159,7 +186,7 @@ def post_process_layer(layer: QgsVectorLayer, endpoint: RouterEndpoint) -> None:
             symbol = QgsSymbol.defaultSymbol(layer.geometryType())
             color = STYLES.COLORS[interpolator.interpolate(id_)]
             symbol.setColor(color)
-            if layer.wkbType() == QgsWkbTypes.LineString:
+            if layer.wkbType() == Qgis.WkbType.LineString:
                 symbol.setWidth(STYLES.LINE_WIDTH)
             category = QgsRendererCategory(unique_value, symbol, str(unique_value))
             categories.append(category)

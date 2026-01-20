@@ -77,19 +77,15 @@ class RouterFactory:
         except TypeError:
             pass
 
+        # either routingpy has the method or we're implementing in this class, see below
         if hasattr(self.router, endpoint.lower()):
             return getattr(self.router, endpoint.lower())(locations, self.profile.lower(), **kwargs)
         elif hasattr(self, endpoint.lower()):
-            return getattr(self, endpoint.lower())(locations, self.profile.lower(), **kwargs)
+            return getattr(self, endpoint.lower())(locations, profile=self.profile.lower(), **kwargs)
         else:
             raise RuntimeError(f"Can't find endpoint {endpoint.lower()}")
 
-    def height(
-        self,
-        locations: Optional[Sequence[Tuple[float, float]]] = None,
-        profile: str = "bicycle",
-        encoded_polyline: Optional[str] = None,
-    ):
+    def height(self, locations: Optional[Sequence[Tuple[float, float]]] = None, **kwargs):
         """Shim for missing /height endpoint in routingpy"""
         params = dict()
         if locations:
@@ -100,10 +96,24 @@ class RouterFactory:
                     params["shape"].append(e._make_waypoint())
                 else:
                     params["shape"].append({"lon": e[0], "lat": e[1]})
-        elif encoded_polyline:
-            params["encoded_polyline"] = encoded_polyline
+        elif pl := kwargs.get("encoded_polyline"):
+            params["encoded_polyline"] = pl
             params["shape_format"] = "polyline6"
         else:
-            RuntimeError('/height needs either "shape" or "encoded_polyline"')
+            raise RuntimeError('/height needs either "shape" or "encoded_polyline"')
 
         return self.router.client._request("/height", post_params=params)
+
+    def trace_route(self, locations: Optional[Sequence[Tuple[float, float]]] = None, **kwargs):
+        """Shim for missing /trace_route endpoint in routingpy"""
+        params = kwargs
+
+        params["costing"] = kwargs["profile"]
+        params["shape"] = []
+        for e in locations:
+            if isinstance(e, Valhalla.Waypoint):
+                params["shape"].append(e._make_waypoint())
+            else:
+                params["shape"].append({"lon": e[0], "lat": e[1]})
+
+        return self.router.client._request("/trace_route", post_params=params)

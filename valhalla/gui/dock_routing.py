@@ -56,10 +56,11 @@ from .widgets.widget_waypoints import WaypointsWidget
 
 MENU_TABS = {
     RouterEndpoint.DIRECTIONS: "ui_directions_params",
+    RouterEndpoint.TSP: "ui_tsp_params",
     RouterEndpoint.ISOCHRONES: "ui_isochrones_params",
     RouterEndpoint.MATRIX: "ui_matrix_params",
+    RouterEndpoint.MAP_MATCH: "ui_map_matching_params",
     RouterEndpoint.EXPANSION: "ui_expansion_params",
-    RouterEndpoint.TSP: "ui_tsp_params",
     RouterEndpoint.ELEVATION: "ui_elevation_params",
 }
 
@@ -137,11 +138,12 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         # icons on left side menu
         self.menu_widget: QListWidget
         self.menu_widget.item(0).setIcon(get_icon("directions_icon.svg"))
-        self.menu_widget.item(1).setIcon(get_icon("isochrones_icon.svg"))
-        self.menu_widget.item(2).setIcon(get_icon("matrix_icon.svg"))
-        self.menu_widget.item(3).setIcon(get_icon("expansion_icon.svg"))
-        self.menu_widget.item(4).setIcon(get_icon("optimized_directions_icon.svg"))
-        self.menu_widget.item(5).setIcon(get_icon("height_icon.svg"))
+        self.menu_widget.item(1).setIcon(get_icon("optimized_directions_icon.svg"))
+        self.menu_widget.item(2).setIcon(get_icon("isochrones_icon.svg"))
+        self.menu_widget.item(3).setIcon(get_icon("matrix_icon.svg"))
+        self.menu_widget.item(4).setIcon(get_icon("trace_route_icon.svg"))
+        self.menu_widget.item(5).setIcon(get_icon("expansion_icon.svg"))
+        self.menu_widget.item(6).setIcon(get_icon("height_icon.svg"))
         self.menu_widget.setCurrentRow(0)
 
         self.setWindowTitle("Valhalla - Routing")
@@ -169,7 +171,6 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             except ValueError:
                 return list()
 
-        # this relies on the fact that we have the order of endpoints in the left menu widget
         params = dict()
         if self.router_widget.router == RouterType.VALHALLA:
             if endpoint in (RouterEndpoint.DIRECTIONS, RouterEndpoint.TSP):
@@ -194,6 +195,23 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
                 params["expansion_properties"] = ("duration", "distance")
                 params["dedupe"] = self.ui_expansion_dedupe.isChecked()
                 params["skip_opposites"] = self.ui_expansion_skip_opps.isChecked()
+
+            elif endpoint == RouterEndpoint.MAP_MATCH:
+                params["shape_match"] = "map_snap"
+                params["narrative"] = False
+
+                trace_options = dict()
+                if v := int(self.ui_valhalla_mapmatch_search_radius.value()):
+                    trace_options["search_radius"] = v
+                if v := int(self.ui_valhalla_mapmatch_gps_accuracy.value()):
+                    trace_options["gps_accuracy"] = v
+                if v := int(self.ui_valhalla_mapmatch_breakage_distance.value()):
+                    trace_options["breakage_distance"] = v
+
+                print(trace_options)
+
+                if len(trace_options):
+                    params["trace_options"] = trace_options
 
             # only append the costing options if the costing options widget is active
             return {
@@ -323,14 +341,16 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         if menu_index == 0:
             title += "Routing"
         elif menu_index == 1:
-            title += "Isochrones"
-        elif menu_index == 2:
-            title += "Matrix"
-        elif menu_index == 3:
-            title += "Expansion"
-        elif menu_index == 4:
             title += "Traveling Salesman"
+        elif menu_index == 2:
+            title += "Isochrones"
+        elif menu_index == 3:
+            title += "Matrix"
+        elif menu_index == 4:
+            title += "Map Match"
         elif menu_index == 5:
+            title += "Expansion"
+        elif menu_index == 6:
             title += "Elevation"
         else:
             raise ValueError(f"Need to update menu index {menu_index}")

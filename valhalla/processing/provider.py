@@ -44,6 +44,13 @@ from .routing.valhalla.isochrones import (
     ValhallaIsochronePedestrian,
     ValhallaIsochroneTruck,
 )
+from .routing.valhalla.mapmatch import (
+    ValhallaMapMatchBicycle,
+    ValhallaMapMatchCar,
+    ValhallaMapMatchMotorcycle,
+    ValhallaMapMatchPedestrian,
+    ValhallaMapMatchTruck,
+)
 
 
 class ValhallaProvider(QgsProcessingProvider):
@@ -80,16 +87,13 @@ class ValhallaProvider(QgsProcessingProvider):
                     ValhallaOptimizedDirectionsMotorcycle,
                     ValhallaOptimizedDirectionsPedestrian,
                     ValhallaOptimizedDirectionsBicycle,
+                    ValhallaMapMatchCar,
+                    ValhallaMapMatchTruck,
+                    ValhallaMapMatchMotorcycle,
+                    ValhallaMapMatchPedestrian,
+                    ValhallaMapMatchBicycle,
                 )
             ],
-            # *[
-            #     OSRMMatrix(),
-            #     OSRMDirections(),
-            #     LSCPAlgorithm(),
-            #     MCLPAlgorithm(),
-            #     PCenterAlgorithm(),
-            #     PMedianAlgorithm(),
-            # ],
         ]
 
     def unload(self):

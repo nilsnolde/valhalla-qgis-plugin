@@ -3,6 +3,7 @@ from typing import List, Optional, Tuple, Type
 
 from qgis.core import (
     QgsFeatureSink,
+    QgsFeatureSource,
     QgsFields,
     QgsProcessing,
     QgsProcessingAlgorithm,
@@ -14,7 +15,6 @@ from qgis.core import (
     QgsProcessingParameterField,
     QgsProcessingParameterNumber,
     QgsProcessingParameterString,
-    QgsVectorLayer,
 )
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtGui import QIcon
@@ -52,6 +52,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
 
     OUT = "OUTPUT"
     WITH_COSTING_OPTIONS = True
+    IN_1_TYPES = [QgsProcessing.TypeVectorPoint]
 
     def __init__(
         self,
@@ -158,7 +159,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         input_param = QgsProcessingParameterFeatureSource(
             name=self.IN_1,
             description=wrap_in_html_tag(input_layer_desc, "b"),
-            types=[QgsProcessing.TypeVectorPoint],
+            types=self.IN_1_TYPES,
         )
         self.addParameter(input_param)
 
@@ -173,7 +174,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
 
         output_param = QgsProcessingParameterFeatureSink(
             name=self.OUT,
-            description=f"{self.router}_{self.endpoint}"
+            description=f"{self.router.lower()}_{self.endpoint.lower()}"
             f"{f'_{self.profile}' if self.router == RouterType.VALHALLA and self.profile else str()}",
             createByDefault=True,
         )
@@ -190,7 +191,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
         #     if len(self.pkgs) > 0
         #     else ""
         # )
-        layer_1: QgsVectorLayer = self.parameterAsSource(parameters, self.IN_1, context)
+        layer_1: QgsFeatureSource = self.parameterAsSource(parameters, self.IN_1, context)
         layer_field_name_1 = self.parameterAsString(parameters, self.IN_FIELD_1, context)
 
         params = dict()

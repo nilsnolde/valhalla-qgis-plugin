@@ -1,0 +1,6 @@
+The <b>Valhalla Map Match</b> algorithm matches input points to the Valhalla graph and returns directions.
+
+The input can be MultiPoint or LineString layer. The output will be a LineString layer with one feature per matched route.
+
+Valhalla has a dynamic cost model. You can set an extensive amount of costing options in the <b>Advanced Parameters</b> section. Refer to
+<a href="https://valhalla.github.io/valhalla/api/map-matching/api-reference/">the documentation</a> for an in-depth explanation.

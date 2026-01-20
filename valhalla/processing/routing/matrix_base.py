@@ -39,7 +39,7 @@ class MatrixBase(ValhallaBaseAlgorithm):
         )
 
     def group(self):
-        return "matrix"
+        return "Matrix"
 
     def groupId(self):
         return "valhalla_matrix"

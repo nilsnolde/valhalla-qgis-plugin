@@ -10,4 +10,4 @@ Specify points and/or polygons to be avoided during routing with the <i>avoid lo
 The output layer is a LineString layer with the attributes <i>durations</i>, <i>distances</i>, and – optionally – IDs .
 
 Valhalla has a dynamic cost model. You can set an extensive amount of costing options in the <b>Advanced Parameters</b> section. Refer to
-<a href="https://github.com/valhalla/valhalla/blob/master/docs/api/turn-by-turn/api-reference.md">the documentation</a> for an in-depth explanation.
+<a href="https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/">the documentation</a> for an in-depth explanation.

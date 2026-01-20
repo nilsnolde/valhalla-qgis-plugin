@@ -19,6 +19,7 @@ from ..third_party.routingpy.routingpy.expansion import Expansions
 from ..third_party.routingpy.routingpy.isochrone import Isochrone, Isochrones
 from ..third_party.routingpy.routingpy.matrix import Matrix
 from ..third_party.routingpy.routingpy.optimized import OptimizedDirection
+from ..third_party.routingpy.routingpy.utils import decode_polyline6
 from .router_factory import RouterFactory
 
 
@@ -64,6 +65,7 @@ class ResultsFactory:
             gd.RouterEndpoint.DIRECTIONS,
             gd.RouterEndpoint.EXPANSION,
             gd.RouterEndpoint.TSP,
+            gd.RouterEndpoint.MAP_MATCH,
         ):
             return QgsWkbTypes.LineString
         elif endpoint == gd.RouterEndpoint.ISOCHRONES:
@@ -94,9 +96,14 @@ class ResultsFactory:
             for field in DEFAULT_LAYER_FIELDS[endpoint]:
                 fields.append(field)
 
-        if endpoint == gd.RouterEndpoint.DIRECTIONS:
+        if endpoint in (gd.RouterEndpoint.DIRECTIONS):
             result = self.router.request(endpoint, locations, **params)
             yield next(self._process_direction_result(result, params, fields))  # is always one feature
+
+        elif endpoint in (gd.RouterEndpoint.MAP_MATCH):
+            result = self.router.request(endpoint, locations, **params)
+            for part in self._process_mapmatch_result(result, params, fields):
+                yield part
 
         elif endpoint == gd.RouterEndpoint.ISOCHRONES:
             for loc in locations:
@@ -202,3 +209,36 @@ class ResultsFactory:
             feat.setGeometry(QgsPoint(coords["lon"], coords["lat"], height["height"][idx]))
 
             yield feat
+
+    def _process_mapmatch_result(self, result: dict, params: dict, fields: QgsFields):
+        coords = []
+        for leg in result["trip"]["legs"]:
+            coords.extend(decode_polyline6(leg["shape"]))
+
+        routes = [coords]
+        durations = [int(result["trip"]["summary"]["time"])]
+        distances = [int(result["trip"]["summary"]["length"] * 1000)]
+
+        # if the trace needed to be broken there'll be more trips
+        if alts := result.get("alternates"):
+            for trip in alts:
+                coords.clear()
+                for leg in trip["trip"]["legs"]:
+                    coords.extend(decode_polyline6(leg["shape"]))
+                routes.append(coords)
+                durations.append(int(result["trip"]["summary"]["time"]))
+                distances.append(int(result["trip"]["summary"]["length"] * 1000))
+
+        for idx, route_coords in enumerate(routes):
+            feature = QgsFeature()
+            line = QgsLineString([QgsPoint(*coords) for coords in route_coords])
+            feature.setGeometry(QgsGeometry(line))
+
+            feature.setFields(fields)
+            feature[FieldNames.PROVIDER] = self.provider.lower()
+            feature[FieldNames.PROFILE] = self.profile.lower()
+            feature[FieldNames.DURATION] = durations[idx]
+            feature[FieldNames.DISTANCE] = distances[idx]
+            feature[FieldNames.OPTIONS] = json.dumps(params)
+
+            yield feature
