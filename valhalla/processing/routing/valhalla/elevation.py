@@ -9,6 +9,7 @@ from ....global_definitions import (
     DEFAULT_LAYER_FIELDS,
     FieldNames,
     RouterEndpoint,
+    RouterProfile,
     RouterType,
 )
 from ....third_party.routingpy import routingpy
@@ -23,7 +24,7 @@ class ValhallaElevation(ValhallaBaseAlgorithm):
 
     def __init__(self):
         super(ValhallaElevation, self).__init__(
-            provider=RouterType.VALHALLA, endpoint=RouterEndpoint.ELEVATION
+            provider=RouterType.VALHALLA, endpoint=RouterEndpoint.ELEVATION, profile=RouterProfile.CAR
         )
 
     def initAlgorithm(self, configuration, p_str=None, Any=None, *args, **kwargs):

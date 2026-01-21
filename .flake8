@@ -22,6 +22,7 @@ per-file-ignores =
     tests/test_localhost_docker/test_processing/test_routing/test_valhalla_expansion.py: E402
     tests/test_localhost_docker/test_processing/test_routing/test_valhalla_matrix.py: E402
     tests/test_localhost_docker/test_processing/test_routing/test_valhalla_trace_route.py: E402
+    tests/test_localhost_docker/test_processing/test_routing/test_valhalla_height.py: E402
     tests/test_localhost_docker/test_utils/test_layer_utils.py: E402
     tests/test_localhost_docker/test_core/test_results_factory.py: E402
     tests/test_localhost_docker/test_gui/test_widgets/test_waypoint_widget.py: E402
