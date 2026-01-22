@@ -19,11 +19,12 @@ from qgis.core import (
     QgsUnitTypes,
 )
 from qgis.gui import QgisInterface, QgsMapTool, QgsSpinBox
-from qgis.PyQt.QtCore import QPointF, QSize
+from qgis.PyQt.QtCore import QPointF, QSize, Qt
 from qgis.PyQt.QtWidgets import (
     QAbstractItemView,
     QAction,
     QApplication,
+    QComboBox,
     QDialog,
     QHBoxLayout,
     QHeaderView,
@@ -47,6 +48,29 @@ from ...utils.misc_utils import str_is_bool, str_is_float, str_to_bool
 from ...utils.resource_utils import get_icon, get_resource_path
 from ..dlg_from_json import FromValhallaJsonDialog
 from ..dlg_from_osrm_url import FromOsrmUrlDialog
+
+
+@unique
+class LocationType(str, Enum):
+    BREAK = "break"
+    VIA = "via"
+    THROUGH = "through"
+    BREAK_THROUGH = "break_through"
+
+    @property
+    def idx(self) -> int:
+        return list(type(self)).index(self)
+
+
+@unique
+class PreferredSide(str, Enum):
+    EITHER = "either"
+    SAME = "same"
+    OPPOSITE = "opposite"
+
+    @property
+    def idx(self) -> int:
+        return list(type(self)).index(self)
 
 
 @unique
@@ -122,28 +146,36 @@ def build_btn(layout: QLayout, btn_type: WayPtWidgetElems, checkable: bool = Fal
 
 def extract_locations(  # noqa: C901
     router: RouterType, locations: Union[List[dict], str]
-) -> Generator[Tuple[float, float, int, str], None, None]:
+) -> Generator[Tuple[float, float, LocationType, PreferredSide, int, str], None, None]:
     """
     Extracts extra parameters being set on a OSRM URL or a Valhalla location JSON
 
     :param router: the router/provider type
     :param location: the whole valhalla location JSON or OSRM URL
-    :returns: lat, lon, radius, extra_col
+    :returns: lat, lon, type, preferred_side, radius, extra_col
     :raises: ValueError
     """
     if router == RouterType.VALHALLA:
         for loc in locations:
             extra_col: List[str] = list()
             radius = 0
+            type_ = LocationType.BREAK
+            preferred_side = PreferredSide.EITHER
             for k, v in loc.items():
                 if k in ("lat", "lon", "search_filter"):
                     continue
                 elif k == "radius":
                     radius = v
                     continue
+                elif k == "type":
+                    type_ = v
+                    continue
+                elif k == "preferred_side":
+                    preferred_side = v
+                    continue
                 extra_col.append(f"{k}={v}")
 
-            yield loc["lat"], loc["lon"], radius, "&".join(extra_col)
+            yield loc["lat"], loc["lon"], type_, preferred_side, radius, "&".join(extra_col)
     else:
         # OSRM needs to be parsed from the URL
         parsed_url = urlparse(locations)
@@ -172,7 +204,7 @@ def extract_locations(  # noqa: C901
                 if radiuses[idx].isnumeric():
                     radius = int(radiuses[idx])
 
-            yield lat, lon, radius, extra_col
+            yield lat, lon, LocationType.BREAK, PreferredSide.EITHER, radius, extra_col
 
 
 class WaypointsWidget(QWidget):
@@ -226,12 +258,14 @@ class WaypointsWidget(QWidget):
                         kwargs[k] = float(v)
                     else:  # it's a string
                         kwargs[k] = v
+                kwargs["type"] = self.ui_table.cellWidget(row, 0).currentText()
+                kwargs["preferred_side"] = self.ui_table.cellWidget(row, 1).currentText()
                 radius = self.ui_table.cellWidget(row, 2).value()
                 if radius > 0:
                     kwargs["radius"] = radius
                 locations.append(
                     Valhalla.Waypoint(
-                        [float(self.ui_table.item(row, x).text()) for x in (1, 0)],  # lon, lat
+                        [round(c, 6) for c in self.ui_table.item(row, 4).data(Qt.UserRole)],
                         **kwargs,
                     )
                 )
@@ -264,19 +298,42 @@ class WaypointsWidget(QWidget):
 
         return params
 
-    def _add_row_to_table(self, row: int, lat: float, lon: float, radius: int = 0, extra: str = ""):
+    def _add_row_to_table(
+        self,
+        row: int,
+        lat: float,
+        lon: float,
+        loc_type: str = "break",
+        preferred_side: str = "either",
+        radius: int = 0,
+        extra: str = "",
+    ):
         """
-        Adds radiuses and bearings to the table's locations
+        Adds a row to the table's locations
         """
+        loc_type_w = QComboBox()
+        loc_type_w.addItems([t.value for t in LocationType])
+        loc_type_w.setCurrentIndex(LocationType(loc_type).idx)
+        self.ui_table.setCellWidget(row, 0, loc_type_w)
+
+        preferred_side_w = QComboBox()
+        preferred_side_w.addItems([t.value for t in PreferredSide])
+        preferred_side_w.setCurrentIndex(PreferredSide(preferred_side).idx)
+        self.ui_table.setCellWidget(row, 1, preferred_side_w)
+
         radius_w = QgsSpinBox()
         radius_w.setMaximum(100000)
         radius_w.setValue(radius)
-        self.ui_table.setItem(row, 0, QTableWidgetItem(str(round(lat, 6))))
-        self.ui_table.setItem(row, 1, QTableWidgetItem(str(round(lon, 6))))
         self.ui_table.setCellWidget(row, 2, radius_w)
+
         extra_col = QTableWidgetItem(extra)
         extra_col.setToolTip(extra)
         self.ui_table.setItem(row, 3, extra_col)
+
+        # lat/lon as UserRole data
+        lonlat = QTableWidgetItem()
+        lonlat.setData(Qt.UserRole, (lon, lat))
+        self.ui_table.setItem(row, 4, lonlat)
 
     def _handle_from_layer(self):
         """Fires a dialog to choose a Point layer and populates the waypoints table with the features."""
@@ -357,6 +414,7 @@ class WaypointsWidget(QWidget):
         for row_id in reversed(range(self.ui_table.rowCount())):
             self.ui_table.removeRow(row_id)
         for _, item in self.points_lyr.items().items():
+            item: QgsAnnotationMarkerItem
             pt = point_to_wgs84(item.geometry(), self.iface.mapCanvas().mapSettings().destinationCrs())
             row_id = self.ui_table.rowCount()
             self.ui_table.insertRow(row_id)
@@ -471,10 +529,9 @@ class WaypointsWidget(QWidget):
         """Remove a point from the locations table."""
         # first collect the row ids
         max_row = self.ui_table.rowCount()
-        rm_idx = list()
-        for row_id in range(max_row):
-            if self.ui_table.item(row_id, 0).isSelected():
-                rm_idx.append(row_id)
+        rm_idx = set()
+        for idx in self.ui_table.selectionModel().selectedIndexes():
+            rm_idx.add(idx.row())
 
         if not len(rm_idx) and max_row > 0:
             rm_idx.append(max_row - 1)
@@ -504,10 +561,7 @@ class WaypointsWidget(QWidget):
         self.points_lyr_id = self.points_lyr.id()
 
         for row_id in range(self.ui_table.rowCount()):
-            pt = QgsPointXY(
-                float(self.ui_table.item(row_id, 1).text()),
-                float(self.ui_table.item(row_id, 0).text()),
-            )
+            pt = QgsPointXY(*self.ui_table.item(row_id, 4).data(Qt.UserRole))
             pt = point_to_wgs84(
                 pt,
                 self.iface.mapCanvas().mapSettings().destinationCrs(),
@@ -604,20 +658,35 @@ class WaypointsWidget(QWidget):
         self.outer_layout.addLayout(self.buttons_layout)
 
         # add table widget to the outer layout
-        self.ui_table = QTableWidget(0, 4, self)
+        self.ui_table = QTableWidget(0, 5, self)
         self.ui_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui_table.setObjectName(WayPtWidgetElems.TABLE.value)
-        self.ui_table.setHorizontalHeaderItem(0, QTableWidgetItem())
-        self.ui_table.setHorizontalHeaderItem(1, QTableWidgetItem())
+
+        type_col = QTableWidgetItem()
+        type_col.setToolTip(
+            "See https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#locations"
+        )
+        self.ui_table.setHorizontalHeaderItem(0, type_col)
+
+        type_col = QTableWidgetItem()
+        type_col.setToolTip(
+            "See https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#locations"
+        )
+        self.ui_table.setHorizontalHeaderItem(1, type_col)
+
         radius_col = QTableWidgetItem()
         radius_col.setToolTip("Radius in meters")
         self.ui_table.setHorizontalHeaderItem(2, radius_col)
+
         extra_col = QTableWidgetItem()
         extra_col.setToolTip(
             "Extra location properties in URL form, e.g. 'bearing=120,20&hint=348sfj89sa' for OSRM or 'heading=120&preferred_side=same' for Valhalla "
         )
         self.ui_table.setHorizontalHeaderItem(3, extra_col)
-        self.ui_table.setHorizontalHeaderLabels(("Lat", "Lon", "Radius", "Extra"))
+        self.ui_table.setHorizontalHeaderLabels(("Type", "Side", "Radius", "Extra", "Coords"))
+
+        # attach lat/lon to a hidden column's data
+        self.ui_table.setColumnHidden(4, True)
 
         # set table dimensions
         self.ui_table.setMinimumHeight(200)
