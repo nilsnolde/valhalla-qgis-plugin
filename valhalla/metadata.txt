@@ -2,8 +2,8 @@
 name=Valhalla
 qgisMinimumVersion=3.4
 qgisMaximumVersion=3.99
-description=Valhalla routing, isochrones, expansion and matrix calculations for QGIS
-version=4.2.0
+description=Valhalla routing, TSP, isochrones, matrix, map match, elevation & expansion calculations for QGIS
+version=4.3.0
 author=Nils Nolde
 email=nilsnolde@proton.me
 hasProcessingProvider=yes
@@ -12,7 +12,7 @@ server=False
 # End of mandatory metadata
 
 about=Valhalla provides access to most of the functions of the open-source Valhalla routing engine.
-    The tool set includes routing, isochrones, matrix and expansion calculations, either interactive in the map canvas or from Point/LineString files within the processing framework.
+    The tool set includes routing, Traveling Salesman, isochrones, matrix, map match, elevation & expansion calculations, either interactive in the map canvas or from Point/LineString files within the processing framework.
     Extensive attributes are set for output files, incl. duration, length and start/end locations.
 
     The plugin accesses remote or local Valhalla HTTP APIs. Linux & OSX users can even install https://pypi.org/project/pyvalhalla/ and are one button click away of:
@@ -28,7 +28,7 @@ tracker=https://github.com/nilsnolde/valhalla-qgis-plugin/issues
 repository=https://github.com/nilsnolde/valhalla-qgis-plugin
 category=Web
 icon=resources/icons/valhalla_logo.svg
-tags=routing, OSM, openstreetmap, valhalla, isochrone, route, matrix, processing, expansion
+tags=routing, OSM, openstreetmap, valhalla, isochrone, route, matrix, processing, expansion, mapmatch, elevation, expansion, tsp
 
 experimental=False
 deprecated=False
