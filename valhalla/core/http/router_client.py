@@ -40,6 +40,7 @@ class RouterClient(BaseClient):
             QNetworkRequest.ContentTypeHeader,
             "application/json",
         )
+        request.setRawHeader(b"X-Client-Id", b"valhalla-qgis-plugin")
 
         request_args = {"request": request}
         if post_params:
