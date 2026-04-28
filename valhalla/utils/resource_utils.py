@@ -144,13 +144,10 @@ def exec_cmd(cmd: str) -> subprocess.CompletedProcess:
     :param cmd: the full command to be executed
     :returns: the completed (success or failure) process instance
     """
-    cmd_split = shlex.split(cmd)
-    shell = False
-    if platform.system() == "Windows":
-        shell = True
-        cmd_split[0] = f'"{cmd_split[0]}"'  # needs to be quoted, absolute path can contain spaces
+    is_win = platform.system() == "Windows"
+    cmd_split = shlex.split(cmd, posix=not is_win)
 
-    return subprocess.run(cmd_split, text=True, check=True, capture_output=True, shell=shell)
+    return subprocess.run(cmd_split, text=True, check=True, capture_output=True, shell=False)
 
 
 def get_json_body(response: QgsNetworkReplyContent) -> dict:
