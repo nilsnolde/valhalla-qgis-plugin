@@ -8,7 +8,7 @@ class PluginSettingsDlgElems(str, Enum):
     # we append the user-defined name to these
     VALHALLA_HTTP_URL = "ui_valhalla_http_url"
     VALHALLA_HTTP_PARAM = "ui_valhalla_http_param"
-    VALHALLA_HTTP_SECRET = "ui_valhalla_http_secret"
+    VALHALLA_HTTP_BLABLA = "ui_valhalla_http_secret"
     VALHALLA_GRAPH_DIRECTORY = "ui_btn_graph_folder"
     DEBUG = "debug"
     SETTINGS_SPLITTER_STATE = "settings_splitter_state"
