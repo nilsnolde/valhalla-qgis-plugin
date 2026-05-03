@@ -1,4 +1,4 @@
-name: Test plugin - QGIS releases
+name: Test plugin - QGIS v3.x releases
 
 # NOTE: remove this whole workflow file once we drop QGIS v3.x support
 

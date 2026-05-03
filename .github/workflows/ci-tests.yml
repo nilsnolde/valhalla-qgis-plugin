@@ -1,4 +1,4 @@
-name: Test plugin - QGIS releases
+name: Test plugin - QGIS v4.x releases
 
 on:
   push:
