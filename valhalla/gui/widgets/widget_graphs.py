@@ -4,8 +4,7 @@ from pathlib import Path
 from shutil import move, rmtree
 
 from qgis.core import Qgis
-from qgis.PyQt.QtCore import QDir, QProcess
-from qgis.PyQt.QtGui import QFileSystemModel
+from qgis.PyQt.QtCore import QDir, QFileSystemWatcher, QProcess, QStringListModel
 from qgis.PyQt.QtWidgets import (
     QAction,
     QDialog,
@@ -18,7 +17,6 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from ...core.settings import ValhallaSettings
-from ...utils.qt_utils import FileNameInDirFilterProxy
 from ...utils.resource_utils import get_icon
 from ..compiled.widget_graphs_ui import Ui_GraphWidget
 from ..dlg_config_editor import ConfigEditorDialog
@@ -66,27 +64,26 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         self.ui_btn_graph_folder.setIcon(get_icon("graph_folder.svg"))
         self.ui_btn_graph_folder.setToolTip(FOLDER_BUTTON_TOOLTIP.format(self.graph_dir))
 
-        # use the graph dir as model for the list view with the restriction that a directory
-        # has to contain a "id.json"
-        self.graph_dir_model = QFileSystemModel()
-        self.graph_dir_model.setFilter(QDir.Filter.NoDotAndDotDot | QDir.Filter.Dirs)
-        self.graph_dir_model.setRootPath(str(self.graph_dir.resolve()))
+        # show subdirs of graph_dir that contain an id.json; rebuild on FS changes
+        self.graph_list_model = QStringListModel(self)
+        self.ui_list_graphs.setModel(self.graph_list_model)
 
-        self.graph_dir_proxy = FileNameInDirFilterProxy(ID_JSON)
-        self.graph_dir_proxy.setSourceModel(self.graph_dir_model)
-        self.graph_dir_proxy.setRootPath(str(self.graph_dir.resolve()))
-        self.ui_list_graphs.setModel(self.graph_dir_proxy)
-
-        root_idx = self.graph_dir_model.index(str(self.graph_dir.resolve()))
-        self.ui_list_graphs.setRootIndex(self.graph_dir_proxy.mapFromSource(root_idx))
+        self.graph_dir_watcher = QFileSystemWatcher([str(self.graph_dir.resolve())], self)
+        self.graph_dir_watcher.directoryChanged.connect(self._refresh_graph_list)
+        self._refresh_graph_list()
 
         # connections
         self.from_pbf_dlg.finished.connect(self._on_graph_add_build)
         self.ui_btn_graph_remove.clicked.connect(self._on_graph_remove)
         self.ui_btn_graph_folder.clicked.connect(self._on_graph_folder_change)
         self.ui_btn_settings.clicked.connect(self.config_dlg.exec)
-        self.graph_dir_model.directoryLoaded.connect(self.graph_dir_proxy.invalidateFilter)
-        self.graph_dir_model.rootPathChanged.connect(self.graph_dir_proxy.invalidateFilter)
+
+    def _refresh_graph_list(self, _path: str = ""):
+        items = sorted(
+            (p.name for p in self.graph_dir.iterdir() if p.is_dir() and (p / ID_JSON).exists()),
+            key=str.casefold,
+        )
+        self.graph_list_model.setStringList(items)
 
     def extendUi(self):
         # turn the "graph add" button into a menu to choose from HTTP, local graph build etc
@@ -203,12 +200,12 @@ class GraphWidget(QWidget, Ui_GraphWidget):
                 indent=2,
             )
 
-        # trigger the filesystem watcher explicitly
-        self.graph_dir_proxy.invalidateFilter()
+        # the new id.json may not be picked up by the FS watcher's directoryChanged
+        # if it's nested in a subdir of graph_dir, so refresh explicitly
+        self._refresh_graph_list()
 
     def _check_list_view(self):
-        root = self.ui_list_graphs.rootIndex()
-        if not self.ui_list_graphs.model().rowCount(root):
+        if not self.graph_list_model.rowCount():
             self._parent.status_bar.pushMessage(
                 "No graphs",
                 f"Couldn't find any usable graph in {self.graph_dir}",
@@ -225,8 +222,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         idx = self.ui_list_graphs.selectedIndexes()
         if not idx:
             return
-        idx = idx[0]
-        path = Path(self.graph_dir_model.filePath(self.graph_dir_proxy.mapToSource(idx)))
+        path = self.graph_dir / idx[0].data()
 
         # make sure this was not by accident
         ret = QMessageBox.warning(
@@ -296,8 +292,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
                 indent=2,
             )
 
-        # trigger the filesystem watcher explicitly
-        self.graph_dir_proxy.invalidateFilter()
+        self._refresh_graph_list()
 
     def _on_graph_folder_change(self):
         new_graph_dir = QFileDialog.getExistingDirectory(
@@ -316,11 +311,10 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         ValhallaSettings().set_graph_dir(self.graph_dir)
         self.ui_btn_graph_folder.setToolTip(FOLDER_BUTTON_TOOLTIP.format(self.graph_dir))
 
-        self.graph_dir_model.setRootPath(new_graph_dir)
-        self.graph_dir_proxy.setRootPath(new_graph_dir)
-
-        # get the source index for that folder and map it through the proxy
-        src_root = self.graph_dir_model.index(new_graph_dir)
-        self.ui_list_graphs.setRootIndex(self.graph_dir_proxy.mapFromSource(src_root))
-
+        # re-target the FS watcher and rebuild
+        watched = self.graph_dir_watcher.directories()
+        if watched:
+            self.graph_dir_watcher.removePaths(watched)
+        self.graph_dir_watcher.addPath(new_graph_dir)
+        self._refresh_graph_list()
         self._check_list_view()
