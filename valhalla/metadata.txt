@@ -3,7 +3,7 @@ name=Valhalla
 qgisMinimumVersion=4.0
 qgisMaximumVersion=4.99
 description=Valhalla routing, TSP, isochrones, matrix, map match, elevation & expansion calculations for QGIS
-version=4.3.3
+version=5.0.0
 author=Nils Nolde
 email=nilsnolde@proton.me
 hasProcessingProvider=yes
@@ -35,11 +35,4 @@ deprecated=False
 
 # done by CI
 changelog=
-    - 4.3.3: reviewer won't relax on the silly "Password security issue", see https://gis.stackexchange.com/questions/500672/qgis-plugin-validation-false-alarm
-    - 4.3.2: remove shell=True & ignore false alarm about secrets detection
-    - 4.3.1: add X-Client-Id request header for valhalla monitoring
-    - 4.3.0: add support for /height & /trace_route
-    - 4.2.0: allow full Valhalla request JSON when extracting locations; manually install pyvalhalla package to not pollute QGIS python packages; add waypoint editor to map context menu; add Traveling Salesman
-    - 4.1.0: Add GeoTIFF support for isochrones
-    - 4.0.0: Introduce pyvalhalla and make all local calculations possible (currently restricted to Linux & OSX), might not be compatible with v3.0.0, see https://github.com/nilsnolde/valhalla-qgis-plugin/issues/30
-    - 3.0.0: Complete re-write from v2.x, for earlier changes refer to `valhalla/metadata.txt` in the [last 2.x commit](https://github.com/nilsnolde/valhalla-qgis-plugin/blob/78c2c71585f23beba796ee85f70b906dbe615f5a/valhalla/metadata.txt)
+    - 5.0.0: same as 4.3.3 (QGIS3 only), adapted for QGIS4 & PyQt6
