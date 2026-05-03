@@ -22,8 +22,8 @@ class TestLSCP(SpOptProcessingBase):
         self.assertEqual(len(fac_out_feats), 2)
         self.assertEqual(len(dem_out_feats), 18)
 
-        self.assertEqual(fac_geom_type, QgsWkbTypes.NoGeometry)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.NoGeometry)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.NoGeometry)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.NoGeometry)
 
     def test_lscp_with_original_layers(self):
         """Tests the LSCP algorithm with facility and demand point inputs specified."""
@@ -44,8 +44,8 @@ class TestLSCP(SpOptProcessingBase):
         ) = self.run_spopt_algorithm(alg, params)
         self.assertEqual(len(fac_out_feats), 2)
         self.assertEqual(len(dem_out_feats), 18)
-        self.assertEqual(fac_geom_type, QgsWkbTypes.Point)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.Point)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.Point)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.Point)
 
     def test_lscp_with_predefined_facilities(self):
         """Tests the LSCP algorithm with predefined facilities."""
@@ -67,8 +67,8 @@ class TestLSCP(SpOptProcessingBase):
         ) = self.run_spopt_algorithm(alg, params)
         self.assertEqual(len(fac_out_feats), 3)
         self.assertEqual(len(dem_out_feats), 26)
-        self.assertEqual(fac_geom_type, QgsWkbTypes.Point)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.Point)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.Point)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.Point)
 
     def test_lscp_partial_joins(self):
         """Tests the LSCP algorithm with only the facilities or demand points layers specified, respectively."""
@@ -88,8 +88,8 @@ class TestLSCP(SpOptProcessingBase):
         ) = self.run_spopt_algorithm(alg, params)
         self.assertEqual(len(fac_out_feats), 2)
         self.assertEqual(len(dem_out_feats), 18)
-        self.assertEqual(fac_geom_type, QgsWkbTypes.Point)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.NoGeometry)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.Point)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.NoGeometry)
 
         params = {
             "INPUT_MATRIX_LAYER": self.od_matrix,
@@ -107,8 +107,8 @@ class TestLSCP(SpOptProcessingBase):
         ) = self.run_spopt_algorithm(alg, params)
         self.assertEqual(len(fac_out_feats), 2)
         self.assertEqual(len(dem_out_feats), 18)
-        self.assertEqual(fac_geom_type, QgsWkbTypes.NoGeometry)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.Point)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.NoGeometry)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.Point)
 
     def test_lscp_small_service_radius(self):
         """Tests the LSCP algorithm with a service radius too small to find a solution."""

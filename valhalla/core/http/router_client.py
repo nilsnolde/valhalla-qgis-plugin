@@ -37,7 +37,7 @@ class RouterClient(BaseClient):
         requests_method = self.nam.blockingGet
         request = QNetworkRequest(url_object)
         request.setHeader(
-            QNetworkRequest.ContentTypeHeader,
+            QNetworkRequest.KnownHeaders.ContentTypeHeader,
             "application/json",
         )
         request.setRawHeader(b"X-Client-Id", b"valhalla-qgis-plugin")
@@ -66,6 +66,6 @@ class RouterClient(BaseClient):
                     qgis_log(
                         "Router {} returned an API error with "
                         "the following message:\n{}".format(self.__class__.__name__, response.content()),
-                        Qgis.Warning,
+                        Qgis.MessageLevel.Warning,
                     )
                 return

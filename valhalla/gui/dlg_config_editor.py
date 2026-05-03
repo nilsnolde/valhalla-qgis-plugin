@@ -24,7 +24,7 @@ class ConfigEditorDialog(QDialog, Ui_ConfigEditor):
             text = json.loads(self.ui_text.toPlainText())
         except json.JSONDecodeError:
             self._parent.status_bar.pushMessage(
-                "Invalid JSON", "Failed saving the Valhalla configuration", Qgis.Warning, 6
+                "Invalid JSON", "Failed saving the Valhalla configuration", Qgis.MessageLevel.Warning, 6
             )
             return super().accept()
 

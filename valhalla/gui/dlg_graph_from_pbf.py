@@ -23,10 +23,14 @@ class GraphFromPBFDialog(QDialog, Ui_GraphFromPBF):
         self.pbf_path = self.ui_pbf_file.filePath()
         graph_name = self.ui_text_name.text()
         if not self.pbf_path:
-            self._parent.status_bar.pushMessage("No PBF", "Needs a PBF file", Qgis.Critical, 6)
+            self._parent.status_bar.pushMessage(
+                "No PBF", "Needs a PBF file", Qgis.MessageLevel.Critical, 6
+            )
             return super().reject()
         elif not graph_name:
-            self._parent.status_bar.pushMessage("No Graph name", "Needs a graph name", Qgis.Critical, 6)
+            self._parent.status_bar.pushMessage(
+                "No Graph name", "Needs a graph name", Qgis.MessageLevel.Critical, 6
+            )
             return super().reject()
 
         try:
@@ -36,10 +40,10 @@ class GraphFromPBFDialog(QDialog, Ui_GraphFromPBF):
                 self,
                 "Graph exists",
                 f"The graph {self.graph_dir} already exists. Should it be replaced?",
-                QMessageBox.Yes | QMessageBox.No,
-                QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
             )
-            if ret == QMessageBox.No:
+            if ret == QMessageBox.StandardButton.No:
                 return
 
             rmtree(self.graph_dir)

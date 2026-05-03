@@ -88,7 +88,7 @@ def get_pypi_lib_version(pypi_pkg: PyPiPkg) -> Version:
     url = QUrl(PYPI_URL.format(pkg_name=pypi_pkg.pypi_name))
     req = QNetworkRequest(url)
     req.setHeader(
-        QNetworkRequest.ContentTypeHeader,
+        QNetworkRequest.KnownHeaders.ContentTypeHeader,
         "application/json",
     )
 
@@ -165,10 +165,10 @@ def get_json_body(response: QgsNetworkReplyContent) -> dict:
 
     error_code = response.error()
 
-    if error_code == QNetworkReply.TimeoutError:
+    if error_code == QNetworkReply.NetworkError.TimeoutError:
         raise exceptions.Timeout("Request timed out.")
 
-    status_code = response.attribute(QNetworkRequest.HttpStatusCodeAttribute)
+    status_code = response.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute)
     if status_code is None:
         msg = f"{response.errorString()} for URL {response.request().url().toString()}"
         raise exceptions.RouterError(response.error(), msg)

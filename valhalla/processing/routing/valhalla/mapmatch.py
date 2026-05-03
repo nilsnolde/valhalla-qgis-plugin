@@ -26,7 +26,7 @@ from ...routing.base_algorithm import (
 
 
 class MapMatchBase(ValhallaBaseAlgorithm):
-    IN_1_TYPES = [QgsProcessing.TypeVectorLine]
+    IN_1_TYPES = [QgsProcessing.SourceType.TypeVectorLine]
 
     def __init__(
         self,

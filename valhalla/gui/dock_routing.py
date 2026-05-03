@@ -246,9 +246,11 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         layer_name = "{} {} {}".format(
             router.capitalize() if router == RouterType.VALHALLA else router.upper(),
             endpoint.capitalize(),
-            self.router_widget.profile.capitalize()
-            if self.router_widget.profile and endpoint != RouterEndpoint.ELEVATION
-            else "",
+            (
+                self.router_widget.profile.capitalize()
+                if self.router_widget.profile and endpoint != RouterEndpoint.ELEVATION
+                else ""
+            ),
         )
 
         if params.get("format") == "geotiff":
@@ -291,7 +293,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
         ):
             self.status_bar.pushMessage(
                 "Please provide intervals as comma separated numbers (e.g. 100,200,300)",
-                Qgis.Critical,
+                Qgis.MessageLevel.Critical,
                 8,
             )
             return
@@ -320,12 +322,12 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
             self.status_bar.pushMessage(
                 f"HTTP Error {e.status}",
                 msg,
-                Qgis.Critical,
+                Qgis.MessageLevel.Critical,
                 8,
             )
             return
         except (RuntimeError, ValhallaError) as e:  # Bindings & factory error
-            self.status_bar.pushMessage("Error", str(e), Qgis.Critical, 8)
+            self.status_bar.pushMessage("Error", str(e), Qgis.MessageLevel.Critical, 8)
             return
 
         QgsProject.instance().addMapLayer(lyr)
@@ -377,7 +379,7 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
 
         # show the details (i.e. request params) by default
         for btn in msg_box.buttons():
-            if msg_box.buttonRole(btn) == QMessageBox.ActionRole:
+            if msg_box.buttonRole(btn) == QMessageBox.ButtonRole.ActionRole:
                 btn.click()
 
         msg_box.exec()

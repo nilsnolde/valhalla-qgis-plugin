@@ -57,7 +57,7 @@ def get_qgis_app(cleanup=True):  # noqa: C901
 
         # Set org and app name for saving settings in the right folder
         QCoreApplication.setOrganizationName('QGIS')
-        QCoreApplication.setApplicationName('QGIS3')
+        QCoreApplication.setApplicationName('QGIS4')
 
         # Note: QGIS_PREFIX_PATH is evaluated in QgsApplication -
         # no need to mess with it here.

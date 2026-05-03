@@ -3,7 +3,7 @@ from qgis.core import Qgis, QgsMessageLog
 from .. import PLUGIN_NAME
 
 
-def qgis_log(message, level=Qgis.Info):
+def qgis_log(message, level=Qgis.MessageLevel.Info):
     """
     Writes to QGIS inbuilt logger accessible through panel.
 

@@ -97,7 +97,7 @@ class TestRoutingDialog(unittest.TestCase):
     def test_graph_extent_fossgis(self):
         # set FOSSGIS, so we get an info msg
         self.dlg.router_widget.ui_cmb_prov.setCurrentIndex(0)
-        QTest.mouseClick(self.dlg.ui_graph_btn, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.ui_graph_btn, Qt.MouseButton.LeftButton)
         self.assertIn(
             "The public server has the full world graph and admins/timezones loaded",
             self.dlg.status_bar.currentItem().text(),
@@ -105,7 +105,7 @@ class TestRoutingDialog(unittest.TestCase):
 
     def test_graph_extent_localhost(self):
         self.dlg.router_widget.ui_cmb_prov.setCurrentIndex(1)
-        QTest.mouseClick(self.dlg.ui_graph_btn, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.ui_graph_btn, Qt.MouseButton.LeftButton)
         self.assertIn(
             "Both admin areas and timezones are built into the graph.",
             self.dlg.status_bar.currentItem().text(),
@@ -115,7 +115,7 @@ class TestRoutingDialog(unittest.TestCase):
         layer: QgsVectorLayer = layers[0]
         self.assertEqual(len(layers), 1)
         self.assertTrue(
-            layer.geometryType() == QgsWkbTypes.PolygonGeometry,
+            layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry,
             msg=f"Extent layer has unexpected Geometry Type {layer.geometryType()}",
         )
         self.assertEqual(layer.featureCount(), 1)

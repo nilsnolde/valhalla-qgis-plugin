@@ -20,6 +20,8 @@ class TestGeomUtils(unittest.TestCase):
         crs = QgsCoordinateReferenceSystem.fromEpsgId(3857)
         exp = WAYPOINTS_3857
         for idx, pt in enumerate(WAYPOINTS_4326):
-            proj_pt = point_to_wgs84(QgsPointXY(*pt), crs, QgsCoordinateTransform.ReverseTransform)
+            proj_pt = point_to_wgs84(
+                QgsPointXY(*pt), crs, QgsCoordinateTransform.TransformDirection.ReverseTransform
+            )
             self.assertEqual(round(proj_pt.x(), 1), exp[idx][0])
             self.assertEqual(round(proj_pt.y(), 1), exp[idx][1])

@@ -51,21 +51,23 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
     def add_waypoints(self, points):
         """adds waypoints to the table"""
         # click the add button which should hide the dialog
-        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_add_pt, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_add_pt, Qt.MouseButton.LeftButton)
         self.assertTrue(self.dlg.isVisible())
         sleep(0.2)
 
         # add 3 points in Berlin
         for pt in points:
-            self.dlg.waypoints_widget.point_tool.canvasClicked.emit(QgsPointXY(*pt), Qt.LeftButton)
+            self.dlg.waypoints_widget.point_tool.canvasClicked.emit(
+                QgsPointXY(*pt), Qt.MouseButton.LeftButton
+            )
             sleep(0.1)
 
         # finish collecting points with double click
         double_click = QgsMapMouseEvent(
             CANVAS,
-            QEvent.MouseButtonDblClick,
+            QEvent.Type.MouseButtonDblClick,
             QPoint(0, 0),  # Relative to the canvas' dimensions
-            Qt.LeftButton,
+            Qt.MouseButton.LeftButton,
         )
         self.dlg.waypoints_widget.point_tool.canvasDoubleClickEvent(double_click)
         self.assertTrue(self.dlg.isVisible())
@@ -129,10 +131,10 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
         self.assertEqual(table.rowCount(), 3)
         for row_id in range(table.rowCount()):
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
             )
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
             )
 
     def test_remove_waypoints(self):
@@ -142,11 +144,11 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
 
         # select the first point and remove it
         table.selectRow(0)
-        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_rm_pt, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_rm_pt, Qt.MouseButton.LeftButton)
         self.assertEqual(table.rowCount(), 2)
 
         # make sure it's the actually the first one that was removed
-        first_pt = table.item(0, 4).data(Qt.UserRole)
+        first_pt = table.item(0, 4).data(Qt.ItemDataRole.UserRole)
         self.assertAlmostEqual(first_pt[0], WAYPOINTS_4326[1][0], 5)
         self.assertAlmostEqual(first_pt[1], WAYPOINTS_4326[1][1], 5)
 
@@ -156,7 +158,7 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
         self.add_waypoints(WAYPOINTS_3857)
 
         self.assertEqual(table.rowCount(), 3)
-        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_rm_all, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_rm_all, Qt.MouseButton.LeftButton)
         self.assertEqual(table.rowCount(), 0)
 
     def test_move_item_up(self):
@@ -169,7 +171,7 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
         old_second = table.item(1, 0)
 
         table.selectRow(1)
-        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_up, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_up, Qt.MouseButton.LeftButton)
 
         self.assertEqual(old_first, table.item(1, 0))
         self.assertEqual(old_second, table.item(0, 0))
@@ -184,7 +186,7 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
         old_second = table.item(2, 0)
 
         table.selectRow(1)
-        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_down, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_down, Qt.MouseButton.LeftButton)
 
         self.assertEqual(old_first, table.item(2, 0))
         self.assertEqual(old_second, table.item(1, 0))
@@ -204,7 +206,9 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
             dlg: FromLayerDialog = QApplication.activeWindow()
             self.assertIsInstance(dlg, FromLayerDialog)
             # the layer we added will automatically be chosen
-            QTest.mouseClick(dlg.buttonBox.button(QDialogButtonBox.Ok), Qt.LeftButton)
+            QTest.mouseClick(
+                dlg.buttonBox.button(QDialogButtonBox.StandardButton.Ok), Qt.MouseButton.LeftButton
+            )
 
         # then press the button and set the right layer when it's open
         QTimer.singleShot(100, handle_exec)
@@ -215,10 +219,10 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
         self.assertEqual(table.rowCount(), 3)
         for row_id in range(table.rowCount()):
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
             )
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
             )
 
     def test_from_valhalla_json(self):
@@ -250,7 +254,9 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
             dlg: FromValhallaJsonDialog = QApplication.activeWindow()
             self.assertIsInstance(dlg, FromValhallaJsonDialog)
             dlg.json_field.setText(json.dumps(input_json))
-            QTest.mouseClick(dlg.buttonBox.button(QDialogButtonBox.Ok), Qt.LeftButton)
+            QTest.mouseClick(
+                dlg.buttonBox.button(QDialogButtonBox.StandardButton.Ok), Qt.MouseButton.LeftButton
+            )
 
         # then press the button and set the right layer when it's open
         QTimer.singleShot(100, lambda: handle_exec(locs_json))
@@ -265,10 +271,10 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
             self.assertEqual(int(table.cellWidget(row_id, 2).value()), 10)
             assertQueryStringEqual(table.item(row_id, 3).text(), unquote(urlencode(extra_params)))
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
             )
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
             )
 
         # try the same with a full valhalla request json
@@ -289,10 +295,10 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
             self.assertEqual(int(table.cellWidget(row_id, 2).value()), 10)
             assertQueryStringEqual(table.item(row_id, 3).text(), unquote(urlencode(extra_params)))
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
             )
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
             )
 
     def test_from_osrm_url(self):
@@ -318,7 +324,9 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
             dlg: FromOsrmUrlDialog = QApplication.activeWindow()
             self.assertIsInstance(dlg, FromOsrmUrlDialog)
             dlg.ui_url.setText(url)
-            QTest.mouseClick(dlg.buttonBox.button(QDialogButtonBox.Ok), Qt.LeftButton)
+            QTest.mouseClick(
+                dlg.buttonBox.button(QDialogButtonBox.StandardButton.Ok), Qt.MouseButton.LeftButton
+            )
 
         # then press the button and set the right layer when it's open
         QTimer.singleShot(100, handle_exec)
@@ -333,10 +341,10 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
             self.assertEqual(int(table.cellWidget(row_id, 2).value()), int(radiuses[row_id]))
             assertQueryStringEqual(table.item(row_id, 3).text(), f"heading={bearings[row_id]}")
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[0], WAYPOINTS_4326[row_id][0], 5
             )
             self.assertAlmostEqual(
-                table.item(row_id, 4).data(Qt.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
+                table.item(row_id, 4).data(Qt.ItemDataRole.UserRole)[1], WAYPOINTS_4326[row_id][1], 5
             )
 
     def test_waypoints_layer(self):
@@ -369,9 +377,9 @@ class TestWaypointsWidget(LocalhostDockerTestCase):
         self.assertTrue(self.dlg.waypoints_widget.ui_btn_show_point_lyr.isChecked())
 
         # then check the other way around: hit the button and check visibility
-        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_show_point_lyr, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_show_point_lyr, Qt.MouseButton.LeftButton)
         self.assertFalse(points_node.isVisible())
-        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_show_point_lyr, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.waypoints_widget.ui_btn_show_point_lyr, Qt.MouseButton.LeftButton)
         self.assertTrue(points_node.isVisible())
 
     def test_waypoints_table_preserves_itself(self):

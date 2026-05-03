@@ -20,7 +20,7 @@ def get_status_response(base_url: str, verbose: bool = False) -> dict:
     url = QUrl(base_url + "/status")
     req = QNetworkRequest(url)
     req.setHeader(
-        QNetworkRequest.ContentTypeHeader,
+        QNetworkRequest.KnownHeaders.ContentTypeHeader,
         "application/json",
     )
     req_method = nam.blockingGet

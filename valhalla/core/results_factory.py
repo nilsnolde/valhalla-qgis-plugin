@@ -67,13 +67,13 @@ class ResultsFactory:
             gd.RouterEndpoint.TSP,
             gd.RouterEndpoint.MAP_MATCH,
         ):
-            return QgsWkbTypes.LineString
+            return QgsWkbTypes.Type.LineString
         elif endpoint == gd.RouterEndpoint.ISOCHRONES:
-            return QgsWkbTypes.Polygon
+            return QgsWkbTypes.Type.Polygon
         elif endpoint == gd.RouterEndpoint.MATRIX:
-            return QgsWkbTypes.NoGeometry
+            return QgsWkbTypes.Type.NoGeometry
         elif endpoint == gd.RouterEndpoint.ELEVATION:
-            return QgsWkbTypes.PointZ
+            return QgsWkbTypes.Type.PointZ
 
     # flake8: noqa: C901
     def get_results(

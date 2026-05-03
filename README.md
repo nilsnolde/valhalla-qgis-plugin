@@ -2,6 +2,9 @@
 
 QGIS Plugin for the [Valhalla routing engine](https://github.com/valhalla/valhalla).
 
+> [!NOTE]
+> This plugin supports both QGIS v3.x (on [`https://github.com/nilsnolde/valhalla-qgis-plugin/tree/qgis-v3` branch]) & v4.x (on `master`). The plugin's release series <=4.x is reserved for QGIS3, series >=5.x for QGIS4.
+
 It features:
 - UI & processing algorithms to routing, isochrones, matrix & expansion endpoints for `pedestrian`, `bicycle`, `car`, `truck` & `motorcycle`
 - (**linux-x86_64 & macos-arm64 only**) **all local** calculations after installing [`pyvalhalla`](https://pypi.org/project/pyvalhalla/) with the full flexibility of local Valhalla processes:
@@ -109,10 +112,10 @@ Since this plugin is pretty flexible, so the tests need to be too:
     docker start valhalla-router
 
     # or if it doesn't exist yet
-    # docker run -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
+    # docker run -dt --name valhalla-router -p 8002:8002 -v $PWD/tests/data:/custom_files -e server_threads=2 -e tileset_name=andorra-tiles ghcr.io/valhalla/valhalla-scripted:latest
 
     # "uninstall" python package if it's installed
-    rm -r /home/nilsnolde/.local/share/QGIS/QGIS3/profiles/default/valhalla/pyvalhalla
+    rm -r /home/nilsnolde/.local/share/QGIS/QGIS4/profiles/default/valhalla/pyvalhalla
 
     QT_QPA_PLATFORM=offscreen python -m coverage run --append -m unittest discover -s tests/test_localhost_docker -t .
     ```

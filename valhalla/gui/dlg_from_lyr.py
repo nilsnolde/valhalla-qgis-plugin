@@ -10,12 +10,12 @@ class FromLayerDialog(QDialog, Ui_FromLayerDialog):
     def __init__(self, parent=None):
         super(FromLayerDialog, self).__init__(parent)
         self.setupUi(self)
-        self.from_layer.setFilters(QgsMapLayerProxyModel.PointLayer)
+        self.from_layer.setFilters(QgsMapLayerProxyModel.Filter.PointLayer)
 
         self.layer: Optional[QgsVectorLayer] = None
 
     def done(self, r: int = 0):
-        if r == QDialog.Accepted:
+        if r == QDialog.DialogCode.Accepted:
             self.layer = self.from_layer.currentLayer()
 
         super().done(r)

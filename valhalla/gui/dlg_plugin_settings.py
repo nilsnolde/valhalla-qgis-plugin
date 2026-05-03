@@ -99,7 +99,7 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
             self.splitter.setSizes([1, 0])
 
     def _get_splitter(self) -> SplitterWithHandleButton:
-        splitter = SplitterWithHandleButton(Qt.Horizontal)
+        splitter = SplitterWithHandleButton(Qt.Orientation.Horizontal)
         splitter.addWidget(GraphWidget(self))
         splitter.addWidget(self.log_widget)
         splitter.setCollapsible(0, False)
@@ -129,7 +129,9 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
         settings.set_binary_dir(new_path)
         if not check_valhalla_installation():
             self.status_bar.pushMessage(
-                f"Couldnt find valhalla_service in {new_path}", level=Qgis.Warning, duration=5
+                f"Couldnt find valhalla_service in {new_path}",
+                level=Qgis.MessageLevel.Warning,
+                duration=5,
             )
             settings.set_binary_dir(old_path)
 
@@ -164,8 +166,8 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
 
             # add a URL linked label
             url_label = QLabel(f'<a href="{pkg.url}">{pkg.pypi_name}</a>')
-            url_label.setTextFormat(Qt.RichText)
-            url_label.setTextInteractionFlags(Qt.TextBrowserInteraction)
+            url_label.setTextFormat(Qt.TextFormat.RichText)
+            url_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
             url_label.setOpenExternalLinks(True)
             self.ui_deps_table.setCellWidget(row_id, 0, url_label)
             version_item = QTableWidgetItem(current_version.public)
@@ -195,7 +197,9 @@ class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
             # in case there'll be more packages in the future, this will need to be extended
             install_pyvalhalla(installed_state)
         except ValhallaCmdError as e:
-            self.status_bar.pushMessage(f"Couldn't install the dependencies:\n{e}", Qgis.Critical, 0)
+            self.status_bar.pushMessage(
+                f"Couldn't install the dependencies:\n{e}", Qgis.MessageLevel.Critical, 0
+            )
             return
 
         self.status_bar.pushMessage(f"Successfully installed/upgraded package: {pypi_pkg}")

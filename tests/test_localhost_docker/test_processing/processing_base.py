@@ -45,7 +45,7 @@ class ProcessingBase(LocalhostDockerTestCase):
 
         # single point layer
         cls.layer_1 = QgsVectorLayer(
-            f"{QgsWkbTypes.displayString(QgsWkbTypes.Point)}",
+            f"{QgsWkbTypes.displayString(QgsWkbTypes.Type.Point)}",
             "layer_1",
             "memory",
         )
@@ -62,7 +62,7 @@ class ProcessingBase(LocalhostDockerTestCase):
 
         # another single point layer
         cls.layer_2 = QgsVectorLayer(
-            f"{QgsWkbTypes.displayString(QgsWkbTypes.Point)}",
+            f"{QgsWkbTypes.displayString(QgsWkbTypes.Type.Point)}",
             "layer_2",
             "memory",
         )
@@ -79,7 +79,7 @@ class ProcessingBase(LocalhostDockerTestCase):
 
         # multipoint layer
         cls.layer_mp = QgsVectorLayer(
-            f"{QgsWkbTypes.displayString(QgsWkbTypes.MultiPoint)}",
+            f"{QgsWkbTypes.displayString(QgsWkbTypes.Type.MultiPoint)}",
             "layer_mp",
             "memory",
         )
@@ -98,7 +98,7 @@ class ProcessingBase(LocalhostDockerTestCase):
 
         # line layer
         cls.layer_line = QgsVectorLayer(
-            f"{QgsWkbTypes.displayString(QgsWkbTypes.LineString)}",
+            f"{QgsWkbTypes.displayString(QgsWkbTypes.Type.LineString)}",
             "layer_line",
             "memory",
         )
@@ -109,7 +109,7 @@ class ProcessingBase(LocalhostDockerTestCase):
 
         # avoid polygon layer
         cls.avoid_polygon_layer = QgsVectorLayer(
-            f"{QgsWkbTypes.displayString(QgsWkbTypes.Polygon)}",
+            f"{QgsWkbTypes.displayString(QgsWkbTypes.Type.Polygon)}",
             "layer_avoid_polygon",
             "memory",
         )

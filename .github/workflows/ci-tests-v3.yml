@@ -1,4 +1,6 @@
-name: Test plugin - QGIS v4.x releases
+name: Test plugin - QGIS v3.x releases
+
+# NOTE: remove this whole workflow file once we drop QGIS v3.x support
 
 on:
   push:
@@ -22,14 +24,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # test 
-        #   - v4 current release
-        #   - in future: + LTR 
-        qgis_tags: [4.0.1]
+        qgis_tags: [3.44.10]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
+          ref: qgis-v3
           submodules: recursive
 
       - name: tests
@@ -50,25 +50,3 @@ jobs:
           docker exec qgis-testing-environment bash -c "/tests_directory/tests/scripts/qgis_test_setup.sh ${{ matrix.qgis_tags }} ${{ env.PLUGIN_PATH }} tests/test_localhost_plugin"
           # do the coverage
           docker exec qgis-testing-environment bash -c "cd /tests_directory && python3 -m coverage report && python3 -m coverage lcov --include \"valhalla/*\""
-
-      - name: Upload coverage artifact
-        if: matrix.qgis_tags == '4.0.1'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-lcov
-          path: coverage.lcov
-
-  coveralls:
-    needs: tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download coverage artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-lcov
-      - name: Send coverage to Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage.lcov

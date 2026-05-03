@@ -68,7 +68,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
                 name=self.IN_MATRIX_SOURCE,
                 description=f"{wrap_in_html_tag('Origin Destination Matrix', 'b')}. "
                 "The Origin-Destination Matrix as a table layer.",
-                types=[QgsProcessing.TypeVector],
+                types=[QgsProcessing.SourceType.TypeVector],
             )
         )
         if self.problem_type in (SpOptTypes.LSCP, SpOptTypes.MCLP):
@@ -76,7 +76,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
                 QgsProcessingParameterNumber(
                     name=self.IN_SERVICE_RADIUS,
                     description="Service Radius",
-                    type=QgsProcessingParameterNumber.Double,
+                    type=QgsProcessingParameterNumber.Type.Double,
                     minValue=0,
                 )
             )
@@ -85,7 +85,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 name=self.IN_FAC_SOURCE,
                 description="The candidate facilities layer.",
-                types=[QgsProcessing.TypeVectorPoint],
+                types=[QgsProcessing.SourceType.TypeVectorPoint],
                 optional=True,
             )
         )
@@ -105,7 +105,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
                     description="Facility layer field indicating if a facility will be used definitively.",
                     parentLayerParameterName=self.IN_FAC_SOURCE,
                     optional=True,
-                    type=QgsProcessingParameterField.Numeric,
+                    type=QgsProcessingParameterField.DataType.Numeric,
                 )
             )
 
@@ -113,7 +113,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 name=self.IN_DEM_SOURCE,
                 description="The demand points layer.",
-                types=[QgsProcessing.TypeVectorPoint],
+                types=[QgsProcessing.SourceType.TypeVectorPoint],
                 optional=True,
             )
         )
@@ -134,7 +134,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
                     description="Demand point weights",
                     parentLayerParameterName=self.IN_DEM_SOURCE,
                     optional=True,
-                    type=QgsProcessingParameterField.Numeric,
+                    type=QgsProcessingParameterField.DataType.Numeric,
                 )
             )
 
@@ -143,7 +143,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
                 QgsProcessingParameterNumber(
                     name=self.IN_N_FAC,
                     description="Number of facilities to be sited",
-                    type=QgsProcessingParameterNumber.Integer,
+                    type=QgsProcessingParameterNumber.Type.Integer,
                     minValue=1,
                     defaultValue=1,
                 )
@@ -156,7 +156,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
             defaultValue=FieldNames.DURATION,
         )
         # We assume users are more interested in the durations than the distances, so we hide this option in the advanced section
-        metric_param.setFlags(QgsProcessingParameterDefinition.FlagAdvanced)
+        metric_param.setFlags(QgsProcessingParameterDefinition.Flag.FlagAdvanced)
 
         self.addParameter(metric_param)
 
@@ -166,7 +166,7 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
             defaultValue=False,
         )
 
-        lines_param.setFlags(lines_param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        lines_param.setFlags(lines_param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(lines_param)
 
         # Only output facilities that are actually selected
@@ -271,30 +271,30 @@ class SPOPTBaseAlgorithm(QgsProcessingAlgorithm):
         if dem_weight_field:  # pass the weight field on if specified
             dem_return_fields.append(QgsField(FieldNames.WEIGHT, QVariant.Double))
 
-        (fac_sink, fac_dest_id) = self.parameterAsSink(
+        fac_sink, fac_dest_id = self.parameterAsSink(
             parameters,
             self.OUT_FAC,
             context,
             fac_return_fields,
-            fac_source.wkbType()
-            if fac_id_field
-            else QgsWkbTypes.NoGeometry,  # if there's an ID field, we retrieve the original geometry
+            (
+                fac_source.wkbType() if fac_id_field else QgsWkbTypes.Type.NoGeometry
+            ),  # if there's an ID field, we retrieve the original geometry
             fac_source.sourceCrs() if fac_source and fac_id_field else WGS84,
         )
 
-        dem_geom_type = QgsWkbTypes.NoGeometry
+        dem_geom_type = QgsWkbTypes.Type.NoGeometry
 
         if dem_id_field:
             dem_geom_type = dem_source.wkbType()
 
         if draw_lines:
-            dem_geom_type = QgsWkbTypes.LineString
+            dem_geom_type = QgsWkbTypes.Type.LineString
             if not dem_id_field and not fac_id_field:
                 raise QgsProcessingException(
                     "No connecting lines can be drawn if facility and demand point ID fields are not specified."
                 )
 
-        (dem_sink, dem_dest_id) = self.parameterAsSink(
+        dem_sink, dem_dest_id = self.parameterAsSink(
             parameters,
             self.OUT_DEM,
             context,

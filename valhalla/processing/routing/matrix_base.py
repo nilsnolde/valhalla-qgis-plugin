@@ -51,7 +51,7 @@ class MatrixBase(ValhallaBaseAlgorithm):
                 name=self.IN_2,
                 description=f"{wrap_in_html_tag('Input point layer 2', 'b')}. "
                 "If provided, directions between points in each layer will be computed",
-                types=[QgsProcessing.TypeVectorPoint],
+                types=[QgsProcessing.SourceType.TypeVectorPoint],
                 optional=True,
             )
         )
