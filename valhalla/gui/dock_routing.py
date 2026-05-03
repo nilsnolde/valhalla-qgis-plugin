@@ -326,6 +326,9 @@ class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
                 8,
             )
             return
+        except routingpy.exceptions.JSONParseError as e:
+            self.status_bar.pushMessage("Invalid response", str(e), Qgis.MessageLevel.Critical, 8)
+            return
         except (RuntimeError, ValhallaError) as e:  # Bindings & factory error
             self.status_bar.pushMessage("Error", str(e), Qgis.MessageLevel.Critical, 8)
             return
