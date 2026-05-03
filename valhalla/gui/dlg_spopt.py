@@ -64,8 +64,8 @@ class SpoptDialog(QDialog, Ui_SpatialOptimization, SplitterMixin):
         self.routing_params_widget = RoutingParamsWidget(self, self.iface)
         self.splitterRightLayout.layout().addWidget(self.routing_params_widget)
 
-        self.ui_fac_layer.setFilters(QgsMapLayerProxyModel.PointLayer)
-        self.ui_dem_point_layer.setFilters(QgsMapLayerProxyModel.PointLayer)
+        self.ui_fac_layer.setFilters(QgsMapLayerProxyModel.Filter.PointLayer)
+        self.ui_dem_point_layer.setFilters(QgsMapLayerProxyModel.Filter.PointLayer)
 
         self._on_profile_change()
 
@@ -206,7 +206,7 @@ class SpoptDialog(QDialog, Ui_SpatialOptimization, SplitterMixin):
             out_dict = spopt_algo.processAlgorithm(spopt_params, ctx, feedback)
 
         except QgsProcessingException as e:
-            self.status_bar.pushMessage("Error", str(e), Qgis.Critical, 8)
+            self.status_bar.pushMessage("Error", str(e), Qgis.MessageLevel.Critical, 8)
             return
 
         out_fac_layer = ctx.takeResultLayer(out_dict[spopt_algo.OUT_FAC])

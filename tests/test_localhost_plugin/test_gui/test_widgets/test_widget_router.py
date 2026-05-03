@@ -44,7 +44,7 @@ class TestRouterWidget(LocalhostPluginTestCase):
 
     @skip
     def test_server_start_stop(self):
-        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_start, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_start, Qt.MouseButton.LeftButton)
         self.assertEqual(self.dlg.router_widget.valhalla_service.state(), QProcess.ProcessState.Starting)
         sleep(0.5)
 
@@ -52,7 +52,7 @@ class TestRouterWidget(LocalhostPluginTestCase):
         parsed_url = urlparse(URL)
         try_connection(parsed_url.hostname, parsed_url.port)
 
-        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_stop, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_stop, Qt.MouseButton.LeftButton)
         sleep(0.5)
 
         # test that it's _not_ reachable
@@ -61,12 +61,12 @@ class TestRouterWidget(LocalhostPluginTestCase):
 
     @skip
     def test_server_log(self):
-        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_start, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_start, Qt.MouseButton.LeftButton)
         sleep(0.1)
 
         self.assertIn("Started ", self.dlg.router_widget.dlg_server_log.text_log.toPlainText())
 
-        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_stop, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_stop, Qt.MouseButton.LeftButton)
         sleep(0.1)
 
         self.assertIn(
@@ -77,7 +77,7 @@ class TestRouterWidget(LocalhostPluginTestCase):
         current_binary_dir = ValhallaSettings().get_binary_dir()
         ValhallaSettings().set_binary_dir("bla")
 
-        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_start, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.router_widget.ui_btn_server_start, Qt.MouseButton.LeftButton)
         sleep(0.1)
 
         self.assertEqual(

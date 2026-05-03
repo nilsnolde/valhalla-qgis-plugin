@@ -83,7 +83,7 @@ class TestRouterWidget(LocalhostDockerTestCase):
         )
 
         # Valhalla - motorbike
-        QTest.mouseClick(self.dlg.router_widget.ui_btn_mbike, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.router_widget.ui_btn_mbike, Qt.MouseButton.LeftButton)
         self.assertIsInstance(
             self.dlg.routing_params_widget.ui_settings_stacked.currentWidget(),
             ValhallaSettingsMbikeWidget,

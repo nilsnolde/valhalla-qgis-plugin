@@ -10,7 +10,7 @@ def add_msg_bar(layout: QLayout) -> QgsMessageBar:
     :returns: the initialized message bar object
     """
     status_bar = QgsMessageBar()
-    status_bar.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+    status_bar.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
     layout.insertWidget(0, status_bar, 2)
 
     return status_bar

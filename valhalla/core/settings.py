@@ -15,7 +15,7 @@ DEFAULTS = {
     PluginSettingsDlgElems.VALHALLA_HTTP_URL: "https://valhalla1.openstreetmap.de",
     PluginSettingsDlgElems.VALHALLA_HTTP_PARAM: "access_token",
     PluginSettingsDlgElems.DEBUG: "False",
-    PluginSettingsDlgElems.SETTINGS_SPLITTER_STATE: ""
+    PluginSettingsDlgElems.SETTINGS_SPLITTER_STATE: "",
     # PluginSettingsDlgElems.SHOP_HTTP_URL: "http://localhost:8080",
 }
 
@@ -66,7 +66,7 @@ class ValhallaSettings(QgsSettings):
     def __init__(self):
         super().__init__(
             str(get_settings_dir().joinpath("settings.ini")),
-            QSettings.IniFormat,
+            QSettings.Format.IniFormat,
         )
 
     def get(self, group: Dialogs, key: Union[str, Enum]):

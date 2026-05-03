@@ -2,11 +2,10 @@ import json
 import platform
 
 from qgis.core import Qgis
-from qgis.PyQt.QtCore import QDir, QProcess, QSize
+from qgis.PyQt.QtCore import QFileSystemWatcher, QProcess, QSize
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QComboBox,
-    QFileSystemModel,
     QFormLayout,
     QHBoxLayout,
     QSizePolicy,
@@ -21,7 +20,6 @@ from ...gui.dlg_plugin_settings import PluginSettingsDialog
 from ...gui.dlg_routing_providers import ProviderDialog
 from ...gui.dlg_server_log import ServerLogDialog
 from ...utils.misc_utils import deep_merge
-from ...utils.qt_utils import FileNameInDirFilterProxy
 from ...utils.resource_utils import (
     check_valhalla_installation,
     create_valhalla_config,
@@ -79,19 +77,10 @@ class RouterWidget(QWidget):
         self.valhalla_service.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
         self.dlg_server_log = ServerLogDialog()
 
-        # make the combobox use a similar view/model as the GraphWidget
-        self.graph_dir_model = QFileSystemModel()
-        self.graph_dir_model.setFilter(QDir.Filter.NoDotAndDotDot | QDir.Filter.Dirs)
-        self.graph_dir_model.setRootPath(str(graph_dir.resolve()))
-
-        self.graph_dir_proxy = FileNameInDirFilterProxy(ID_JSON)
-        self.graph_dir_proxy.setSourceModel(self.graph_dir_model)
-        self.graph_dir_proxy.setRootPath(str(graph_dir.resolve()))
-
-        self.ui_cmb_graphs.setModel(self.graph_dir_proxy)
-        self.ui_cmb_graphs.setModelColumn(0)
-        root_idx = self.graph_dir_model.index(str(graph_dir.resolve()))
-        self.ui_cmb_graphs.setRootModelIndex(self.graph_dir_proxy.mapFromSource(root_idx))
+        # watch the graph dir and rebuild the combobox items on any change
+        self.graph_dir_watcher = QFileSystemWatcher([str(graph_dir.resolve())], self)
+        self.graph_dir_watcher.directoryChanged.connect(self._refresh_graph_combo)
+        self._refresh_graph_combo()
 
         # more connections
         self.ui_btn_server_conf.clicked.connect(self._on_settings_clicked)
@@ -101,7 +90,20 @@ class RouterWidget(QWidget):
         self.ui_cmb_graphs.currentTextChanged.connect(self._on_graph_changed)
         self.valhalla_service.readyReadStandardOutput.connect(self._on_server_log_ready)
         self.valhalla_service.stateChanged.connect(self._on_server_state_changed)
-        self.graph_dir_model.directoryLoaded.connect(self.graph_dir_proxy.invalidateFilter)
+
+    def _refresh_graph_combo(self, _path: str = ""):
+        graph_dir = ValhallaSettings().get_graph_dir()
+        current = self.ui_cmb_graphs.currentText()
+        items = sorted(
+            (p.name for p in graph_dir.iterdir() if p.is_dir() and (p / ID_JSON).exists()),
+            key=str.casefold,
+        )
+        self.ui_cmb_graphs.blockSignals(True)
+        self.ui_cmb_graphs.clear()
+        self.ui_cmb_graphs.addItems(items)
+        if current in items:
+            self.ui_cmb_graphs.setCurrentText(current)
+        self.ui_cmb_graphs.blockSignals(False)
 
     @property
     def router(self) -> RouterType:
@@ -152,10 +154,10 @@ class RouterWidget(QWidget):
     def _on_server_state_changed(self, new_state: QProcess.ProcessState):
         # default to QProcess.ProcessState.Running
         msg = "Local Valhalla server started"
-        level = Qgis.Info
+        level = Qgis.MessageLevel.Info
         if new_state == QProcess.ProcessState.NotRunning:
             msg = "Local Valhalla server stopped"
-            level = Qgis.Warning
+            level = Qgis.MessageLevel.Warning
         elif new_state == QProcess.ProcessState.Starting:
             return
 
@@ -177,7 +179,7 @@ class RouterWidget(QWidget):
             no_binary_dir = True
 
         if no_binary_dir:
-            self._parent.status_bar.pushMessage(msg, Qgis.Critical, 6)
+            self._parent.status_bar.pushMessage(msg, Qgis.MessageLevel.Critical, 6)
             self.settings_dlg.open()
             return
 
@@ -185,7 +187,7 @@ class RouterWidget(QWidget):
         try:
             create_valhalla_config()
         except ModuleNotFoundError as e:
-            self._parent.status_bar.pushMessage(e.msg, Qgis.Critical, 6)
+            self._parent.status_bar.pushMessage(e.msg, Qgis.MessageLevel.Critical, 6)
             return
 
         args = [str(get_valhalla_config_path()), "1"]
@@ -316,7 +318,7 @@ class RouterWidget(QWidget):
         self.mode_btns.buttons()[0].setChecked(True)  # set pedestrian as checked button
 
         self.profile_layout.insertSpacerItem(
-            5, QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+            5, QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         )
         self.outer_layout.addRow("Profile", self.profile_layout)
 

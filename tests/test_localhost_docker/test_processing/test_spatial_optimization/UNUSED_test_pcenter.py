@@ -18,8 +18,8 @@ class TestPCenter(SpOptProcessingBase):
             dem_geom_type,
         ) = self.run_spopt_algorithm(alg, params)
 
-        self.assertEqual(fac_geom_type, QgsWkbTypes.NoGeometry)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.NoGeometry)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.NoGeometry)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.NoGeometry)
         self.assertEqual(len(fac_out_feats), 1)
         self.assertEqual(len(dem_out_feats), 15)
 
@@ -41,8 +41,8 @@ class TestPCenter(SpOptProcessingBase):
             dem_geom_type,
         ) = self.run_spopt_algorithm(alg, params)
 
-        self.assertEqual(fac_geom_type, QgsWkbTypes.Point)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.Point)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.Point)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.Point)
         self.assertEqual(len(fac_out_feats), 1)
         self.assertEqual(len(dem_out_feats), 15)
 
@@ -59,8 +59,8 @@ class TestPCenter(SpOptProcessingBase):
             dem_geom_type,
         ) = self.run_spopt_algorithm(alg, params)
 
-        self.assertEqual(fac_geom_type, QgsWkbTypes.NoGeometry)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.NoGeometry)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.NoGeometry)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.NoGeometry)
         self.assertEqual(
             len(fac_out_feats), 2
         )  # TODO: look into why this is not 3, there is nothing in the spopt docs
@@ -86,8 +86,8 @@ class TestPCenter(SpOptProcessingBase):
             dem_geom_type,
         ) = self.run_spopt_algorithm(alg, params)
 
-        self.assertEqual(fac_geom_type, QgsWkbTypes.Point)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.LineString)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.Point)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.LineString)
         self.assertEqual(len(fac_out_feats), 1)
         self.assertEqual(len(dem_out_feats), 15)
 
@@ -111,8 +111,8 @@ class TestPCenter(SpOptProcessingBase):
             dem_geom_type,
         ) = self.run_spopt_algorithm(alg, params)
 
-        self.assertEqual(fac_geom_type, QgsWkbTypes.Point)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.LineString)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.Point)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.LineString)
         self.assertEqual(len(fac_out_feats), 1)
         self.assertEqual(len(dem_out_feats), 15)
 

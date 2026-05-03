@@ -18,8 +18,8 @@ class TestMCLP(SpOptProcessingBase):
             dem_geom_type,
         ) = self.run_spopt_algorithm(alg, params)
 
-        self.assertEqual(fac_geom_type, QgsWkbTypes.NoGeometry)
-        self.assertEqual(dem_geom_type, QgsWkbTypes.NoGeometry)
+        self.assertEqual(fac_geom_type, QgsWkbTypes.Type.NoGeometry)
+        self.assertEqual(dem_geom_type, QgsWkbTypes.Type.NoGeometry)
         self.assertEqual(len(fac_out_feats), 1)
         self.assertEqual(len(dem_out_feats), 3)
 

@@ -13,10 +13,10 @@ from ... import LocalhostDockerTestCase
 
 
 class FakeReply(QNetworkReply):
-    def __init__(self, status_code=200, error=QNetworkReply.NoError):
+    def __init__(self, status_code=200, error=QNetworkReply.NetworkError.NoError):
         super().__init__()
-        self.setAttribute(QNetworkRequest.HttpStatusCodeAttribute, status_code)
-        if error != QNetworkReply.NoError:
+        self.setAttribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute, status_code)
+        if error != QNetworkReply.NetworkError.NoError:
             self.setError(error, "")
 
     def abort(self):
@@ -29,7 +29,7 @@ class FakeReply(QNetworkReply):
 class TestResourceUtils(LocalhostDockerTestCase):
     def test_get_json_body(self):
         # timeout error
-        res = QgsNetworkReplyContent(FakeReply(error=QNetworkReply.TimeoutError))
+        res = QgsNetworkReplyContent(FakeReply(error=QNetworkReply.NetworkError.TimeoutError))
         with self.assertRaises(exceptions.Timeout):
             get_json_body(res)
 

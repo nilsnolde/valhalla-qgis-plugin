@@ -265,7 +265,7 @@ class WaypointsWidget(QWidget):
                     kwargs["radius"] = radius
                 locations.append(
                     Valhalla.Waypoint(
-                        [round(c, 6) for c in self.ui_table.item(row, 4).data(Qt.UserRole)],
+                        [round(c, 6) for c in self.ui_table.item(row, 4).data(Qt.ItemDataRole.UserRole)],
                         **kwargs,
                     )
                 )
@@ -332,7 +332,7 @@ class WaypointsWidget(QWidget):
 
         # lat/lon as UserRole data
         lonlat = QTableWidgetItem()
-        lonlat.setData(Qt.UserRole, (lon, lat))
+        lonlat.setData(Qt.ItemDataRole.UserRole, (lon, lat))
         self.ui_table.setItem(row, 4, lonlat)
 
     def _handle_from_layer(self):
@@ -340,7 +340,7 @@ class WaypointsWidget(QWidget):
         dlg = FromLayerDialog(self.parent_dlg)
         r = dlg.exec()
 
-        if r == QDialog.Rejected or not dlg.layer or not dlg.layer.isValid():
+        if r == QDialog.DialogCode.Rejected or not dlg.layer or not dlg.layer.isValid():
             return
 
         feat: QgsFeature
@@ -356,7 +356,7 @@ class WaypointsWidget(QWidget):
         """Fill the locations table by parsing a OSRM URL"""
         url_dlg = FromOsrmUrlDialog(self.parent_dlg)
         r = url_dlg.exec()
-        if r != QDialog.Accepted:
+        if r != QDialog.DialogCode.Accepted:
             return
 
         try:
@@ -366,13 +366,13 @@ class WaypointsWidget(QWidget):
                 self.ui_table.insertRow(row_id)
                 self._add_row_to_table(row_id, *loc_args)
         except ValueError as e:
-            self.parent_dlg.status_bar.pushMessage("OSRM Error", str(e), Qgis.Critical, 8)
+            self.parent_dlg.status_bar.pushMessage("OSRM Error", str(e), Qgis.MessageLevel.Critical, 8)
 
     def _handle_from_valhalla_json(self):
         """Fill the locations table by parsing a Valhalla locations JSON"""
         json_dlg = FromValhallaJsonDialog(self.parent_dlg)
         r = json_dlg.exec()
-        if r != QDialog.Accepted:
+        if r != QDialog.DialogCode.Accepted:
             return
 
         try:
@@ -384,7 +384,7 @@ class WaypointsWidget(QWidget):
                     f"Passed JSON is not a Valhalla JSON request object or an array of Valhalla locations: {json_dlg.json_field.toPlainText()}"
                 )
         except (json.JSONDecodeError, ValueError) as e:
-            self.parent_dlg.status_bar.pushMessage("JSON Error", str(e), Qgis.Critical, 8)
+            self.parent_dlg.status_bar.pushMessage("JSON Error", str(e), Qgis.MessageLevel.Critical, 8)
             return
 
         row_count = self.ui_table.rowCount()
@@ -561,11 +561,11 @@ class WaypointsWidget(QWidget):
         self.points_lyr_id = self.points_lyr.id()
 
         for row_id in range(self.ui_table.rowCount()):
-            pt = QgsPointXY(*self.ui_table.item(row_id, 4).data(Qt.UserRole))
+            pt = QgsPointXY(*self.ui_table.item(row_id, 4).data(Qt.ItemDataRole.UserRole))
             pt = point_to_wgs84(
                 pt,
                 self.iface.mapCanvas().mapSettings().destinationCrs(),
-                QgsCoordinateTransform.ReverseTransform,
+                QgsCoordinateTransform.TransformDirection.ReverseTransform,
             )
             self.points_lyr.addItem(self._get_annotation(QgsPoint(pt.x(), pt.y()), row_id))
 
@@ -598,7 +598,7 @@ class WaypointsWidget(QWidget):
         symbol = QgsMarkerSymbol()
         symbol.deleteSymbolLayer(0)
         symbol_layer = QgsSvgMarkerSymbolLayer(str(get_resource_path("icons", svg)), 8)
-        symbol_layer.setOffsetUnit(QgsUnitTypes.RenderPoints)
+        symbol_layer.setOffsetUnit(QgsUnitTypes.RenderUnit.RenderPoints)
         symbol_layer.setOffset(
             QPointF(0, -11)
         )  # tweaked so the tip of the marker points at the clicked location
@@ -625,7 +625,7 @@ class WaypointsWidget(QWidget):
         self.ui_btn_down = build_btn(self.buttons_layout, WayPtWidgetElems.MV_DOWN)
 
         # do the "from layer/json" dropdown button
-        self.ui_btn_from_lyr.setPopupMode(QToolButton.MenuButtonPopup)
+        self.ui_btn_from_lyr.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         self.ui_btn_from_lyr.setAutoRaise(False)
         self.ui_btn_from_lyr.triggered.connect(self.ui_btn_from_lyr.setDefaultAction)
 
@@ -651,7 +651,7 @@ class WaypointsWidget(QWidget):
         self.ui_btn_from_lyr.setDefaultAction(actions[0])
 
         # add horizontal spacer
-        space = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        space = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.buttons_layout.insertSpacerItem(5, space)
 
         # add the buttons to the outer layout
@@ -659,7 +659,7 @@ class WaypointsWidget(QWidget):
 
         # add table widget to the outer layout
         self.ui_table = QTableWidget(0, 5, self)
-        self.ui_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.ui_table.setObjectName(WayPtWidgetElems.TABLE.value)
 
         type_col = QTableWidgetItem()
@@ -691,7 +691,7 @@ class WaypointsWidget(QWidget):
         # set table dimensions
         self.ui_table.setMinimumHeight(200)
         table_header: QHeaderView = self.ui_table.horizontalHeader()
-        table_header.setSectionResizeMode(QHeaderView.Stretch)
+        table_header.setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.outer_layout.addWidget(self.ui_table)
 
         # make connections

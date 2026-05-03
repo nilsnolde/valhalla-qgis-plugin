@@ -34,8 +34,8 @@ class RoutingParamsWidget(QWidget, Ui_RoutingParams):
         self.exclude_polygons.setAllowEmptyLayer(True)
         self.exclude_locations.setCurrentIndex(0)
         self.exclude_polygons.setCurrentIndex(0)
-        self.exclude_locations.setFilters(QgsMapLayerProxyModel.PointLayer)
-        self.exclude_polygons.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        self.exclude_locations.setFilters(QgsMapLayerProxyModel.Filter.PointLayer)
+        self.exclude_polygons.setFilters(QgsMapLayerProxyModel.Filter.PolygonLayer)
 
         # connections
         self.ui_reset_settings.clicked.connect(self._on_settings_reset)
@@ -109,7 +109,7 @@ class RoutingParamsWidget(QWidget, Ui_RoutingParams):
                 self.parent_dlg.status_bar.pushMessage(
                     "Unrecognized option",
                     f"date/time type {dt_type_btn.text()}",
-                    Qgis.Critical,
+                    Qgis.MessageLevel.Critical,
                     8,
                 )
 
@@ -136,7 +136,7 @@ class RoutingParamsWidget(QWidget, Ui_RoutingParams):
                 params = deep_merge(params, js)
             except json.JSONDecodeError as e:
                 self.parent_dlg.status_bar.pushMessage(
-                    "Invalid extra JSON parameters", str(e), Qgis.Critical, 8
+                    "Invalid extra JSON parameters", str(e), Qgis.MessageLevel.Critical, 8
                 )
 
         return params

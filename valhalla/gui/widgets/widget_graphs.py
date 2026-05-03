@@ -5,11 +5,11 @@ from shutil import move, rmtree
 
 from qgis.core import Qgis
 from qgis.PyQt.QtCore import QDir, QProcess
+from qgis.PyQt.QtGui import QFileSystemModel
 from qgis.PyQt.QtWidgets import (
     QAction,
     QDialog,
     QFileDialog,
-    QFileSystemModel,
     QListView,
     QMenu,
     QMessageBox,
@@ -90,7 +90,7 @@ class GraphWidget(QWidget, Ui_GraphWidget):
 
     def extendUi(self):
         # turn the "graph add" button into a menu to choose from HTTP, local graph build etc
-        self.ui_btn_graph_add_tar.setPopupMode(QToolButton.MenuButtonPopup)
+        self.ui_btn_graph_add_tar.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         self.ui_btn_graph_add_tar.setAutoRaise(False)
         self.ui_btn_graph_add_tar.triggered.connect(self.ui_btn_graph_add_tar.setDefaultAction)
 
@@ -141,10 +141,12 @@ class GraphWidget(QWidget, Ui_GraphWidget):
     def _on_admins_finished(self, exit_code: int, exit_status: QProcess.ExitStatus):
         self._parent.log_widget.append(f"Finished building admins with exit code {exit_code}")
         if exit_status == QProcess.ExitStatus.CrashExit:
-            self._parent.status_bar.pushMessage("Building admins failed, see log!", Qgis.Critical, 0)
+            self._parent.status_bar.pushMessage(
+                "Building admins failed, see log!", Qgis.MessageLevel.Critical, 0
+            )
             return
 
-        self._parent.status_bar.pushMessage("Building admins succeeded...", Qgis.Success, 0)
+        self._parent.status_bar.pushMessage("Building admins succeeded...", Qgis.MessageLevel.Success, 0)
 
         graph_dir = self.from_pbf_dlg.graph_dir
         inline_config = {
@@ -172,10 +174,12 @@ class GraphWidget(QWidget, Ui_GraphWidget):
     def _on_tiles_finished(self, exit_code: int, exit_status: QProcess.ExitStatus):
         self._parent.log_widget.append(f"Finished building tiles with exit code {exit_code}")
         if exit_status == QProcess.ExitStatus.CrashExit:
-            self._parent.status_bar.pushMessage("Building tiles failed, see log!", Qgis.Critical, 0)
+            self._parent.status_bar.pushMessage(
+                "Building tiles failed, see log!", Qgis.MessageLevel.Critical, 0
+            )
             return
 
-        self._parent.status_bar.pushMessage("Building tiles succeeded...", Qgis.Success, 0)
+        self._parent.status_bar.pushMessage("Building tiles succeeded...", Qgis.MessageLevel.Success, 0)
 
         graph_dir = Path(self.from_pbf_dlg.graph_dir).resolve()
 
@@ -206,7 +210,10 @@ class GraphWidget(QWidget, Ui_GraphWidget):
         root = self.ui_list_graphs.rootIndex()
         if not self.ui_list_graphs.model().rowCount(root):
             self._parent.status_bar.pushMessage(
-                "No graphs", f"Couldn't find any usable graph in {self.graph_dir}", Qgis.Warning, 6
+                "No graphs",
+                f"Couldn't find any usable graph in {self.graph_dir}",
+                Qgis.MessageLevel.Warning,
+                6,
             )
 
     def _on_build_pbf_log_ready(self):
@@ -226,18 +233,20 @@ class GraphWidget(QWidget, Ui_GraphWidget):
             self,
             "Remove graph",
             f"You're sure you want to delete\n{path}",
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.Yes,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.Yes,
         )
 
-        if ret != QMessageBox.Yes:
+        if ret != QMessageBox.StandardButton.Yes:
             return
 
         try:
             rmtree(path)
         except:
             pass
-        self._parent.status_bar.pushMessage("Removed graph", f"{path.stem}", Qgis.Warning, 3)
+        self._parent.status_bar.pushMessage(
+            "Removed graph", f"{path.stem}", Qgis.MessageLevel.Warning, 3
+        )
 
     def _on_graph_add_tar(self):
         try:
@@ -258,10 +267,10 @@ class GraphWidget(QWidget, Ui_GraphWidget):
                 self,
                 "Graph exists",
                 f"The graph {out_tar_dir} already exists. Should it be replaced?",
-                QMessageBox.Yes | QMessageBox.No,
-                QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
             )
-            if ret == QMessageBox.No:
+            if ret == QMessageBox.StandardButton.No:
                 return
 
         # move the tar file

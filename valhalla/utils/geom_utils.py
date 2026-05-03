@@ -15,7 +15,7 @@ WGS84 = QgsCoordinateReferenceSystem.fromEpsgId(4326)
 def point_to_wgs84(
     point: QgsPointXY,
     own_crs: QgsCoordinateReferenceSystem,
-    direction: int = QgsCoordinateTransform.ForwardTransform,
+    direction: int = QgsCoordinateTransform.TransformDirection.ForwardTransform,
 ) -> QgsPointXY:
     """
     Transforms the ``point`` to (``direction=ForwardTransform``) or from

@@ -21,7 +21,9 @@ class GraphFromURLDialog(QDialog, Ui_GraphFromUrl):
         url = self.ui_text_url.text()
         parsed_url = urlparse(url)
         if not url or not parsed_url.scheme:
-            self._parent.status_bar.pushMessage("No URL", "Needs a valid HTTP(s) URL", Qgis.Critical, 6)
+            self._parent.status_bar.pushMessage(
+                "No URL", "Needs a valid HTTP(s) URL", Qgis.MessageLevel.Critical, 6
+            )
             return super().reject()
 
         try:
@@ -35,10 +37,10 @@ class GraphFromURLDialog(QDialog, Ui_GraphFromUrl):
                 self,
                 "Graph exists",
                 f"The graph {graph_dir} already exists. Should it be replaced?",
-                QMessageBox.Yes | QMessageBox.No,
-                QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
             )
-            if ret == QMessageBox.No:
+            if ret == QMessageBox.StandardButton.No:
                 return
 
             rmtree(graph_dir)

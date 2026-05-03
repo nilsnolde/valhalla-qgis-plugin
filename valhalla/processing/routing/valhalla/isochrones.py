@@ -65,7 +65,7 @@ class ValhallaIsochronesBase(ValhallaBaseAlgorithm):
         denoise_param = QgsProcessingParameterNumber(
             self.IN_DENOISE,
             "Denoise",
-            type=QgsProcessingParameterNumber.Double,
+            type=QgsProcessingParameterNumber.Type.Double,
             minValue=0,
             maxValue=1,
         )
@@ -80,7 +80,7 @@ class ValhallaIsochronesBase(ValhallaBaseAlgorithm):
         generalize_param = QgsProcessingParameterNumber(
             self.IN_GENERALIZE,
             "Generalize",
-            type=QgsProcessingParameterNumber.Integer,
+            type=QgsProcessingParameterNumber.Type.Integer,
             minValue=0,
             maxValue=1000,
         )

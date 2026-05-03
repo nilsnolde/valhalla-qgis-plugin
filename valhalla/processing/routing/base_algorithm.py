@@ -52,7 +52,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
 
     OUT = "OUTPUT"
     WITH_COSTING_OPTIONS = True
-    IN_1_TYPES = [QgsProcessing.TypeVectorPoint]
+    IN_1_TYPES = [QgsProcessing.SourceType.TypeVectorPoint]
 
     def __init__(
         self,
@@ -127,30 +127,30 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
                 "If 'shortest', Valhalla will solely use distance as cost and disregard all other costs, penalties and factors."
             )
 
-            mode_param.setFlags(QgsProcessingParameterDefinition.FlagAdvanced)
+            mode_param.setFlags(QgsProcessingParameterDefinition.Flag.FlagAdvanced)
 
             self.addParameter(mode_param)
 
             avoid_locations_param = QgsProcessingParameterFeatureSource(
                 name=self.IN_AVOID_LOCATIONS,
                 description="Point layer with locations to avoid",
-                types=[QgsProcessing.TypeVectorPoint],
+                types=[QgsProcessing.SourceType.TypeVectorPoint],
                 optional=True,
             )
 
             avoid_locations_param.setFlags(
-                avoid_locations_param.flags() | QgsProcessingParameterDefinition.FlagAdvanced
+                avoid_locations_param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced
             )
             self.addParameter(avoid_locations_param)
 
             avoid_polygons_param = QgsProcessingParameterFeatureSource(
                 name=self.IN_AVOID_POLYGONS,
                 description="Point layer with polygons to avoid",
-                types=[QgsProcessing.TypeVectorPolygon],
+                types=[QgsProcessing.SourceType.TypeVectorPolygon],
                 optional=True,
             )
             avoid_polygons_param.setFlags(
-                avoid_polygons_param.flags() | QgsProcessingParameterDefinition.FlagAdvanced
+                avoid_polygons_param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced
             )
             self.addParameter(avoid_polygons_param)
             self.setup_costing_options()
@@ -252,9 +252,9 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
                 processing_param = QgsProcessingParameterNumber(
                     **processing_param_args,
                     type=(
-                        QgsProcessingParameterNumber.Integer
+                        QgsProcessingParameterNumber.Type.Integer
                         if param_type == int
-                        else QgsProcessingParameterNumber.Double
+                        else QgsProcessingParameterNumber.Type.Double
                     ),
                     minValue=param_min,
                     maxValue=param_max,
@@ -269,7 +269,7 @@ class ValhallaBaseAlgorithm(QgsProcessingAlgorithm):
                 raise TypeError(f"Type {param_type} not supported for costing options.")
 
             processing_param.setFlags(
-                processing_param.flags() | QgsProcessingParameterDefinition.FlagAdvanced
+                processing_param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced
             )
             processing_param.setHelp(param_dict["help"])
             self.addParameter(processing_param)

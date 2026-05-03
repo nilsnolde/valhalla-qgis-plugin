@@ -1,7 +1,7 @@
 [general]
 name=Valhalla
-qgisMinimumVersion=3.4
-qgisMaximumVersion=3.99
+qgisMinimumVersion=4.0
+qgisMaximumVersion=4.99
 description=Valhalla routing, TSP, isochrones, matrix, map match, elevation & expansion calculations for QGIS
 version=4.3.3
 author=Nils Nolde

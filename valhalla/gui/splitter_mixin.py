@@ -24,7 +24,7 @@ class SplitterMixin:
         self.collapse_button.setChecked(True)
         self.collapse_button.setFixedSize(24, 24)
         self.collapse_button.setIcon(get_icon("costing_options.svg"))
-        self.collapse_button.setCursor(Qt.ArrowCursor)
+        self.collapse_button.setCursor(Qt.CursorShape.ArrowCursor)
         self.collapse_button.setToolTip(
             "Click to collapse/expand the costing options panel. <br/>"
             "If collapsed, costing options won't be used."

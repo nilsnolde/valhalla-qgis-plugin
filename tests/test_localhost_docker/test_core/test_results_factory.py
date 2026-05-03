@@ -20,19 +20,19 @@ class TestResultsFactory(LocalhostDockerTestCase):
     def test_geom_type(self):
         self.assertEqual(
             ResultsFactory.geom_type(RouterEndpoint.DIRECTIONS),
-            QgsWkbTypes.LineString,
+            QgsWkbTypes.Type.LineString,
         )
         self.assertEqual(
             ResultsFactory.geom_type(RouterEndpoint.ISOCHRONES),
-            QgsWkbTypes.Polygon,
+            QgsWkbTypes.Type.Polygon,
         )
         self.assertEqual(
             ResultsFactory.geom_type(RouterEndpoint.MATRIX),
-            QgsWkbTypes.NoGeometry,
+            QgsWkbTypes.Type.NoGeometry,
         )
         self.assertEqual(
             ResultsFactory.geom_type(RouterEndpoint.EXPANSION),
-            QgsWkbTypes.LineString,
+            QgsWkbTypes.Type.LineString,
         )
 
     def test_url_input(self):

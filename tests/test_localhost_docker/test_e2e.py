@@ -32,7 +32,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         QgsProject.instance().removeAllMapLayers()
 
     def hit_execute(self):
-        QTest.mouseClick(self.dlg.execute_btn, Qt.LeftButton)
+        QTest.mouseClick(self.dlg.execute_btn, Qt.MouseButton.LeftButton)
         sleep(0.2)  # give some time for the response to be handled
 
     def test_valhalla_http_directions_via(self):
@@ -44,7 +44,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         layer: QgsVectorLayer = list(QgsProject.instance().mapLayers().values())[0]
         self.assertEqual(layer.featureCount(), 1)
         self.assertTrue(
-            layer.geometryType() == QgsWkbTypes.LineGeometry,
+            layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry,
             msg=f"Directions layer has unexpected Geometry Type {layer.geometryType()}",
         )
 
@@ -61,7 +61,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         layer: QgsVectorLayer = list(QgsProject.instance().mapLayers().values())[0]
         self.assertEqual(layer.featureCount(), 1)
         self.assertTrue(
-            layer.geometryType() == QgsWkbTypes.LineGeometry,
+            layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry,
             msg=f"Directions layer has unexpected Geometry Type {layer.geometryType()}",
         )
 
@@ -73,7 +73,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         self.assertEqual(len(layers), 1)
         layer: QgsVectorLayer = layers[0]
         self.assertTrue(
-            layer.geometryType() == QgsWkbTypes.PolygonGeometry,
+            layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry,
             msg=f"Isochrone layer has unexpected Geometry Type {layer.geometryType()}",
         )
         self.assertEqual(layer.featureCount(), 4)
@@ -85,7 +85,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         self.assertEqual(len(layers), 1)
         layer: QgsVectorLayer = layers[0]
         self.assertTrue(
-            layer.geometryType() == QgsWkbTypes.NullGeometry,
+            layer.geometryType() == QgsWkbTypes.GeometryType.NullGeometry,
             msg=f"Matrix layer has unexpected Geometry Type {layer.geometryType()}",
         )
 
@@ -105,7 +105,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         layer: QgsVectorLayer = list(QgsProject.instance().mapLayers().values())[0]
         self.assertEqual(layer.featureCount(), 1)
         self.assertTrue(
-            layer.geometryType() == QgsWkbTypes.LineGeometry,
+            layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry,
             msg=f"Directions layer has unexpected Geometry Type {layer.geometryType()}",
         )
 
@@ -117,7 +117,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         self.assertEqual(len(layers), 1)
         layer: QgsVectorLayer = layers[0]
         self.assertTrue(
-            layer.geometryType() == QgsWkbTypes.LineGeometry,
+            layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry,
             msg=f"Expansion layer has unexpected Geometry Type {layer.geometryType()}",
         )
         self.assertGreater(
@@ -140,7 +140,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         """Runs directions with and without costing options, compares result differences."""
         QTest.mouseClick(
             self.dlg.router_widget.ui_btn_bike,
-            Qt.LeftButton,
+            Qt.MouseButton.LeftButton,
         )
         self.hit_execute()
         layer_no_costing: QgsVectorLayer = list(QgsProject.instance().mapLayers().values())[0]
@@ -165,7 +165,7 @@ class TestHttpRouting(LocalhostDockerTestCase):
         # tests the reset button: new directions geometry should be almost equal to the first one
         QTest.mouseClick(
             self.dlg.routing_params_widget.ui_reset_settings,
-            Qt.LeftButton,
+            Qt.MouseButton.LeftButton,
         )
         self.hit_execute()
         layer_with_reset_costing = [
