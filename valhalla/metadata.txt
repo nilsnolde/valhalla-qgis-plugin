@@ -3,7 +3,7 @@ name=Valhalla
 qgisMinimumVersion=3.4
 qgisMaximumVersion=3.99
 description=Valhalla routing, TSP, isochrones, matrix, map match, elevation & expansion calculations for QGIS
-version=4.3.3
+version=4.3.4
 author=Nils Nolde
 email=nilsnolde@proton.me
 hasProcessingProvider=yes
@@ -35,6 +35,7 @@ deprecated=False
 
 # done by CI
 changelog=
+    - 4.3.4: handle 5xx HTTP codes better; also extended the FOSSGIS service's timeout to 10 secs
     - 4.3.3: reviewer won't relax on the silly "Password security issue", see https://gis.stackexchange.com/questions/500672/qgis-plugin-validation-false-alarm
     - 4.3.2: remove shell=True & ignore false alarm about secrets detection
     - 4.3.1: add X-Client-Id request header for valhalla monitoring
