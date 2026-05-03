@@ -173,10 +173,16 @@ def get_json_body(response: QgsNetworkReplyContent) -> dict:
         msg = f"{response.errorString()} for URL {response.request().url().toString()}"
         raise exceptions.RouterError(response.error(), msg)
 
+    raw = bytes(response.content())
     try:
-        body = json.loads(bytes(response.content()) or "{}")
+        body = json.loads(raw or b"{}")
     except json.decoder.JSONDecodeError:
-        raise exceptions.JSONParseError("Can't decode JSON response:{}".format(response.content()))
+        # non-JSON body (e.g. upstream returned plain text like "The server didn't
+        # respond in time"). Only treat this as a parse error on 200 OK; otherwise
+        # surface the raw text via the appropriate RouterError subclass.
+        if status_code == 200:
+            raise exceptions.JSONParseError(f"Can't decode JSON response: {raw!r}")
+        body = raw.decode(errors="replace").strip() or response.errorString()
 
     if status_code == 429:
         raise exceptions.OverQueryLimit(status_code, body)
