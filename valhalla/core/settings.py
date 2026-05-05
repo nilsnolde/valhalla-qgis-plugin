@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+import json
+from dataclasses import asdict, dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
@@ -110,18 +111,50 @@ class ValhallaSettings(QgsSettings):
         self,
         router: RouterType,
     ) -> List[ProviderSetting]:
-        """Returns all providers"""
-        return self.get(Dialogs.PROVIDERS, router.lower()) or list()
+        """Returns all providers for ``router``.
+
+        Stored as a JSON string. Legacy installations may still hold a
+        ``PyQt_PyObject`` Variant list (pickled ``ProviderSetting``s) — PyQt6
+        can fail to reconvert those, raising
+        ``TypeError: unable to convert a C++ 'QVariantList' instance to a
+        Python object``, especially during plugin reload. We swallow that
+        and return ``[]`` so the caller repopulates from defaults, which
+        will then be persisted as JSON.
+        """
+        self.beginGroup(Dialogs.PROVIDERS.value, QgsSettings.Section.Plugins)
+        try:
+            raw = self.value(router.lower())
+        except TypeError:
+            raw = None
+        finally:
+            self.endGroup()
+
+        if not raw:
+            return []
+        if isinstance(raw, str):
+            try:
+                return [ProviderSetting(**item) for item in json.loads(raw)]
+            except (json.JSONDecodeError, TypeError):
+                return []
+        if isinstance(raw, list):
+            return [p for p in raw if isinstance(p, ProviderSetting)]
+        return []
+
+    def _set_providers(self, router: RouterType, providers: List[ProviderSetting]) -> None:
+        self.set(
+            Dialogs.PROVIDERS,
+            router.lower(),
+            json.dumps([asdict(p) for p in providers]),
+        )
 
     def set_provider(self, router: RouterType, provider: ProviderSetting):
         existing = self.get_providers(router)
         existing.append(provider)
-        self.set(Dialogs.PROVIDERS, router.lower(), existing)
+        self._set_providers(router, existing)
 
     def remove_provider(self, router: RouterType, provider_name: str):
         current = self.get_providers(router)
-        new = list(filter(lambda x: x.name != provider_name, current))
-        self.set(Dialogs.PROVIDERS, router.lower(), new)
+        self._set_providers(router, [p for p in current if p.name != provider_name])
 
     def pop_providers(self, router: RouterType) -> List[ProviderSetting]:
         current = self.get_providers(router)
