@@ -320,7 +320,8 @@ class RouterWidget(QWidget):
         self.mode_btns.buttons()[0].setChecked(True)  # set pedestrian as checked button
 
         self.profile_layout.insertSpacerItem(
-            len(mode_buttons), QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+            len(mode_buttons),
+            QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum),
         )
         self.outer_layout.addRow("Profile", self.profile_layout)
 
