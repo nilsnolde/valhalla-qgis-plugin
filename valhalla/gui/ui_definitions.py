@@ -23,6 +23,7 @@ class RouterWidgetElems(str, Enum):
     CAR = "ui_btn_car"
     TRUCK = "ui_btn_truck"
     MBIKE = "ui_btn_mbike"
+    BUS = "ui_btn_bus"
     SERVER_START = "ui_btn_server_start"
     SERVER_STOP = "ui_btn_server_stop"
     SERVER_LOG = "ui_btn_server_log"

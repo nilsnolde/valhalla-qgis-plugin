@@ -34,6 +34,7 @@ PROFILE_TO_UI = {
     RouterWidgetElems.CAR: RouterProfile.CAR,
     RouterWidgetElems.TRUCK: RouterProfile.TRUCK,
     RouterWidgetElems.MBIKE: RouterProfile.MBIKE,
+    RouterWidgetElems.BUS: RouterProfile.BUS,
 }
 
 
@@ -307,6 +308,7 @@ class RouterWidget(QWidget):
             RouterWidgetElems.CAR: ("car.svg", "Car mode"),
             RouterWidgetElems.TRUCK: ("truck.svg", "Truck mode"),
             RouterWidgetElems.MBIKE: ("motorbike.svg", "Motorbike mode"),
+            RouterWidgetElems.BUS: ("bus.svg", "Bus mode"),
         }
         self.profile_layout = QHBoxLayout(self)
         self.mode_btns = QButtonGroup()
@@ -318,7 +320,7 @@ class RouterWidget(QWidget):
         self.mode_btns.buttons()[0].setChecked(True)  # set pedestrian as checked button
 
         self.profile_layout.insertSpacerItem(
-            5, QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+            len(mode_buttons), QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         )
         self.outer_layout.addRow("Profile", self.profile_layout)
 
