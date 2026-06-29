@@ -147,3 +147,8 @@ class ValhallaExpansionPedestrian(ValhallaExpansionBase):
 class ValhallaExpansionBicycle(ValhallaExpansionBase):
     def __init__(self):
         super(ValhallaExpansionBicycle, self).__init__(profile=RouterProfile.BIKE)
+
+
+class ValhallaExpansionBus(ValhallaExpansionBase):
+    def __init__(self):
+        super(ValhallaExpansionBus, self).__init__(profile=RouterProfile.BUS)

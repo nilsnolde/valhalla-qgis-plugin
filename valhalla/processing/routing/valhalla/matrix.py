@@ -32,3 +32,8 @@ class ValhallaMatrixPedestrian(ValhallaMatrixBase):
 class ValhallaMatrixBicycle(ValhallaMatrixBase):
     def __init__(self):
         super(ValhallaMatrixBicycle, self).__init__(profile=RouterProfile.BIKE)
+
+
+class ValhallaMatrixBus(ValhallaMatrixBase):
+    def __init__(self):
+        super(ValhallaMatrixBus, self).__init__(profile=RouterProfile.BUS)

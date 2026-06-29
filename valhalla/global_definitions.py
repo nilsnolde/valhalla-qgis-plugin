@@ -19,6 +19,9 @@ from .gui.widgets.costing_settings.widget_settings_valhalla_mbike import (
 from .gui.widgets.costing_settings.widget_settings_valhalla_pedestrian import (
     ValhallaSettingsPedestrianWidget,
 )
+from .gui.widgets.costing_settings.widget_settings_valhalla_bus import (
+    ValhallaSettingsBusWidget,
+)
 from .gui.widgets.costing_settings.widget_settings_valhalla_truck import (
     ValhallaSettingsTruckWidget,
 )
@@ -63,6 +66,7 @@ class RouterProfile(str, Enum):
     CAR = "auto"
     MBIKE = "motorcycle"
     TRUCK = "truck"
+    BUS = "bus"
 
 
 class RoutingMetric(IndexableStrEnum):
@@ -160,6 +164,10 @@ SETTINGS_WIDGETS_MAP = {
     RouterProfile.MBIKE: {
         "widget": ValhallaSettingsMbikeWidget,
         "ui_name": "settings_valhalla_truck",
+    },
+    RouterProfile.BUS: {
+        "widget": ValhallaSettingsBusWidget,
+        "ui_name": "settings_valhalla_bus",
     },
 }
 

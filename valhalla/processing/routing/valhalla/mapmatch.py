@@ -117,3 +117,8 @@ class ValhallaMapMatchPedestrian(MapMatchBase):
 class ValhallaMapMatchBicycle(MapMatchBase):
     def __init__(self):
         super(ValhallaMapMatchBicycle, self).__init__(profile=RouterProfile.BIKE)
+
+
+class ValhallaMapMatchBus(MapMatchBase):
+    def __init__(self):
+        super(ValhallaMapMatchBus, self).__init__(profile=RouterProfile.BUS)
