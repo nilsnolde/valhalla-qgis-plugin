@@ -34,3 +34,8 @@ class ValhallaOptimizedDirectionsPedestrian(ValhallaOptimizedDirectionsBase):
 class ValhallaOptimizedDirectionsBicycle(ValhallaOptimizedDirectionsBase):
     def __init__(self):
         super(ValhallaOptimizedDirectionsBicycle, self).__init__(profile=RouterProfile.BIKE)
+
+
+class ValhallaOptimizedDirectionsBus(ValhallaOptimizedDirectionsBase):
+    def __init__(self):
+        super(ValhallaOptimizedDirectionsBus, self).__init__(profile=RouterProfile.BUS)

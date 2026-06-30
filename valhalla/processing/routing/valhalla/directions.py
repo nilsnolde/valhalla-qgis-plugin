@@ -35,3 +35,10 @@ class ValhallaDirectionsBicycle(DirectionsBase):
         super(ValhallaDirectionsBicycle, self).__init__(
             provider=RouterType.VALHALLA, profile=RouterProfile.BIKE
         )
+
+
+class ValhallaDirectionsBus(DirectionsBase):
+    def __init__(self):
+        super(ValhallaDirectionsBus, self).__init__(
+            provider=RouterType.VALHALLA, profile=RouterProfile.BUS
+        )

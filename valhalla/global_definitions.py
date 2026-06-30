@@ -10,6 +10,9 @@ from qgis.PyQt.QtCore import QVariant
 from .gui.widgets.costing_settings.widget_settings_valhalla_bike import (
     ValhallaSettingsBikeWidget,
 )
+from .gui.widgets.costing_settings.widget_settings_valhalla_bus import (
+    ValhallaSettingsBusWidget,
+)
 from .gui.widgets.costing_settings.widget_settings_valhalla_car import (
     ValhallaSettingsCarWidget,
 )
@@ -63,6 +66,7 @@ class RouterProfile(str, Enum):
     CAR = "auto"
     MBIKE = "motorcycle"
     TRUCK = "truck"
+    BUS = "bus"
 
 
 class RoutingMetric(IndexableStrEnum):
@@ -160,6 +164,10 @@ SETTINGS_WIDGETS_MAP = {
     RouterProfile.MBIKE: {
         "widget": ValhallaSettingsMbikeWidget,
         "ui_name": "settings_valhalla_truck",
+    },
+    RouterProfile.BUS: {
+        "widget": ValhallaSettingsBusWidget,
+        "ui_name": "settings_valhalla_bus",
     },
 }
 

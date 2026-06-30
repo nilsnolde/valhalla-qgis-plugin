@@ -181,3 +181,8 @@ class ValhallaIsochronePedestrian(ValhallaIsochronesBase):
 class ValhallaIsochroneBicycle(ValhallaIsochronesBase):
     def __init__(self):
         super(ValhallaIsochroneBicycle, self).__init__(profile=RouterProfile.BIKE)
+
+
+class ValhallaIsochroneBus(ValhallaIsochronesBase):
+    def __init__(self):
+        super(ValhallaIsochroneBus, self).__init__(profile=RouterProfile.BUS)

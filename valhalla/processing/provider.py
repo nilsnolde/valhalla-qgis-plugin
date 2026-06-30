@@ -5,6 +5,7 @@ from .. import PLUGIN_NAME, __version__
 from ..processing.routing.valhalla.elevation import ValhallaElevation
 from ..processing.routing.valhalla.expansion import (
     ValhallaExpansionBicycle,
+    ValhallaExpansionBus,
     ValhallaExpansionCar,
     ValhallaExpansionMotorcycle,
     ValhallaExpansionPedestrian,
@@ -12,6 +13,7 @@ from ..processing.routing.valhalla.expansion import (
 )
 from ..processing.routing.valhalla.matrix import (
     ValhallaMatrixBicycle,
+    ValhallaMatrixBus,
     ValhallaMatrixCar,
     ValhallaMatrixMotorcycle,
     ValhallaMatrixPedestrian,
@@ -19,6 +21,7 @@ from ..processing.routing.valhalla.matrix import (
 )
 from ..processing.routing.valhalla.optimized import (
     ValhallaOptimizedDirectionsBicycle,
+    ValhallaOptimizedDirectionsBus,
     ValhallaOptimizedDirectionsCar,
     ValhallaOptimizedDirectionsMotorcycle,
     ValhallaOptimizedDirectionsPedestrian,
@@ -32,6 +35,7 @@ from ..processing.routing.valhalla.optimized import (
 from ..utils.resource_utils import get_icon
 from .routing.valhalla.directions import (
     ValhallaDirectionsBicycle,
+    ValhallaDirectionsBus,
     ValhallaDirectionsCar,
     ValhallaDirectionsMotorcycle,
     ValhallaDirectionsPedestrian,
@@ -39,6 +43,7 @@ from .routing.valhalla.directions import (
 )
 from .routing.valhalla.isochrones import (
     ValhallaIsochroneBicycle,
+    ValhallaIsochroneBus,
     ValhallaIsochroneCar,
     ValhallaIsochroneMotorcycle,
     ValhallaIsochronePedestrian,
@@ -46,6 +51,7 @@ from .routing.valhalla.isochrones import (
 )
 from .routing.valhalla.mapmatch import (
     ValhallaMapMatchBicycle,
+    ValhallaMapMatchBus,
     ValhallaMapMatchCar,
     ValhallaMapMatchMotorcycle,
     ValhallaMapMatchPedestrian,
@@ -67,31 +73,37 @@ class ValhallaProvider(QgsProcessingProvider):
                     ValhallaDirectionsMotorcycle,
                     ValhallaDirectionsPedestrian,
                     ValhallaDirectionsBicycle,
+                    ValhallaDirectionsBus,
                     ValhallaIsochroneCar,
                     ValhallaIsochroneTruck,
                     ValhallaIsochroneMotorcycle,
                     ValhallaIsochroneBicycle,
                     ValhallaIsochronePedestrian,
+                    ValhallaIsochroneBus,
                     ValhallaExpansionCar,
                     ValhallaExpansionTruck,
                     ValhallaExpansionMotorcycle,
                     ValhallaExpansionBicycle,
                     ValhallaExpansionPedestrian,
+                    ValhallaExpansionBus,
                     ValhallaMatrixCar,
                     ValhallaMatrixTruck,
                     ValhallaMatrixMotorcycle,
                     ValhallaMatrixBicycle,
                     ValhallaMatrixPedestrian,
+                    ValhallaMatrixBus,
                     ValhallaOptimizedDirectionsCar,
                     ValhallaOptimizedDirectionsTruck,
                     ValhallaOptimizedDirectionsMotorcycle,
                     ValhallaOptimizedDirectionsPedestrian,
                     ValhallaOptimizedDirectionsBicycle,
+                    ValhallaOptimizedDirectionsBus,
                     ValhallaMapMatchCar,
                     ValhallaMapMatchTruck,
                     ValhallaMapMatchMotorcycle,
                     ValhallaMapMatchPedestrian,
                     ValhallaMapMatchBicycle,
+                    ValhallaMapMatchBus,
                 )
             ],
         ]
