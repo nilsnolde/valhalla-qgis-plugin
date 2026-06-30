@@ -80,10 +80,12 @@ class MapMatchBase(ValhallaBaseAlgorithm):
             if feedback.isCanceled():
                 break
             try:
-                for ix, result_feat in enumerate(
-                    results_factory.get_results(self.endpoint, coords, params, return_fields)
+                for result_feat in results_factory.get_results(
+                    self.endpoint, coords, params, return_fields
                 ):
-                    result_feat[FieldNames.ID] = ix
+                    result_feat[FieldNames.ID] = (
+                        feature[layer_field_name_1] if layer_field_name_1 else feature.id()
+                    )
                     sink.addFeature(result_feat)
                     feedback.setProgress(int((count + 1) / total_count * 100))
             except (
