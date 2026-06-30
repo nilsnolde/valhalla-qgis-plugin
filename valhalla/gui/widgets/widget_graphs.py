@@ -4,6 +4,7 @@ from pathlib import Path
 from shutil import move, rmtree
 
 from qgis.core import Qgis
+from qgis.PyQt import uic
 from qgis.PyQt.QtCore import QDir, QFileSystemWatcher, QProcess, QStringListModel
 from qgis.PyQt.QtWidgets import (
     QAction,
@@ -16,18 +17,20 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+from ... import RESOURCE_PATH
 from ...core.settings import ValhallaSettings
 from ...utils.resource_utils import get_icon
-from ..compiled.widget_graphs_ui import Ui_GraphWidget
 from ..dlg_config_editor import ConfigEditorDialog
 from ..dlg_graph_from_pbf import GraphFromPBFDialog
 from ..dlg_graph_from_url import GraphFromURLDialog
 from ..ui_definitions import ID_JSON
 
+FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "widget_graphs.ui"))
+
 FOLDER_BUTTON_TOOLTIP = "Set the graph library directory\nCurrently: {}"
 
 
-class GraphWidget(QWidget, Ui_GraphWidget):
+class GraphWidget(QWidget, FORM_CLASS):
     def __init__(self, parent):
         super().__init__(parent)
         self.setupUi(self)

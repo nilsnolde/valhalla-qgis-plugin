@@ -3,14 +3,17 @@ from shutil import rmtree
 from urllib.parse import urlparse
 
 from qgis.core import Qgis
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog, QMessageBox
 
+from .. import RESOURCE_PATH
 from ..core.settings import ValhallaSettings
-from .compiled.dlg_graph_from_url_ui import Ui_GraphFromUrl
 from .ui_definitions import ID_JSON
 
+FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_graph_from_url.ui"))
 
-class GraphFromURLDialog(QDialog, Ui_GraphFromUrl):
+
+class GraphFromURLDialog(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self._parent = parent

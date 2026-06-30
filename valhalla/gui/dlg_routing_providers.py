@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 
 from qgis.gui import QgsCollapsibleGroupBox
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import (
     QDialog,
     QGridLayout,
@@ -12,9 +13,11 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
 )
 
+from .. import RESOURCE_PATH
 from ..core.settings import ProviderSetting, ValhallaSettings
 from ..global_definitions import RouterType
-from ..gui.compiled.dlg_routing_providers_ui import Ui_RoutingProviders
+
+FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_routing_providers.ui"))
 
 
 @dataclass
@@ -29,7 +32,7 @@ class ProvUiProps:
         self.PARAM_TEXT = f"{provider.name}_{provider.auth_param}"
 
 
-class ProviderDialog(QDialog, Ui_RoutingProviders):
+class ProviderDialog(QDialog, FORM_CLASS):
     """Builds provider config dialog."""
 
     def __init__(self, parent=None):

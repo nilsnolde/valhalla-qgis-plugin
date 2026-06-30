@@ -1,12 +1,15 @@
 from typing import Optional
 
 from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
-from .compiled.dlg_from_layer_ui import Ui_FromLayerDialog
+from .. import RESOURCE_PATH
+
+FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_from_layer.ui"))
 
 
-class FromLayerDialog(QDialog, Ui_FromLayerDialog):
+class FromLayerDialog(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         super(FromLayerDialog, self).__init__(parent)
         self.setupUi(self)

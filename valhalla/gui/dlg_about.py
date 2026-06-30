@@ -1,14 +1,16 @@
 from datetime import datetime
 from typing import Optional
 
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
-from .. import __version__
-from ..gui.compiled.dlg_about_ui import Ui_AboutDialog
+from .. import RESOURCE_PATH, __version__
 from ..utils.http_utils import get_status_response
 
+FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_about.ui"))
 
-class AboutDialog(QDialog, Ui_AboutDialog):
+
+class AboutDialog(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self._parent = parent

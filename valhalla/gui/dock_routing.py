@@ -17,6 +17,7 @@ from qgis.core import (  # noqa: F811
     QgsWkbTypes,
 )
 from qgis.gui import QgisInterface, QgsDockWidget
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import (
     QAction,
     QLineEdit,
@@ -28,8 +29,14 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+from .. import RESOURCE_PATH
 from ..core.results_factory import ResultsFactory
-from ..core.settings import DEFAULT_GRAPH_DIR, DEFAULT_PROVIDERS, ProviderSetting, ValhallaSettings
+from ..core.settings import (
+    DEFAULT_GRAPH_DIR,
+    DEFAULT_PROVIDERS,
+    ProviderSetting,
+    ValhallaSettings,
+)
 from ..exceptions import ValhallaError
 from ..global_definitions import (
     DEFAULT_LAYER_FIELDS,
@@ -47,12 +54,13 @@ from ..utils.resource_utils import (
     get_icon,
     get_resource_path,
 )
-from .compiled.widget_routing_dock_ui import Ui_routing_widget
 from .dlg_about import AboutDialog
 from .gui_utils import add_msg_bar
 from .widgets.widget_router import PROFILE_TO_UI, RouterWidget
 from .widgets.widget_routing_params import RoutingParamsWidget
 from .widgets.widget_waypoints import WaypointsWidget
+
+FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "widget_routing_dock.ui"))
 
 MENU_TABS = {
     RouterEndpoint.DIRECTIONS: "ui_directions_params",
@@ -67,7 +75,7 @@ MENU_TABS = {
 HELP_URL = "https://github.com/nilsnolde/valhalla-qgis-plugin?tab=readme-ov-file#how-to"
 
 
-class RoutingDockWidget(QgsDockWidget, Ui_routing_widget):
+class RoutingDockWidget(QgsDockWidget, FORM_CLASS):
     def __init__(self, iface: QgisInterface = None):
         QgsDockWidget.__init__(self)
         widget = QWidget(self)
