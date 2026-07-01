@@ -10,6 +10,7 @@ from qgis.PyQt.QtCore import QRect, QSize, Qt
 from qgis.PyQt.QtWidgets import (
     QApplication,
     QDialog,
+    QFileDialog,
     QLabel,
     QTableWidgetItem,
     QTextBrowser,
@@ -44,6 +45,17 @@ class PluginSettingsDialog(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        try:
+            # Qt6/PyQt6: enum values live inside the Option sub-class
+            _opts = (
+                QFileDialog.Option.DontResolveSymlinks
+                | QFileDialog.Option.ReadOnly
+                | QFileDialog.Option.ShowDirsOnly
+            )
+        except AttributeError:
+            # Qt5/PyQt5: enum values live directly on QFileDialog
+            _opts = QFileDialog.DontResolveSymlinks | QFileDialog.ReadOnly | QFileDialog.ShowDirsOnly
+        self.ui_binary_path.setOptions(_opts)
         self.setupDepsTable()
         self.log_widget = QTextBrowser(self)
         self.splitter = self._get_splitter()
