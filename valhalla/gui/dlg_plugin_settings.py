@@ -5,10 +5,12 @@ from typing import Optional
 from packaging.version import parse as Version
 from qgis.core import Qgis, QgsApplication
 from qgis.gui import QgisInterface, QgsFileWidget
+from qgis.PyQt import uic
 from qgis.PyQt.QtCore import QRect, QSize, Qt
 from qgis.PyQt.QtWidgets import (
     QApplication,
     QDialog,
+    QFileDialog,
     QLabel,
     QTableWidgetItem,
     QTextBrowser,
@@ -29,17 +31,31 @@ from ..utils.resource_utils import (
     get_pypi_lib_version,
     install_pyvalhalla,
 )
-from .compiled.dlg_plugin_settings_ui import Ui_PluginSettingsDialog
+from . import UI_RESOURCE_PATH
 from .gui_utils import add_msg_bar
 from .widgets.widget_graphs import GraphWidget
+
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_plugin_settings.ui"))
+
 
 iface: QgisInterface
 
 
-class PluginSettingsDialog(QDialog, Ui_PluginSettingsDialog):
+class PluginSettingsDialog(QDialog, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        try:
+            # Qt6/PyQt6: enum values live inside the Option sub-class
+            _opts = (
+                QFileDialog.Option.DontResolveSymlinks
+                | QFileDialog.Option.ReadOnly
+                | QFileDialog.Option.ShowDirsOnly
+            )
+        except AttributeError:
+            # Qt5/PyQt5: enum values live directly on QFileDialog
+            _opts = QFileDialog.DontResolveSymlinks | QFileDialog.ReadOnly | QFileDialog.ShowDirsOnly
+        self.ui_binary_path.setOptions(_opts)
         self.setupDepsTable()
         self.log_widget = QTextBrowser(self)
         self.splitter = self._get_splitter()

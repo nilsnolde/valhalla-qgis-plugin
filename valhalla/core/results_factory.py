@@ -5,7 +5,6 @@ from qgis.core import (
     QgsFeature,
     QgsFields,
     QgsGeometry,
-    QgsJsonUtils,
     QgsLineString,
     QgsPoint,
     QgsPolygon,

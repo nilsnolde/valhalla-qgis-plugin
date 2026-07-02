@@ -38,9 +38,6 @@
            <property name="storageMode">
             <enum>QgsFileWidget::GetDirectory</enum>
            </property>
-           <property name="options">
-            <set>QFileDialog::Option::DontResolveSymlinks|QFileDialog::Option::ReadOnly|QFileDialog::Option::ShowDirsOnly</set>
-           </property>
           </widget>
          </item>
          <item>

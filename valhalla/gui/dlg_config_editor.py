@@ -1,13 +1,16 @@
 import json
 
 from qgis.core import Qgis
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
-from ..gui.compiled.dlg_config_editor_ui import Ui_ConfigEditor
 from ..utils.resource_utils import get_valhalla_config_path
+from . import UI_RESOURCE_PATH
+
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_config_editor.ui"))
 
 
-class ConfigEditorDialog(QDialog, Ui_ConfigEditor):
+class ConfigEditorDialog(QDialog, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self._parent = parent

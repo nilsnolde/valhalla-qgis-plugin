@@ -1,7 +1,11 @@
-from ...compiled.routing_settings_valhalla_bike_widget_ui import (
-    Ui_settings_valhalla_bike,
-)
+from qgis.PyQt import uic
+
+from ... import UI_RESOURCE_PATH
 from .widget_settings_valhalla_base import ValhallaSettingsBase
+
+GENERATED_FORM_CLASS, _ = uic.loadUiType(
+    str(UI_RESOURCE_PATH / "routing_settings_valhalla_bike_widget.ui")
+)
 
 BIKE_SPEED_MAP = {  # default speeds in km/h
     "Road": 25,
@@ -11,7 +15,7 @@ BIKE_SPEED_MAP = {  # default speeds in km/h
 }
 
 
-class ValhallaSettingsBikeWidget(ValhallaSettingsBase, Ui_settings_valhalla_bike):
+class ValhallaSettingsBikeWidget(ValhallaSettingsBase, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super(ValhallaSettingsBikeWidget, self).__init__(parent)
         self.setupUi(self)
