@@ -4,13 +4,13 @@ from qgis.core import Qgis
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
-from .. import RESOURCE_PATH
 from ..utils.resource_utils import get_valhalla_config_path
+from . import UI_RESOURCE_PATH
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_config_editor.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_config_editor.ui"))
 
 
-class ConfigEditorDialog(QDialog, FORM_CLASS):
+class ConfigEditorDialog(QDialog, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self._parent = parent

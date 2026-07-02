@@ -4,12 +4,12 @@ from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
-from .. import RESOURCE_PATH
+from . import UI_RESOURCE_PATH
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_from_layer.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_from_layer.ui"))
 
 
-class FromLayerDialog(QDialog, FORM_CLASS):
+class FromLayerDialog(QDialog, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super(FromLayerDialog, self).__init__(parent)
         self.setupUi(self)

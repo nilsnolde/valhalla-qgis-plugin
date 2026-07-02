@@ -1,12 +1,12 @@
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
-from .. import RESOURCE_PATH
+from . import UI_RESOURCE_PATH
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_server_log.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_server_log.ui"))
 
 
-class ServerLogDialog(QDialog, FORM_CLASS):
+class ServerLogDialog(QDialog, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setupUi(self)

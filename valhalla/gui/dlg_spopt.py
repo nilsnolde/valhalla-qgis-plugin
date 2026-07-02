@@ -12,7 +12,6 @@ from qgis.gui import QgisInterface, QgsFieldComboBox
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog, QToolButton
 
-from .. import RESOURCE_PATH
 from ..core.settings import ValhallaSettings
 from ..global_definitions import (
     FieldNames,
@@ -27,13 +26,14 @@ from ..processing.spatial_optimization.lscp import LSCPAlgorithm
 from ..processing.spatial_optimization.mclp import MCLPAlgorithm
 from ..processing.spatial_optimization.pcenter import PCenterAlgorithm
 from ..processing.spatial_optimization.pmedian import PMedianAlgorithm
+from . import UI_RESOURCE_PATH
 from .dlg_about import AboutDialog
 from .gui_utils import add_msg_bar
 from .splitter_mixin import SplitterMixin
 from .widgets.widget_router import PROFILE_TO_UI, RouterWidget
 from .widgets.widget_routing_params import RoutingParamsWidget
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_spopt.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_spopt.ui"))
 
 MENU_TABS = {
     SpOptTypes.LSCP: "ui_lscp_params",
@@ -52,7 +52,7 @@ SPOPT_ALGO_MAP = {
 }
 
 
-class SpoptDialog(QDialog, FORM_CLASS, SplitterMixin):
+class SpoptDialog(QDialog, GENERATED_FORM_CLASS, SplitterMixin):
     def __init__(self, parent=None, iface: QgisInterface = None):
         super().__init__(parent=parent)
         self.setupUi(self)

@@ -17,20 +17,20 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
-from ... import RESOURCE_PATH
 from ...core.settings import ValhallaSettings
 from ...utils.resource_utils import get_icon
+from .. import UI_RESOURCE_PATH
 from ..dlg_config_editor import ConfigEditorDialog
 from ..dlg_graph_from_pbf import GraphFromPBFDialog
 from ..dlg_graph_from_url import GraphFromURLDialog
 from ..ui_definitions import ID_JSON
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "widget_graphs.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "widget_graphs.ui"))
 
 FOLDER_BUTTON_TOOLTIP = "Set the graph library directory\nCurrently: {}"
 
 
-class GraphWidget(QWidget, FORM_CLASS):
+class GraphWidget(QWidget, GENERATED_FORM_CLASS):
     def __init__(self, parent):
         super().__init__(parent)
         self.setupUi(self)

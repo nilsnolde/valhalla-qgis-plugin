@@ -18,7 +18,6 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
-from .. import RESOURCE_PATH
 from ..core.settings import ValhallaSettings
 from ..exceptions import ValhallaCmdError
 from ..global_definitions import PYPI_PKGS, Dialogs, PyPiState
@@ -32,16 +31,17 @@ from ..utils.resource_utils import (
     get_pypi_lib_version,
     install_pyvalhalla,
 )
+from . import UI_RESOURCE_PATH
 from .gui_utils import add_msg_bar
 from .widgets.widget_graphs import GraphWidget
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_plugin_settings.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_plugin_settings.ui"))
 
 
 iface: QgisInterface
 
 
-class PluginSettingsDialog(QDialog, FORM_CLASS):
+class PluginSettingsDialog(QDialog, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)

@@ -4,13 +4,14 @@ from typing import Optional
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 
-from .. import RESOURCE_PATH, __version__
+from .. import __version__
 from ..utils.http_utils import get_status_response
+from . import UI_RESOURCE_PATH
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_about.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_about.ui"))
 
 
-class AboutDialog(QDialog, FORM_CLASS):
+class AboutDialog(QDialog, GENERATED_FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self._parent = parent

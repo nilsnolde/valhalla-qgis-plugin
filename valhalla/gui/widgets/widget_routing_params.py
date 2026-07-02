@@ -6,15 +6,15 @@ from qgis.PyQt import uic
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QPushButton, QTextEdit, QWidget
 
-from ... import RESOURCE_PATH
 from ...global_definitions import SETTINGS_WIDGETS_MAP, RouterProfile
 from ...utils.layer_utils import get_wgs_coords_from_layer
 from ...utils.misc_utils import deep_merge
+from .. import UI_RESOURCE_PATH
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "routing_params_widget.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "routing_params_widget.ui"))
 
 
-class RoutingParamsWidget(QWidget, FORM_CLASS):
+class RoutingParamsWidget(QWidget, GENERATED_FORM_CLASS):
     def __init__(
         self,
         parent_dlg: QWidget = None,

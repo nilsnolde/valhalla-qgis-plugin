@@ -13,11 +13,11 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
 )
 
-from .. import RESOURCE_PATH
 from ..core.settings import ProviderSetting, ValhallaSettings
 from ..global_definitions import RouterType
+from . import UI_RESOURCE_PATH
 
-FORM_CLASS, _ = uic.loadUiType(str(RESOURCE_PATH / "ui" / "dlg_routing_providers.ui"))
+GENERATED_FORM_CLASS, _ = uic.loadUiType(str(UI_RESOURCE_PATH / "dlg_routing_providers.ui"))
 
 
 @dataclass
@@ -32,7 +32,7 @@ class ProvUiProps:
         self.PARAM_TEXT = f"{provider.name}_{provider.auth_param}"
 
 
-class ProviderDialog(QDialog, FORM_CLASS):
+class ProviderDialog(QDialog, GENERATED_FORM_CLASS):
     """Builds provider config dialog."""
 
     def __init__(self, parent=None):

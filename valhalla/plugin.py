@@ -3,13 +3,13 @@ from typing import List, Optional
 from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu, QToolBar
 
-from . import PLUGIN_NAME, __version__
+from . import PLUGIN_NAME
 from .gui.dock_routing import RoutingDockWidget
 from .processing.provider import ValhallaProvider
 from .utils.resource_utils import get_icon
+
 
 class ValhallaPlugin:
     def __init__(self, iface: QgisInterface):

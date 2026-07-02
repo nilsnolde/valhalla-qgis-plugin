@@ -1,0 +1,3 @@
+from .. import RESOURCE_PATH
+
+UI_RESOURCE_PATH = RESOURCE_PATH / "ui"
